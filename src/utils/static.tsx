@@ -26,3 +26,26 @@ export const sidebarLink = [
     ],
   },
 ];
+
+export const searchSectionList = [
+  {
+    name: "Dashboard",
+    url: "/",
+  },
+  {
+    name: "Inventory",
+    url: "/inventory",
+  },
+  {
+    name: "User List",
+    url: "/user/list",
+  },
+  {
+    name: "User Create",
+    url: "/user/create",
+  },
+  {
+    name: "User Detail",
+    url: "/user/detail",
+  },
+];
