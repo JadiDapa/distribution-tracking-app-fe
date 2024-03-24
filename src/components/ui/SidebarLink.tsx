@@ -24,12 +24,13 @@ export default function SiderbarLink({
 }: Props) {
   const [isDrop, setIsDrop] = useState(false);
   const location = useLocation();
+
   return (
     <>
       <Link
         onClick={() => setIsDrop(!isDrop)}
         to={url}
-        className={`${isDrop ? "bg-slate-100" : ""} mt-2 flex items-center justify-between rounded-md px-2.5 py-1.5 duration-300 hover:bg-slate-100`}
+        className={`${isDrop || location.pathname.includes(url) ? "bg-slate-100" : ""} mt-2 flex items-center justify-between rounded-md px-2.5 py-1.5 duration-300 hover:bg-slate-100`}
       >
         <div className="flex items-center gap-3">
           <div className="text-lg">{icon}</div>

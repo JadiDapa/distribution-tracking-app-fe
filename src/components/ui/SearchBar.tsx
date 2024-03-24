@@ -11,11 +11,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+type Props = {
+  bordered?: boolean;
+  placeholder?: string;
+};
+
 const searchSchema = z.object({
   searchValue: z.string(),
 });
 
-export default function SearchBar() {
+export default function SearchBar({ bordered, placeholder }: Props) {
   const search = useForm<z.infer<typeof searchSchema>>({
     resolver: zodResolver(searchSchema),
     defaultValues: {
@@ -27,10 +32,12 @@ export default function SearchBar() {
     console.log(values);
   }
   return (
-    <div className="flex gap-2 px-4">
-      <div className="flex items-center justify-center rounded-full duration-300 hover:bg-gray-200 ">
-        <Search strokeWidth={1.5} size={24} />
-      </div>
+    <div className={` ${!bordered && "flex gap-2 px-4"} `}>
+      {!bordered && (
+        <div className="flex items-center justify-center rounded-full duration-300 hover:bg-gray-200 ">
+          <Search strokeWidth={1.5} size={24} />
+        </div>
+      )}
       <Form {...search}>
         <form onSubmit={search.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -40,9 +47,10 @@ export default function SearchBar() {
               <FormItem>
                 <FormControl>
                   <Input
-                    autoFocus
+                    autoFocus={!bordered}
                     {...field}
-                    className="border-none focus:outline-none"
+                    className={`text-base focus:outline-none ${bordered ? "rounded-md border transition-all duration-500 focus:border-transparent focus:outline-transparent focus:ring-2 focus:ring-primary" : "border-none"}`}
+                    placeholder={placeholder}
                   />
                 </FormControl>
                 <FormMessage />

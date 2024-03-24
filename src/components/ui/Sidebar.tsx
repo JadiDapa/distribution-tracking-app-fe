@@ -35,6 +35,7 @@ export default function Sidebar({ isOpen, setIsOpen }: Props) {
       <div className="mt-6">
         {sidebarLink.map((link) => (
           <SiderbarLink
+            key={link.name}
             name={link.name}
             url={link.url}
             icon={link.icon}
