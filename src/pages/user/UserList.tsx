@@ -4,7 +4,7 @@ import { userListCard } from "@/utils/static";
 
 export default function UserList() {
   return (
-    <div className="flex w-full flex-col gap-6 py-6">
+    <section className="flex w-full flex-col gap-6 py-6">
       <div className="grid grid-cols-4 gap-6">
         {userListCard.map((list) => (
           <DataCard
@@ -19,6 +19,6 @@ export default function UserList() {
         ))}
       </div>
       <UserData />
-    </div>
+    </section>
   );
 }

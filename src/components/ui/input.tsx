@@ -10,15 +10,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <input
         type={type}
+        autoComplete="off"
         className={cn(
-          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground  disabled:cursor-not-allowed disabled:opacity-50",
-          className
+          "flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-[17px] outline-transparent ring-offset-background transition-all duration-500 file:border-0 file:bg-transparent file:text-base  file:font-medium placeholder:text-muted-foreground focus:outline-primary disabled:cursor-not-allowed disabled:opacity-50",
+          className,
         )}
         ref={ref}
         {...props}
       />
     );
-  }
+  },
 );
 Input.displayName = "Input";
 

@@ -7,7 +7,7 @@ function Layout() {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <section className="flex w-full gap-12 border bg-[#F8F7FA]">
+    <section className="flex min-h-screen w-full gap-12 border bg-[#F8F7FA]">
       <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
       <main
         className={`${isOpen ? "ml-[290px]" : "ml-[82px]"}  w-full p-6 transition-all duration-500`}
