@@ -295,9 +295,25 @@
       "status": "active"
     }
   ],
-  "comments": [
-    { "id": "1", "text": "a comment about post 1", "postId": "1" },
-    { "id": "2", "text": "another comment about post 1", "postId": "1" }
+  "material": [
+    {
+      "id": "1",
+      "material": "Unit Pelaksana",
+      "category": "BH",
+      "status": "available"
+    },
+    {
+      "id": "2",
+      "material": "UL - Pekanbaru",
+      "category": "SMTH",
+      "status": "unavailable"
+    },
+    {
+      "id": "3",
+      "material": "UL - Tanjung Pinang",
+      "category": "FR",
+      "status": "unavailable"
+    }
   ],
   "profile": {
     "name": "typicode"

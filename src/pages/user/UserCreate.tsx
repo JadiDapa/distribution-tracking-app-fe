@@ -47,7 +47,7 @@ export default function UserCreate() {
     },
   });
 
-  // console.log(form.getValues());
+  console.log(form.watch());
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
@@ -62,8 +62,8 @@ export default function UserCreate() {
         >
           <Header />
           <div className="flex gap-6">
-            <InfoForm control={form.control} values={form.getValues()} />
-            <RelationForm control={form.control} values={form.getValues()} />
+            <InfoForm control={form.control} values={form.watch()} />
+            <RelationForm control={form.control} values={form.watch()} />
           </div>
         </form>
       </Form>

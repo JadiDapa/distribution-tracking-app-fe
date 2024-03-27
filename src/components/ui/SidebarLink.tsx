@@ -54,7 +54,7 @@ export default function SiderbarLink({
           <Link
             key={i}
             to={segment.url}
-            className={`${location.pathname.includes(segment.url) ? "bg-primary text-white" : ""} mt-2 flex items-center justify-between rounded-md px-2.5 py-1.5 duration-300 hover:bg-slate-100`}
+            className={`${location.pathname.includes(segment.url) ? "bg-primary text-white shadow-md" : "hover:bg-slate-100"} mt-2 flex items-center justify-between rounded-md px-2.5 py-1.5 duration-300 `}
           >
             <div className="flex items-center gap-3">
               <div className="mr-2 ms-1 text-lg">

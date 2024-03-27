@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup } from "@/components/ui/radio-group";
-import { Building, PowerOff } from "lucide-react";
+import { Power, PowerOff } from "lucide-react";
 import { Control } from "react-hook-form";
 
 type Props = {
@@ -92,7 +92,7 @@ export default function InfoForm({ control, values }: Props) {
                   value="Active"
                   desc="Account is enabled"
                   label="Active"
-                  icon={<Building />}
+                  icon={<Power />}
                 />
                 <CustomRadio
                   values={values.status}

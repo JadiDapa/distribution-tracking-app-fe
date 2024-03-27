@@ -8,12 +8,19 @@ import Layout from "./components/Layout/Layout";
 import UserList from "./pages/user/UserList";
 import UserCreate from "./pages/user/UserCreate";
 import UserDetail from "./pages/user/UserDetail";
+import Dashboard from "./pages/dashboard/Dashboard";
+import MaterialList from "./pages/material/MaterialList";
+import MaterialCreate from "./pages/material/MaterialCreate";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     children: [
+      {
+        path: "dashboard",
+        element: <Dashboard />,
+      },
       {
         path: "user",
         children: [
@@ -28,6 +35,19 @@ const router = createBrowserRouter([
           {
             path: "detail",
             element: <UserDetail />,
+          },
+        ],
+      },
+      {
+        path: "material",
+        children: [
+          {
+            path: "list",
+            element: <MaterialList />,
+          },
+          {
+            path: "create",
+            element: <MaterialCreate />,
           },
         ],
       },
