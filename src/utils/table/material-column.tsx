@@ -4,7 +4,7 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export type Material = {
-  id: string;
+  id: number;
   material: string;
   category: string;
   status: "available" | "inavailable";

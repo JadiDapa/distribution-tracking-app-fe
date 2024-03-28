@@ -59,11 +59,11 @@ export const sidebarLink = [
     segments: [
       {
         name: "List",
-        url: "/tools/list",
+        url: "/tool/list",
       },
       {
         name: "Create",
-        url: "/tools/create",
+        url: "/tool/create",
       },
     ],
   },

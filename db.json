@@ -315,7 +315,30 @@
       "status": "unavailable"
     }
   ],
-  "profile": {
-    "name": "typicode"
-  }
+  "tool": [
+    {
+      "id": 1,
+      "tool": "Tang Ampere (Clip On AVO Meter digital) 600A",
+      "category": "alat ukur",
+      "expired": "2027",
+      "detail": "KOYRITSU",
+      "status": "active"
+    },
+    {
+      "id": 2,
+      "tool": "Coffing hoist / Rachet puller 1,5 Ton",
+      "category": "alat kerja",
+      "expired": "2027",
+      "detail": "NGK",
+      "status": "active"
+    },
+    {
+      "id": 3,
+      "tool": "Comealong (Wire Grip) 70-240 mm²",
+      "category": "alat kerja",
+      "expired": "2027",
+      "detail": "NGK",
+      "status": "active"
+    }
+  ]
 }

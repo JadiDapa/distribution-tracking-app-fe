@@ -1,10 +1,10 @@
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "./button";
 import { Column } from "@tanstack/react-table";
-import { Payment } from "@/utils/table/user-column";
 
 type Props = {
-  column: Column<Payment, unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  column: Column<any, unknown>;
   header: string;
 };
 

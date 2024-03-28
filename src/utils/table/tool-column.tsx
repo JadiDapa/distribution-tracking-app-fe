@@ -3,16 +3,16 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export type Payment = {
+export type Tool = {
   id: number;
-  account: string;
-  user: string;
-  category: "Unit Pelaksana" | "Unit Layanan" | "Posko";
+  tool: string;
+  category: string;
+  expired: string;
   status: "active" | "inactive";
   action: string;
 };
 
-export const userColumns: ColumnDef<Payment>[] = [
+export const toolColumns: ColumnDef<Tool>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => <TableSorter column={column} header="#" />,
@@ -21,16 +21,20 @@ export const userColumns: ColumnDef<Payment>[] = [
     ),
   },
   {
-    accessorKey: "account",
-    header: ({ column }) => <TableSorter column={column} header="ACCOUNT" />,
-  },
-  {
-    accessorKey: "user",
-    header: ({ column }) => <TableSorter column={column} header="USER" />,
+    accessorKey: "tool",
+    header: ({ column }) => <TableSorter column={column} header="TOOL" />,
   },
   {
     accessorKey: "category",
     header: ({ column }) => <TableSorter column={column} header="CATEGORY" />,
+  },
+  {
+    accessorKey: "expired",
+    header: ({ column }) => <TableSorter column={column} header="EXPIRED" />,
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => <TableSorter column={column} header="STATUS" />,
   },
   {
     accessorKey: "action",

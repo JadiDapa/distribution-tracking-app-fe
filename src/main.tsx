@@ -11,6 +11,8 @@ import UserDetail from "./pages/user/UserDetail";
 import Dashboard from "./pages/dashboard/Dashboard";
 import MaterialList from "./pages/material/MaterialList";
 import MaterialCreate from "./pages/material/MaterialCreate";
+import ToolList from "./pages/tool/ToolList";
+import ToolCreate from "./pages/tool/ToolCreate";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +50,32 @@ const router = createBrowserRouter([
           {
             path: "create",
             element: <MaterialCreate />,
+          },
+        ],
+      },
+      {
+        path: "tool",
+        children: [
+          {
+            path: "list",
+            element: <ToolList />,
+          },
+          {
+            path: "create",
+            element: <ToolCreate />,
+          },
+        ],
+      },
+      {
+        path: "tool",
+        children: [
+          {
+            path: "list",
+            element: <ToolList />,
+          },
+          {
+            path: "create",
+            element: <ToolCreate />,
           },
         ],
       },

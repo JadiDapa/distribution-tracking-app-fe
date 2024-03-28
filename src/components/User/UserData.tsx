@@ -1,15 +1,9 @@
-import Actions from "./Actions";
-import UserFilter from "./UserFilter";
+import { useFetch } from "@/hooks/context/useFetch";
 import UserTable from "./UserTable";
+import { userColumns } from "@/utils/table/user-column";
 
-export default function UserData() {
-  return (
-    <div className="box-shadow w-full rounded-md bg-white">
-      <UserFilter />
-      <hr />
-      <Actions />
-      <hr />
-      <UserTable />
-    </div>
-  );
+export default function ToolData() {
+  const { apiData } = useFetch("http://localhost:3000/users");
+
+  return apiData && <UserTable columns={userColumns} data={apiData} />;
 }

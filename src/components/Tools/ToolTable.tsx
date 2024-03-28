@@ -9,18 +9,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { materialCategoryFilter, materialStatusFilter } from "@/utils/static";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { CirclePlus, Upload } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -28,8 +16,20 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} from "@/components/ui/table";
+import { useState } from "react";
 import Pagination from "../ui/Pagination";
+import { materialCategoryFilter, materialStatusFilter } from "@/utils/static";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { CirclePlus, Upload } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -61,7 +61,7 @@ export default function ToolTable<TData, TValue>({
   return (
     <div className="box-shadow w-full rounded-md bg-white">
       <div className="p-6">
-        <div className="text-xl">Search Filters</div>
+        <div className="text-xl">Filters</div>
         <div className="mt-4 grid grid-cols-3 gap-6">
           <Select>
             <SelectTrigger className="w-full text-base">
@@ -95,26 +95,20 @@ export default function ToolTable<TData, TValue>({
               ))}
             </SelectContent>
           </Select>
-          <Select>
-            <SelectTrigger className="w-full text-base">
-              <SelectValue placeholder="Select Status" />
-            </SelectTrigger>
-            <SelectContent>
-              {materialStatusFilter.map((option) => (
-                <SelectItem
-                  key={option.value}
-                  value={option.value}
-                  className="mt-1.5 text-base text-slate-600"
-                >
-                  {option.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Input
+            placeholder="Search Material"
+            value={
+              (table.getColumn("material")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn("material")?.setFilterValue(event.target.value)
+            }
+            className="rounded-md border text-base transition-all duration-500 focus:border-transparent focus:outline-none focus:outline-transparent focus:ring-2 focus:ring-primary"
+          />
         </div>
       </div>
       <hr />
-      <div className="flex justify-between gap-4 px-6 py-4">
+      <div className="flex justify-end gap-4 p-6">
         <div className="w-28">
           <Select>
             <SelectTrigger className="w-full text-base">
@@ -134,30 +128,15 @@ export default function ToolTable<TData, TValue>({
           </Select>
         </div>
 
-        <div className="flex gap-4">
-          <Input
-            placeholder="Search Account"
-            value={
-              (table.getColumn("material")?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn("material")?.setFilterValue(event.target.value)
-            }
-            className="w-64 rounded-md border text-base transition-all duration-500 focus:border-transparent focus:outline-none focus:outline-transparent focus:ring-2 focus:ring-primary"
-          />
-          <Button
-            variant="muted"
-            icon={<Upload size={20} strokeWidth={2.25} />}
-          >
-            Export
-          </Button>
-          <Button
-            variant="default"
-            icon={<CirclePlus size={20} strokeWidth={2.25} />}
-          >
-            Add New User
-          </Button>
-        </div>
+        <Button variant="muted" icon={<Upload size={20} strokeWidth={2.25} />}>
+          Export
+        </Button>
+        <Button
+          variant="default"
+          icon={<CirclePlus size={20} strokeWidth={2.25} />}
+        >
+          Add New User
+        </Button>
       </div>
       <hr />
       <Table>

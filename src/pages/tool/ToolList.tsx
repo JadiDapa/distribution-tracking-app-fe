@@ -1,14 +1,14 @@
-import UserData from "@/components/User/UserData";
+import ToolData from "@/components/Tools/ToolData";
 import SeperatedCard from "@/components/ui/ConnectedCard";
 import SeactionHeader from "@/components/ui/SeactionHeader";
-import { userListCard } from "@/utils/static";
+import { materialListCard } from "@/utils/static";
 
-export default function UserList() {
+export default function ToolList() {
   return (
     <section className="flex w-full flex-col gap-6 py-6">
-      <SeactionHeader section="Account" subSection="Account List" />
-      <div className="grid grid-cols-4 gap-6">
-        {userListCard.map((list) => (
+      <SeactionHeader section="Tool" subSection="Tool List" />
+      <div className="box-shadow flex divide-x rounded-md bg-white p-6">
+        {materialListCard.map((list) => (
           <SeperatedCard
             key={list.title}
             title={list.title}
@@ -20,7 +20,7 @@ export default function UserList() {
           />
         ))}
       </div>
-      <UserData />
+      <ToolData />
     </section>
   );
 }

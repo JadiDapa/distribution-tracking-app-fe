@@ -9,7 +9,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -37,7 +36,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export default function MaterialTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -64,7 +63,7 @@ export function DataTable<TData, TValue>({
       <div className="p-6">
         <div className="text-xl">Filters</div>
         <div className="mt-4 grid grid-cols-3 gap-6">
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select>
             <SelectTrigger className="w-full text-base">
               <SelectValue placeholder="Select Category" />
             </SelectTrigger>
@@ -73,9 +72,6 @@ export function DataTable<TData, TValue>({
                 <SelectItem
                   key={option.value}
                   value={option.value}
-                  onChange={() =>
-                    table.getColumn("category")?.setFilterValue(option.value)
-                  }
                   className="mt-1.5 text-base text-slate-600"
                 >
                   {option.name}
