@@ -64,7 +64,7 @@ export function DataTable<TData, TValue>({
       <div className="p-6">
         <div className="text-xl">Filters</div>
         <div className="mt-4 grid grid-cols-3 gap-6">
-          <Select>
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
             <SelectTrigger className="w-full text-base">
               <SelectValue placeholder="Select Category" />
             </SelectTrigger>
