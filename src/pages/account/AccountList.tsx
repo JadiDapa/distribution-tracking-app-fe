@@ -1,9 +1,9 @@
-import UserData from "@/components/User/UserData";
+import AccountData from "@/components/User/AccountData";
 import SeactionHeader from "@/components/ui/SeactionHeader";
 import SeperatedCard from "@/components/ui/SeperatedCard";
 import { userListCard } from "@/utils/static";
 
-export default function UserList() {
+export default function AccountList() {
   return (
     <section className="flex w-full flex-col gap-6 py-6">
       <SeactionHeader section="Account" subSection="Account List" />
@@ -20,7 +20,7 @@ export default function UserList() {
           />
         ))}
       </div>
-      <UserData />
+      <AccountData />
     </section>
   );
 }

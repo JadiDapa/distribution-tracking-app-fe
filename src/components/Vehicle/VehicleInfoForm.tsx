@@ -17,7 +17,7 @@ import {
 import { materialCategoryFilter } from "@/utils/static";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { VehicleType } from "@/pages/vehicle/VehicleCreate";
+import { VehicleType } from "@/pages/vehicle/VehicleAdd";
 
 type Props = {
   control: Control<VehicleType>;

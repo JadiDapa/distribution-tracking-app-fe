@@ -30,13 +30,14 @@ import {
   TableRow,
 } from "../ui/table";
 import Pagination from "../ui/Pagination";
+import { Link } from "react-router-dom";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export default function ToolTable<TData, TValue>({
+export default function AccountTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -151,12 +152,14 @@ export default function ToolTable<TData, TValue>({
           >
             Export
           </Button>
-          <Button
-            variant="default"
-            icon={<CirclePlus size={20} strokeWidth={2.25} />}
-          >
-            Add New User
-          </Button>
+          <Link to="/account-add">
+            <Button
+              variant="default"
+              icon={<CirclePlus size={20} strokeWidth={2.25} />}
+            >
+              Add New Account
+            </Button>
+          </Link>
         </div>
       </div>
       <hr />

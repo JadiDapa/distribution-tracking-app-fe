@@ -40,7 +40,7 @@ export type VehicleType = {
   image: string;
 };
 
-export default function VehicleCreate() {
+export default function VehicleAdd() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -66,7 +66,7 @@ export default function VehicleCreate() {
 
   return (
     <section className="flex w-full flex-col gap-6 pt-6">
-      <SeactionHeader section="Vehicle" subSection="Create Vehicle" />
+      <SeactionHeader section="Vehicle" subSection="Add Vehicle" />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

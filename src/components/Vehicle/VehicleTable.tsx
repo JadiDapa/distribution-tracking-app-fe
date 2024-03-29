@@ -30,6 +30,7 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { CirclePlus, Upload } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -150,12 +151,14 @@ export default function VehicleTable<TData, TValue>({
           >
             Export
           </Button>
-          <Button
-            variant="default"
-            icon={<CirclePlus size={20} strokeWidth={2.25} />}
-          >
-            Add New Vehiclee
-          </Button>
+          <Link to="/vehicle-add">
+            <Button
+              variant="default"
+              icon={<CirclePlus size={20} strokeWidth={2.25} />}
+            >
+              Add New Vehiclee
+            </Button>
+          </Link>
         </div>
       </div>
       <hr />

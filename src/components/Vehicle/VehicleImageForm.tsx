@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
 import { Control } from "react-hook-form";
-import { VehicleType } from "@/pages/vehicle/VehicleCreate";
+import { VehicleType } from "@/pages/vehicle/VehicleAdd";
 
 type Props = {
   control: Control<VehicleType>;

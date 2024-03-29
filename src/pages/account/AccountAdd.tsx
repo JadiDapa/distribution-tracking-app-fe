@@ -1,10 +1,11 @@
-import Header from "@/components/User/Create/Header";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
-import InfoForm from "@/components/User/Create/InfoForm";
-import RelationForm from "@/components/User/Create/RelationForm";
+import InfoForm from "@/components/User/InfoForm";
+import RelationForm from "@/components/User/RelationForm";
+import CreatePageHeader from "@/components/ui/CreatePageHeader";
+import SeactionHeader from "@/components/ui/SeactionHeader";
 
 const formSchema = z
   .object({
@@ -33,7 +34,7 @@ const formSchema = z
     },
   );
 
-export default function UserCreate() {
+export default function AccountAdd() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,12 +56,16 @@ export default function UserCreate() {
 
   return (
     <section className="flex w-full flex-col gap-6 py-6">
+      <SeactionHeader section="Account" subSection="Add Account" />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-6"
         >
-          <Header />
+          <CreatePageHeader
+            header="Add New Account"
+            subheader="Add new account to use accross the app"
+          />
           <div className="flex gap-6">
             <InfoForm control={form.control} values={form.watch()} />
             <RelationForm control={form.control} values={form.watch()} />

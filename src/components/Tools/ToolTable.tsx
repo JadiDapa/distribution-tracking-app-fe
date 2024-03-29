@@ -30,6 +30,7 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { CirclePlus, Upload } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -131,12 +132,14 @@ export default function ToolTable<TData, TValue>({
         <Button variant="muted" icon={<Upload size={20} strokeWidth={2.25} />}>
           Export
         </Button>
-        <Button
-          variant="default"
-          icon={<CirclePlus size={20} strokeWidth={2.25} />}
-        >
-          Add New User
-        </Button>
+        <Link to="/tool-add">
+          <Button
+            variant="default"
+            icon={<CirclePlus size={20} strokeWidth={2.25} />}
+          >
+            Add New Tool
+          </Button>
+        </Link>
       </div>
       <hr />
       <Table>

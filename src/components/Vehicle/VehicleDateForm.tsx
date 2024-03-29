@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import { format } from "date-fns";
-import { VehicleType } from "@/pages/vehicle/VehicleCreate";
+import { VehicleType } from "@/pages/vehicle/VehicleAdd";
 import { Input } from "../ui/input";
 
 type Props = {

@@ -1,92 +1,11 @@
 import {
   Building,
-  BusFront,
   Cable,
   Home,
-  Package,
   RectangleEllipsis,
-  UserRound,
   UsersRound,
   Warehouse,
-  Wrench,
 } from "lucide-react";
-
-export const sidebarLink = [
-  {
-    name: "Dashboard",
-    url: "/dashboard",
-    icon: <Home strokeWidth={1.5} />,
-  },
-  {
-    name: "Inventory",
-    url: "/inventory",
-    icon: <Package strokeWidth={1.5} />,
-  },
-  {
-    name: "User",
-    url: "#",
-    icon: <UserRound strokeWidth={1.5} />,
-    segments: [
-      {
-        name: "List",
-        url: "/user/list",
-      },
-      {
-        name: "Create",
-        url: "/user/create",
-      },
-    ],
-  },
-  {
-    name: "Material",
-    url: "#",
-    icon: <Cable strokeWidth={1.5} />,
-    segments: [
-      {
-        name: "List",
-        url: "/material/list",
-      },
-      {
-        name: "Create",
-        url: "/material/create",
-      },
-    ],
-  },
-  {
-    name: "Tool",
-    url: "#",
-    icon: <Wrench strokeWidth={1.5} />,
-    segments: [
-      {
-        name: "List",
-        url: "/tool/list",
-      },
-      {
-        name: "Create",
-        url: "/tool/create",
-      },
-    ],
-  },
-  {
-    name: "Vehicle",
-    url: "#",
-    icon: <BusFront strokeWidth={1.5} />,
-    segments: [
-      {
-        name: "List",
-        url: "/vehicle/list",
-      },
-      {
-        name: "Create",
-        url: "/vehicle/create",
-      },
-      {
-        name: "Request",
-        url: "/vehicle/detail",
-      },
-    ],
-  },
-];
 
 export const searchSectionList = [
   {

@@ -1,9 +1,9 @@
 import { useFetch } from "@/hooks/context/useFetch";
-import UserTable from "./UserTable";
 import { userColumns } from "@/utils/table/user-column";
+import AccountTable from "./AccountTable";
 
-export default function ToolData() {
+export default function AccountData() {
   const { apiData } = useFetch("http://localhost:3000/users");
 
-  return apiData && <UserTable columns={userColumns} data={apiData} />;
+  return apiData && <AccountTable columns={userColumns} data={apiData} />;
 }

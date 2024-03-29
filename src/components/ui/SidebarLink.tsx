@@ -1,5 +1,3 @@
-import { ChevronDown, ChevronRight, Circle } from "lucide-react";
-import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 type Props = {
@@ -15,22 +13,14 @@ type Segments = {
   url: string;
 };
 
-export default function SiderbarLink({
-  name,
-  url,
-  icon,
-  segments,
-  isOpen,
-}: Props) {
-  const [isDrop, setIsDrop] = useState(false);
+export default function SiderbarLink({ name, url, icon, isOpen }: Props) {
   const location = useLocation();
 
   return (
     <>
       <Link
-        onClick={() => setIsDrop(!isDrop)}
         to={url}
-        className={`${isDrop || location.pathname.includes(url) ? "bg-slate-100" : ""} mt-2 flex items-center justify-between rounded-md px-2.5 py-2 duration-300 hover:bg-slate-100`}
+        className={`${location.pathname === url ? "bg-primary text-white shadow-md" : "hover:bg-slate-100"} mt-2 flex items-center justify-between rounded-md px-2.5 py-2 duration-300`}
       >
         <div className="flex items-center gap-3">
           <div className="text-lg">{icon}</div>
@@ -38,32 +28,7 @@ export default function SiderbarLink({
             {name}
           </div>
         </div>
-        {segments && (
-          <div className="text-lg ">
-            {isDrop ? (
-              <ChevronDown strokeWidth={1.5} />
-            ) : (
-              <ChevronRight strokeWidth={1.5} />
-            )}
-          </div>
-        )}
       </Link>
-      {isDrop &&
-        isOpen &&
-        segments?.map((segment, i) => (
-          <Link
-            key={i}
-            to={segment.url}
-            className={`${location.pathname.includes(segment.url) ? "bg-primary text-white shadow-md" : "hover:bg-slate-100"} mt-2 flex items-center justify-between rounded-md px-2.5 py-2 duration-300 `}
-          >
-            <div className="flex items-center gap-3">
-              <div className="mr-2 ms-1 text-lg">
-                <Circle size={12} strokeWidth={1.5} />
-              </div>
-              <div className={`text-lg`}>{segment.name}</div>
-            </div>
-          </Link>
-        ))}
     </>
   );
 }
