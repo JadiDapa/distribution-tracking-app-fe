@@ -1,6 +1,5 @@
 import {
   Building,
-  Bus,
   BusFront,
   Cable,
   Home,

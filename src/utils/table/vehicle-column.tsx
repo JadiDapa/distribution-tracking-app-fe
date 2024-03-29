@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export type Vehicle = {
   id: number;
-  "police-number": string;
+  police_number: string;
   variant: string;
   brand: string;
   year: string;
@@ -22,7 +22,7 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
     ),
   },
   {
-    accessorKey: "police-number",
+    accessorKey: "police_number",
     header: ({ column }) => (
       <TableSorter column={column} header="POLICE NUMBER" />
     ),

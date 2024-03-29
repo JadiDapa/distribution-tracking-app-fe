@@ -85,7 +85,7 @@ export default function ToolStatusForm({ control, values }: Props) {
                   <Button
                     variant={"outline"}
                     className={cn(
-                      "w-[240px] w-full pl-3 text-left font-normal",
+                      "w-full pl-3 text-left font-normal",
                       !field.value && "text-muted-foreground",
                     )}
                   >

@@ -344,7 +344,7 @@
   "vehicle": [
     {
       "id": 1,
-      "police-number": "B 1839 RKA",
+      "police_number": "B 1839 RKA",
       "variant": "Mobil Minibus",
       "brand": "Toyota Avanza",
       "year": "2022",
@@ -352,7 +352,7 @@
     },
     {
       "id": 2,
-      "police-number": "L 5932 PT",
+      "police_number": "L 5932 PT",
       "variant": "Sepeda Motor Sport",
       "brand": "Honda Verza",
       "year": "2023",
@@ -360,7 +360,7 @@
     },
     {
       "id": 3,
-      "police-number": "B 1839 RKA",
+      "police_number": "B 1839 RKA",
       "variant": "Mobil Pick Up Double Cabin",
       "brand": "Mitsubishi Triton",
       "year": "2022",
