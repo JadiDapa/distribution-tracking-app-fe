@@ -7,7 +7,7 @@ type Props = {
   textColor: string;
 };
 
-export default function DataCard({
+export default function SeperatedCard({
   title,
   value,
   icon,

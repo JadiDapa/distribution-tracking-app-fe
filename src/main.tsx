@@ -13,6 +13,8 @@ import MaterialList from "./pages/material/MaterialList";
 import MaterialCreate from "./pages/material/MaterialCreate";
 import ToolList from "./pages/tool/ToolList";
 import ToolCreate from "./pages/tool/ToolCreate";
+import VehicleList from "./pages/vehicle/VehicleList";
+import VehicleCreate from "./pages/vehicle/VehicleCreate";
 
 const router = createBrowserRouter([
   {
@@ -67,15 +69,15 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "tool",
+        path: "vehicle",
         children: [
           {
             path: "list",
-            element: <ToolList />,
+            element: <VehicleList />,
           },
           {
             path: "create",
-            element: <ToolCreate />,
+            element: <VehicleCreate />,
           },
         ],
       },

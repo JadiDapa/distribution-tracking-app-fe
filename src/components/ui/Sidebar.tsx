@@ -32,7 +32,7 @@ export default function Sidebar({ isOpen, setIsOpen }: Props) {
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-8">
         {sidebarLink.map((link) => (
           <SiderbarLink
             key={link.name}

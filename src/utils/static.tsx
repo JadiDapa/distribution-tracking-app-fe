@@ -1,6 +1,7 @@
 import {
   Building,
   Bus,
+  BusFront,
   Cable,
   Home,
   Package,
@@ -70,7 +71,7 @@ export const sidebarLink = [
   {
     name: "Vehicle",
     url: "#",
-    icon: <Bus strokeWidth={1.5} />,
+    icon: <BusFront strokeWidth={1.5} />,
     segments: [
       {
         name: "List",

@@ -7,7 +7,7 @@ type Props = {
   textColor: string;
 };
 
-export default function SeperatedCard({
+export default function ConnectedCard({
   title,
   value,
   icon,
@@ -16,7 +16,7 @@ export default function SeperatedCard({
   textColor,
 }: Props) {
   return (
-    <div className="box-shadow flex w-full justify-between rounded-md bg-white p-6 px-6">
+    <div className="flex w-full justify-between rounded-md px-6 first:pl-0 last:pr-0">
       <div className="flex flex-col gap-2">
         <div className="text-lg">{title}</div>
         <div className="text-3xl">{value}</div>

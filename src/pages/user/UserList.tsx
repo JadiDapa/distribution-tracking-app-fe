@@ -1,6 +1,6 @@
 import UserData from "@/components/User/UserData";
-import SeperatedCard from "@/components/ui/ConnectedCard";
 import SeactionHeader from "@/components/ui/SeactionHeader";
+import SeperatedCard from "@/components/ui/SeperatedCard";
 import { userListCard } from "@/utils/static";
 
 export default function UserList() {
