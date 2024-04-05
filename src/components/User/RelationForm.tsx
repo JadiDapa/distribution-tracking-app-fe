@@ -8,32 +8,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup } from "@/components/ui/radio-group";
+import { AccountType } from "@/lib/network/useAccounts";
 import { Building, Home, Warehouse } from "lucide-react";
 import { Control } from "react-hook-form";
 
 type Props = {
-  control: Control<{
-    account: string;
-    user: string;
-    password: string;
-    confirmPassword: string;
-    status: "Active" | "Inactive";
-    category: "Unit Pelaksana" | "Unit Layanan" | "Posko";
-    relation?: string;
-  }>;
-  values: {
-    account: string;
-    user: string;
-    password: string;
-    confirmPassword: string;
-    status: "Active" | "Inactive";
-    category: "Unit Pelaksana" | "Unit Layanan" | "Posko";
-    relation?: string | undefined;
-  };
+  control: Control<AccountType>;
+  values: AccountType;
 };
 
 export default function RelationForm({ control, values }: Props) {
-  console.log(values);
   return (
     <div className="box-shadow flex w-[47%]  flex-col gap-6 rounded-md bg-white p-6">
       <h2 className="text-xl font-medium">Account Relation</h2>
@@ -52,33 +36,33 @@ export default function RelationForm({ control, values }: Props) {
       />
       <FormField
         control={control}
-        name="category"
+        name="unitId"
         render={({ field }) => (
           <FormItem className="">
-            <FormLabel>Category</FormLabel>
+            <FormLabel>Unit Type</FormLabel>
             <FormControl>
               <RadioGroup
                 onValueChange={field.onChange}
-                defaultValue={field.value}
+                defaultValue="3"
                 className="flex justify-between"
               >
                 <CustomRadio
-                  values={values.category}
-                  value="Unit Pelaksana"
+                  values={values.unitId}
+                  value="1"
                   desc="HQ"
                   label="Unit Pelaksana"
                   icon={<Building />}
                 />
                 <CustomRadio
-                  values={values.category}
-                  value="Unit Layanan"
+                  values={values.unitId}
+                  value="2"
                   desc="UL"
                   label="Unit Layanan"
                   icon={<Warehouse />}
                 />
                 <CustomRadio
-                  values={values.category}
-                  value="Posko"
+                  values={values.unitId}
+                  value="3"
                   desc="Posko"
                   label="Posko"
                   icon={<Home />}
@@ -89,7 +73,7 @@ export default function RelationForm({ control, values }: Props) {
           </FormItem>
         )}
       />
-      {values.category === "Posko" && (
+      {values.unitId === "3" && (
         <FormField
           control={control}
           name="relation"

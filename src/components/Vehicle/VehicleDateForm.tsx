@@ -1,4 +1,3 @@
-import CustomRadio from "@/components/ui/CustomRadio";
 import {
   FormControl,
   FormField,
@@ -6,8 +5,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { RadioGroup } from "@/components/ui/radio-group";
-import { BadgeCheck, BadgeX } from "lucide-react";
+
 import { Control } from "react-hook-form";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
@@ -23,7 +21,7 @@ type Props = {
   values: VehicleType;
 };
 
-export default function VehicleDateForm({ control, values }: Props) {
+export default function VehicleDateForm({ control }: Props) {
   return (
     <div className="box-shadow flex flex-col gap-6 rounded-md bg-white p-6">
       <h2 className="text-xl font-medium">Vehicle Date/Year Informations</h2>

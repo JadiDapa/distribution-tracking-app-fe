@@ -15,25 +15,28 @@ import { PiUserLight } from "react-icons/pi";
 import { CiLock } from "react-icons/ci";
 import { AiOutlineEye } from "react-icons/ai";
 import { BsEyeSlash } from "react-icons/bs";
+import { useLogin } from "@/lib/network/useLogin";
+import ErrorAlert from "../ui/ErrorAlert";
 
 const formSchema = z.object({
-  username: z.string().min(8).max(50),
-  password: z.string().min(8).max(50),
+  name: z.string(),
+  password: z.string(),
 });
 
 export default function LoginForm() {
   const [isShow, setIsShow] = useState(false);
+  const { login, error, setError } = useLogin();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      name: "",
       password: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    await login(values);
   }
 
   return (
@@ -42,19 +45,20 @@ export default function LoginForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-4"
       >
+        <ErrorAlert condition={error} message={error} onClose={setError} />
         <FormField
           control={form.control}
-          name="username"
+          name="name"
           render={({ field }) => (
             <FormItem className="relative">
-              <FormLabel className="text-lg font-medium">Username</FormLabel>
+              <FormLabel className="">Account</FormLabel>
               <div className="relative">
-                <PiUserLight className="absolute left-2.5 top-2.5 text-xl" />
+                <PiUserLight className="absolute left-3 top-3 text-xl" />
                 <FormControl>
                   <Input
-                    placeholder="masukkan username anda"
+                    placeholder="masukkan akun anda"
                     {...field}
-                    className="mt-1 w-full rounded-md border-slate-300 px-10 py-5 text-lg focus:outline-primary"
+                    className="mt-1 w-full rounded-md border-slate-300 px-10 py-5 focus:outline-primary"
                   />
                 </FormControl>
               </div>
@@ -70,18 +74,18 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <div className="relative">
-                <CiLock className="absolute left-2.5 top-2.5 text-xl" />
-                <FormControl className="text-lg font-medium">
+                <CiLock className="absolute left-3 top-3 text-xl" />
+                <FormControl className="">
                   <Input
                     placeholder="masukkan password yang sesuai"
                     type={isShow ? "text" : "password"}
                     {...field}
-                    className="mt-1 w-full rounded-md border-slate-300 px-10 py-5 text-lg focus:outline-primary"
+                    className="mt-1 w-full rounded-md border-slate-300 px-10 py-5 focus:outline-primary"
                   />
                 </FormControl>
                 <div
                   onClick={() => setIsShow(!isShow)}
-                  className="absolute right-2.5 top-2.5 text-xl"
+                  className="absolute right-3 top-3 text-xl"
                 >
                   {isShow ? <BsEyeSlash /> : <AiOutlineEye />}
                 </div>

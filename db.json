@@ -315,6 +315,26 @@
       "status": "unavailable"
     }
   ],
+  "material-inventory": [
+    {
+      "id": 1,
+      "material": "Kabel",
+      "category": "BH",
+      "quantity": "12"
+    },
+    {
+      "id": 2,
+      "material": "Lampu",
+      "category": "SMTH",
+      "quantity": "23"
+    },
+    {
+      "id": 3,
+      "material": "Sekrup",
+      "category": "FR",
+      "quantity": "57"
+    }
+  ],
   "tool": [
     {
       "id": 1,

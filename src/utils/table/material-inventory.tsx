@@ -3,16 +3,15 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export type Payment = {
+export type Material = {
   id: number;
-  account: string;
-  user: string;
-  category: "Unit Pelaksana" | "Unit Layanan" | "Posko";
-  status: "active" | "inactive";
+  material: string;
+  category: string;
+  quantity: number;
   action: string;
 };
 
-export const userColumns: ColumnDef<Payment>[] = [
+export const materialInventory: ColumnDef<Material>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => <TableSorter column={column} header="#" />,
@@ -21,16 +20,16 @@ export const userColumns: ColumnDef<Payment>[] = [
     ),
   },
   {
-    accessorKey: "account",
-    header: ({ column }) => <TableSorter column={column} header="ACCOUNT" />,
-  },
-  {
-    accessorKey: "user",
-    header: ({ column }) => <TableSorter column={column} header="USER" />,
+    accessorKey: "material",
+    header: ({ column }) => <TableSorter column={column} header="MATERIAL" />,
   },
   {
     accessorKey: "category",
     header: ({ column }) => <TableSorter column={column} header="CATEGORY" />,
+  },
+  {
+    accessorKey: "quantity",
+    header: ({ column }) => <TableSorter column={column} header="QUANTITY" />,
   },
   {
     accessorKey: "action",

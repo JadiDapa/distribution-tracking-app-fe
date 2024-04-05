@@ -1,9 +1,14 @@
-import { useFetch } from "@/hooks/context/useFetch";
-import { userColumns } from "@/utils/table/user-column";
+import { accountColumns } from "@/utils/table/account-column";
 import AccountTable from "./AccountTable";
+import { GetAccounts } from "@/lib/network/useAccounts";
 
 export default function AccountData() {
-  const { apiData } = useFetch("http://localhost:3000/users");
+  const { data, error } = GetAccounts();
 
-  return apiData && <AccountTable columns={userColumns} data={apiData} />;
+  return (
+    <>
+      {error && <h1>Something went wrong</h1>}
+      {data && <AccountTable columns={accountColumns} data={data} />}
+    </>
+  );
 }

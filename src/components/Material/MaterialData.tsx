@@ -1,11 +1,11 @@
-import { materialColumns } from "@/utils/table/material-column";
 import { useFetch } from "@/hooks/context/useFetch";
 import MaterialTable from "./MaterialTable";
+import { materialInventory } from "@/utils/table/material-inventory";
 
 function UserTable() {
-  const { apiData } = useFetch("http://localhost:3000/material");
+  // const { apiData } = useFetch("http://localhost:3000/material-inventory");
 
-  return apiData && <MaterialTable columns={materialColumns} data={apiData} />;
+  return <MaterialTable columns={materialInventory} data={[]} />;
 }
 
 export default UserTable;

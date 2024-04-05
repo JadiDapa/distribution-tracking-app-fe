@@ -6,8 +6,8 @@ import InfoForm from "@/components/User/InfoForm";
 import RelationForm from "@/components/User/RelationForm";
 import CreatePageHeader from "@/components/ui/CreatePageHeader";
 import SeactionHeader from "@/components/ui/SeactionHeader";
-import { CreateAccount } from "@/lib/network/useAccounts";
-import { useNavigate } from "react-router-dom";
+import { EditAccount, GetAccountById } from "@/lib/network/useAccounts";
+import { useNavigate, useParams } from "react-router-dom";
 import useNotificationStore from "@/lib/store/NotificationStore";
 
 const formSchema = z
@@ -65,27 +65,33 @@ const formSchema = z
     },
   );
 
-export default function AccountAdd() {
-  const { postAccount } = CreateAccount();
+export default function AccountEdit() {
+  const { editAccount } = EditAccount();
+  const { accountId } = useParams();
   const navigate = useNavigate();
   const { setStatus, setMessage } = useNotificationStore();
+
+  const { data } = GetAccountById(accountId!);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      user: "",
-      password: "",
-      confirmPassword: "",
-      status: "active",
-      unitId: "3",
-      relation: "",
+    values: {
+      name: data.name,
+      user: data.user,
+      password: data.password,
+      confirmPassword: data.password,
+      status: data.status,
+      unitId: data.unitId,
+      relation: data.relation,
     },
   });
 
+  console.log(form.watch());
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await postAccount(values);
+    await editAccount(values);
     setStatus("success");
-    setMessage("Account Successfully Created!");
+    setMessage(`Account ${values.name} Successfully Modified!`);
     return navigate("/account-list");
   }
 

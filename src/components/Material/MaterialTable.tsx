@@ -137,7 +137,7 @@ export default function MaterialTable<TData, TValue>({
             variant="default"
             icon={<CirclePlus size={20} strokeWidth={2.25} />}
           >
-            Add New Material
+            Add New Materials
           </Button>
         </Link>
       </div>

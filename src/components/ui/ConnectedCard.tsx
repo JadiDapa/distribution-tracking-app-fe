@@ -16,14 +16,14 @@ export default function ConnectedCard({
   textColor,
 }: Props) {
   return (
-    <div className="flex w-full justify-between rounded-md px-6 first:pl-0 last:pr-0">
+    <div className="flex w-full justify-between px-6 first:pl-0 last:pr-0">
       <div className="flex flex-col gap-2">
-        <div className="text-lg">{title}</div>
-        <div className="text-3xl">{value}</div>
-        <div className="font-light">{detail}</div>
+        <div className="">{title}</div>
+        <div className="text-2xl">{value}</div>
+        <div className="text-sm font-light">{detail}</div>
       </div>
       <div
-        className="flex h-12 w-12 items-center justify-center rounded-md text-lg"
+        className="flex h-10 w-10 items-center justify-center rounded-md"
         style={{ backgroundColor: bgColor, color: textColor }}
       >
         {icon}

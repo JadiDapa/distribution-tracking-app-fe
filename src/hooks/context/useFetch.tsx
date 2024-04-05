@@ -11,7 +11,7 @@ export const useFetch = (url: string) => {
     const fetchData = async () => {
       try {
         const resp = await axios.get(url);
-        const data = await resp?.data;
+        const data = await resp?.data.data;
 
         setApiData(data);
         setIsLoading(false);

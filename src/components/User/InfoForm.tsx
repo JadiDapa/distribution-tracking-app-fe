@@ -8,28 +8,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup } from "@/components/ui/radio-group";
+import { AccountType } from "@/lib/network/useAccounts";
 import { Power, PowerOff } from "lucide-react";
 import { Control } from "react-hook-form";
 
 type Props = {
-  control: Control<{
-    account: string;
-    user: string;
-    password: string;
-    confirmPassword: string;
-    status: "Active" | "Inactive";
-    category: "Unit Pelaksana" | "Unit Layanan" | "Posko";
-    relation?: string;
-  }>;
-  values: {
-    account: string;
-    user: string;
-    password: string;
-    confirmPassword: string;
-    status: "Active" | "Inactive";
-    category: "Unit Pelaksana" | "Unit Layanan" | "Posko";
-    relation?: string | undefined;
-  };
+  control: Control<AccountType>;
+  values: AccountType;
 };
 
 export default function InfoForm({ control, values }: Props) {
@@ -38,7 +23,7 @@ export default function InfoForm({ control, values }: Props) {
       <h2 className="text-xl font-medium ">Account Information</h2>
       <FormField
         control={control}
-        name="account"
+        name="name"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Account Name</FormLabel>
@@ -89,14 +74,14 @@ export default function InfoForm({ control, values }: Props) {
               >
                 <CustomRadio
                   values={values.status}
-                  value="Active"
+                  value="active"
                   desc="Account is enabled"
                   label="Active"
                   icon={<Power />}
                 />
                 <CustomRadio
                   values={values.status}
-                  value="Inactive"
+                  value="inactive"
                   desc="Account is disabled"
                   label="Inactive"
                   icon={<PowerOff />}

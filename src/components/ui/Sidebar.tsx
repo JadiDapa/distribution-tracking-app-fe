@@ -8,7 +8,7 @@ import {
   Truck,
   UserRound,
   UsersRound,
-  Wrench,
+  WrenchIcon,
 } from "lucide-react";
 import { LiaToolsSolid } from "react-icons/lia";
 
@@ -16,32 +16,32 @@ const sidebarLink = [
   {
     name: "Dashboard",
     url: "/",
-    icon: <Home strokeWidth={1.5} />,
+    icon: <Home strokeWidth={1.5} size={20} />,
   },
   {
     name: "Distribution",
     url: "/distribution",
-    icon: <Truck strokeWidth={1.5} />,
+    icon: <Truck strokeWidth={1.5} size={20} />,
   },
   {
     name: "Related Account",
     url: "/account-related",
-    icon: <UserRound strokeWidth={1.5} />,
+    icon: <UserRound strokeWidth={1.5} size={20} />,
   },
   {
     name: "Materials",
     url: "/material-inventory",
-    icon: <Cable strokeWidth={1.5} />,
+    icon: <Cable strokeWidth={1.5} size={20} />,
   },
   {
     name: "Tools",
     url: "/tool-inventory",
-    icon: <Wrench className="text-2xl" />,
+    icon: <WrenchIcon strokeWidth={1.5} size={20} />,
   },
   {
     name: "Vehicles",
     url: "/vehicle-inventory",
-    icon: <CarFront strokeWidth={1.5} />,
+    icon: <CarFront strokeWidth={1.5} size={20} />,
   },
 ];
 
@@ -49,12 +49,12 @@ const adminSidebarLink = [
   {
     name: "Account List",
     url: "/account-list",
-    icon: <UsersRound strokeWidth={1.5} />,
+    icon: <UsersRound strokeWidth={1.5} size={20} />,
   },
   {
     name: "Material List",
     url: "/material-list",
-    icon: <CircuitBoard strokeWidth={1.5} />,
+    icon: <CircuitBoard strokeWidth={1.5} size={20} />,
   },
   {
     name: "Tool List",
@@ -64,7 +64,7 @@ const adminSidebarLink = [
   {
     name: "Vehicle List",
     url: "/vehicle-list",
-    icon: <BusFront strokeWidth={1.5} />,
+    icon: <BusFront strokeWidth={1.5} size={20} />,
   },
 ];
 
@@ -76,14 +76,14 @@ type Props = {
 export default function Sidebar({ isOpen, setIsOpen }: Props) {
   return (
     <nav
-      className={`${isOpen ? "w-72" : "w-[76px]"} box-shadow fixed min-h-screen overflow-hidden bg-white p-4 transition-all duration-500`}
+      className={`${isOpen ? "w-[260px]" : "w-[84px]"} box-shadow fixed min-h-screen overflow-hidden bg-white p-4 transition-all duration-500`}
     >
       <div className="flex items-center justify-between ">
         <div className="flex items-center gap-4">
           <img
             onClick={() => setIsOpen(!isOpen)}
             src="/images/logo-only.png"
-            className="w-12"
+            className="w-11"
           />
           <div
             className={`${isOpen ? "block" : "hidden"} text-2xl font-extrabold tracking-wider text-[#00AFEF]`}
@@ -99,7 +99,7 @@ export default function Sidebar({ isOpen, setIsOpen }: Props) {
         </div>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-4">
         {sidebarLink.map((link) => (
           <SiderbarLink
             key={link.name}
@@ -109,7 +109,11 @@ export default function Sidebar({ isOpen, setIsOpen }: Props) {
             isOpen={isOpen}
           />
         ))}
-        <div className="mt-8">ADMIN WORKSPACE</div>
+        {isOpen ? (
+          <div className="mt-4">ADMIN WORKSPACE</div>
+        ) : (
+          <hr className="mx-2 mt-4" />
+        )}
         {adminSidebarLink.map((link) => (
           <SiderbarLink
             key={link.name}

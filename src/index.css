@@ -54,7 +54,7 @@
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 240, 10%, 88%;
     --muted-foreground: 240, 3%, 94%;
 
     --accent: 217.2 32.6% 17.5%;
@@ -74,10 +74,10 @@
     @apply border-border;
   }
   body {
-    @apply font-public bg-background text-foreground text-slate-700;
+    @apply bg-background font-public text-foreground text-slate-700;
   }
 }
 
 .box-shadow {
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 6px 0px;
 }

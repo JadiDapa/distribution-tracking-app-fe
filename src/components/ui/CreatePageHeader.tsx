@@ -15,7 +15,7 @@ export default function CreatePageHeader({ header, subheader }: Props) {
       <div className="flex gap-4">
         <Button variant="muted">Discard</Button>
         <Button variant="default" type="submit">
-          Add Material
+          Add Data
         </Button>
       </div>
     </header>
