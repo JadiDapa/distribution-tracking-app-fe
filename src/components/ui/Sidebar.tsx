@@ -1,5 +1,6 @@
 import SiderbarLink from "./SidebarLink";
 import {
+  ArchiveRestore,
   BusFront,
   Cable,
   CarFront,
@@ -19,14 +20,14 @@ const sidebarLink = [
     icon: <Home strokeWidth={1.5} size={20} />,
   },
   {
-    name: "Distribution",
-    url: "/distribution",
-    icon: <Truck strokeWidth={1.5} size={20} />,
-  },
-  {
     name: "Related Account",
     url: "/account-related",
     icon: <UserRound strokeWidth={1.5} size={20} />,
+  },
+  {
+    name: "Request",
+    url: "/request-list",
+    icon: <ArchiveRestore strokeWidth={1.5} size={20} />,
   },
   {
     name: "Materials",

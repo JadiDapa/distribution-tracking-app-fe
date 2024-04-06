@@ -11,7 +11,6 @@ import AccountAdd from "./pages/account/AccountAdd";
 import MaterialAdd from "./pages/material/MaterialAdd";
 import ToolAdd from "./pages/tool/ToolAdd";
 import VehicleAdd from "./pages/vehicle/VehicleAdd";
-import Distribution from "./pages/distribution/Distribution";
 import AccountRelated from "./pages/account/AccountRelated";
 import MaterialInventory from "./pages/material/MaterialInventory";
 import ToolInventory from "./pages/tool/ToolInventory";
@@ -19,6 +18,8 @@ import VehicleInventory from "./pages/vehicle/VehicleInventory";
 import { useEffect } from "react";
 import useAuthStore from "./lib/store/AuthStore";
 import AccountEdit from "./pages/account/AccountEdit";
+import RequestList from "./pages/request/RequestList";
+import RequestAdd from "./pages/request/RequestAdd";
 
 export default function App() {
   const [token, saveToken] = useAuthStore((state) => [
@@ -28,19 +29,19 @@ export default function App() {
 
   useEffect(() => {
     const checkToken = localStorage.getItem("token");
-    if (!token) {
-      if (checkToken) {
-        saveToken(checkToken);
-      }
+    if (!token && checkToken) {
+      saveToken(checkToken);
     }
   }, [token, saveToken]);
 
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="distribution" element={<Distribution />} />
+          <Route path="/request-list" element={<RequestList />} />
+          <Route path="/request-add" element={<RequestAdd />} />
 
           <Route path="/account-related" element={<AccountRelated />} />
           <Route path="/account-list" element={<AccountList />} />
@@ -59,7 +60,6 @@ export default function App() {
           <Route path="/vehicle-list" element={<VehicleList />} />
           <Route path="/vehicle-add" element={<VehicleAdd />} />
         </Route>
-        <Route path="/login" element={<Login />} />
         <Route path="*" element={"NoPage"} />
       </Routes>
     </BrowserRouter>

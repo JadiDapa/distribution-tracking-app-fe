@@ -12,9 +12,9 @@ function Login() {
 
   useEffect(() => {
     if (token) {
-      return navigate("/");
+      navigate("/");
     }
-  }, [navigate, token]);
+  });
 
   return (
     <div className="overflow-hidden lg:flex">

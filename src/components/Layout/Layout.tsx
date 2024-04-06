@@ -31,11 +31,9 @@ function Layout() {
     }, 3000);
   }, [message, status, setMessage, setStatus]);
 
-  useEffect(() => {
-    if (!token) {
-      return navigate("/login");
-    }
-  }, [navigate, token]);
+  if (!token) {
+    navigate("/login");
+  }
 
   return (
     <>

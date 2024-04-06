@@ -12,6 +12,7 @@ import useNotificationStore from "@/lib/store/NotificationStore";
 
 const formSchema = z
   .object({
+    id: z.any(),
     name: z
       .string()
       .min(4, {
@@ -28,22 +29,8 @@ const formSchema = z
       .max(50, {
         message: "Account User must be lower than 50 characters long!",
       }),
-    password: z
-      .string()
-      .min(8, {
-        message: "Password must be atleast 8 characters long!",
-      })
-      .max(50, {
-        message: "Password must be lower than 50 characters long!",
-      }),
-    confirmPassword: z
-      .string()
-      .min(8, {
-        message: "Password must be atleast 8 characters long!",
-      })
-      .max(50, {
-        message: "Password must be lower than 50 characters long!",
-      }),
+    password: z.string(),
+    confirmPassword: z.string(),
     status: z.string(),
     unitId: z.string(),
     relation: z.string().optional(),
@@ -76,20 +63,28 @@ export default function AccountEdit() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     values: {
+      id: data.id,
       name: data.name,
       user: data.user,
       password: data.password,
       confirmPassword: data.password,
       status: data.status,
-      unitId: data.unitId,
+      unitId: String(data.unitId),
       relation: data.relation,
     },
   });
 
-  console.log(form.watch());
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await editAccount(values);
+    await editAccount({
+      id: Number(values.id),
+      name: values.name,
+      user: values.user,
+      password: values.password,
+      confirmPassword: values.password,
+      status: values.status,
+      unitId: Number(values.unitId),
+      relation: values.relation,
+    });
     setStatus("success");
     setMessage(`Account ${values.name} Successfully Modified!`);
     return navigate("/account-list");

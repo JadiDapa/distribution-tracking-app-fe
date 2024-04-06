@@ -1,7 +1,11 @@
 import {
+  Archive,
+  ArchiveRestore,
+  ArchiveX,
   Building,
   Cable,
   Home,
+  PackageOpen,
   RectangleEllipsis,
   UsersRound,
   Warehouse,
@@ -172,5 +176,40 @@ export const showedData = [
   {
     name: "All",
     value: "all",
+  },
+];
+
+export const requestListCard = [
+  {
+    title: "Total Request",
+    value: "400",
+    icon: <PackageOpen />,
+    detail: "Total of every request sent",
+    bgColor: "#e8e6fc",
+    textColor: "#5748ff",
+  },
+  {
+    title: "Accepted",
+    value: "3",
+    icon: <ArchiveRestore />,
+    detail: "Total of accepted request",
+    bgColor: "#d6ffe9",
+    textColor: "#45d387",
+  },
+  {
+    title: "Pending",
+    value: "7",
+    icon: <Archive />,
+    detail: "Total of pending request",
+    bgColor: "#fff9d6",
+    textColor: "#d3c945",
+  },
+  {
+    title: "Declined",
+    value: "7",
+    icon: <ArchiveX />,
+    detail: "Total of declined request",
+    bgColor: "#ffd3d5",
+    textColor: "#ff5e66",
   },
 ];

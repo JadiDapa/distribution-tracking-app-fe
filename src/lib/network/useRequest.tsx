@@ -7,57 +7,24 @@ export type AccountUnit = {
   unit: string;
 };
 
-export type AccountProps = {
+export type RequestType = {
   id: number;
-  name: string;
-  user: string;
-  password: string;
-  picture?: string;
+  code: string;
+  requested: string;
+  type: string;
+  total: number;
   status: string;
-  unitId: string;
-  relation?: string;
-  unit: AccountUnit;
 };
 
-export type AccountType = {
+export type EditAccountType = {
+  id: number;
   name: string;
   user: string;
   password: string;
   confirmPassword: string;
   status: string;
-  unitId: string;
+  unitId: number;
   relation?: string | undefined;
-};
-
-// Fetch Accounts Data
-export const GetAccounts = () => {
-  const [data, setData] = useState<AccountProps[]>();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<boolean>(false);
-  const { token } = useAuthStore();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(false);
-      try {
-        const response = await axios.get("http://localhost:3000/api/accounts", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setData(response.data.data);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [token]);
-
-  return { data, isLoading, error };
 };
 
 const defaultValues = {
@@ -70,6 +37,46 @@ const defaultValues = {
   unitId: "3",
   relation: "",
   unit: { id: 0, unit: "" },
+};
+
+// Fetch Accounts Data
+export const GetRequests = () => {
+  const [data, setData] = useState<RequestType[]>([
+    {
+      id: 2,
+      code: "8324034",
+      requested: "ULP",
+      type: "Material",
+      total: 10,
+      status: "pending",
+    },
+  ]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<boolean>(false);
+  //   const { token } = useAuthStore();
+
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       setIsLoading(true);
+  //       setError(false);
+  //       try {
+  //         const response = await axios.get("http://localhost:3000/api/accounts", {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         });
+  //         setData(response.data.data);
+  //       } catch (error) {
+  //         setError(true);
+  //       } finally {
+  //         setIsLoading(false);
+  //       }
+  //     };
+
+  //     fetchData();
+  //   }, [token]);
+
+  return { data, isLoading, error };
 };
 
 export const GetAccountById = (id: string) => {
@@ -155,17 +162,6 @@ export const CreateAccount = () => {
   };
 
   return { postAccount, isSuccess, loading, error };
-};
-
-export type EditAccountType = {
-  id: number;
-  name: string;
-  user: string;
-  password: string;
-  confirmPassword: string;
-  status: string;
-  unitId: number;
-  relation?: string | undefined;
 };
 
 // Edit an existing Account

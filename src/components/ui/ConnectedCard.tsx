@@ -2,7 +2,7 @@ type Props = {
   title: string;
   value: string;
   icon: React.ReactElement;
-  detail: string;
+  detail?: string;
   bgColor: string;
   textColor: string;
 };
