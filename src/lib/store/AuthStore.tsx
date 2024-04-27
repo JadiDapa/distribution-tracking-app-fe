@@ -1,15 +1,27 @@
 import { create } from "zustand";
 
+type UserData = {
+  id: number;
+  name: string;
+  password: string;
+  picture?: string;
+  relation?: string;
+  status: string;
+  token: string;
+  unitId: number;
+  user: string;
+};
+
 type AuthStore = {
-  token: string | null;
-  saveToken: (token: string) => void;
-  removeToken: () => void;
+  userData: UserData | null;
+  saveUser: (userData: UserData) => void;
+  removeUser: () => void;
 };
 
 const useAuthStore = create<AuthStore>((set) => ({
-  token: null,
-  saveToken: (token: string) => set({ token: token }),
-  removeToken: () => set({ token: null }),
+  userData: null,
+  saveUser: (userData: UserData) => set({ userData: userData }),
+  removeUser: () => set({ userData: null }),
 }));
 
 export default useAuthStore;

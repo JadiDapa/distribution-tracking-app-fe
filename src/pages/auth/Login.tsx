@@ -7,11 +7,11 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const { token } = useAuthStore();
+  const { userData } = useAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token) {
+    if (userData) {
       navigate("/");
     }
   });

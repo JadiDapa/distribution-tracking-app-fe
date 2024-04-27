@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
+import { Request } from "../types/request";
 
 export type AccountUnit = {
   id: number;
@@ -8,11 +9,10 @@ export type AccountUnit = {
 };
 
 export type RequestType = {
-  id: number;
-  code: string;
-  requested: string;
-  type: string;
-  total: number;
+  requester: number;
+  requested: number;
+  items: string;
+  note: string;
   status: string;
 };
 
@@ -41,7 +41,7 @@ const defaultValues = {
 
 // Fetch Accounts Data
 export const GetRequests = () => {
-  const [data, setData] = useState<RequestType[]>([
+  const [data, setData] = useState<Request[]>([
     {
       id: 2,
       code: "8324034",
@@ -79,7 +79,7 @@ export const GetRequests = () => {
   return { data, isLoading, error };
 };
 
-export const GetAccountById = (id: string) => {
+export const GetRequestById = (id: string) => {
   const [data, setData] = useState<AccountProps>(defaultValues);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
@@ -113,40 +113,29 @@ export const GetAccountById = (id: string) => {
   return { data, isLoading, error };
 };
 
-export type CreateAccountType = {
-  name: string;
-  user: string;
-  password: string;
-  confirmPassword?: string;
-  status: string;
-  unitId: string;
-  relation?: string | undefined;
-};
-// Create a new Account
-export const CreateAccount = () => {
+export const CreateRequest = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const { token } = useAuthStore();
+  const { userData } = useAuthStore();
 
-  const postAccount = async ({
-    name,
-    user,
-    password,
+  const postRequest = async ({
+    requester,
+    requested,
+    items,
+    note,
     status,
-    unitId,
-    relation,
-  }: CreateAccountType) => {
+  }: Request) => {
     setLoading(true);
     setError(false);
     setIsSuccess(false);
     try {
       await axios.post(
-        "http://localhost:3000/api/accounts/create",
-        { name, user, password, status, unitId: Number(unitId), relation },
+        "http://localhost:3000/api/request/create",
+        { requester, requested, items, note, status },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         },
       );
@@ -161,7 +150,7 @@ export const CreateAccount = () => {
     }
   };
 
-  return { postAccount, isSuccess, loading, error };
+  return { postRequest, isSuccess, loading, error };
 };
 
 // Edit an existing Account

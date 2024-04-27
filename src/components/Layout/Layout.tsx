@@ -5,9 +5,10 @@ import Navbar from "../ui/Navbar";
 import useAuthStore from "@/lib/store/AuthStore";
 import { Toaster, toast } from "sonner";
 import useNotificationStore from "@/lib/store/NotificationStore";
+import { ToasterUI } from "../ui/toaster";
 
 function Layout() {
-  const { token } = useAuthStore();
+  const { userData } = useAuthStore();
   const { status, message, setStatus, setMessage } = useNotificationStore();
   const [isOpen, setIsOpen] = useState(true);
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ function Layout() {
     }, 3000);
   }, [message, status, setMessage, setStatus]);
 
-  if (!token) {
+  if (!userData) {
     navigate("/login");
   }
 
@@ -47,6 +48,7 @@ function Layout() {
         </main>
       </section>
       <Toaster richColors closeButton />
+      <ToasterUI />
     </>
   );
 }

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 export const useLogin = () => {
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
-  const { saveToken } = useAuthStore();
+  const { saveUser } = useAuthStore();
   const navigate = useNavigate();
 
   const login = async (values: { name: string; password: string }) => {
@@ -16,11 +16,11 @@ export const useLogin = () => {
     await axios
       .post("http://localhost:3000/api/accounts/login", values)
       .then((response) => {
-        const token = response.data.data.token;
-        localStorage.setItem("token", token);
-        saveToken(token);
-        setIsLoading(false);
+        const data = response.data.data;
+        localStorage.setItem("userData", JSON.stringify(data));
+        saveUser(data);
         localStorage.setItem("firstLog", "true");
+        setIsLoading(false);
         navigate("/");
       })
       .catch((error) => {

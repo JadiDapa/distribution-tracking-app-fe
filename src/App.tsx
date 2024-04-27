@@ -22,17 +22,15 @@ import RequestList from "./pages/request/RequestList";
 import RequestAdd from "./pages/request/RequestAdd";
 
 export default function App() {
-  const [token, saveToken] = useAuthStore((state) => [
-    state.token,
-    state.saveToken,
-  ]);
+  const { userData, saveUser } = useAuthStore();
 
   useEffect(() => {
-    const checkToken = localStorage.getItem("token");
-    if (!token && checkToken) {
-      saveToken(checkToken);
+    const getUserData = localStorage.getItem("userData");
+    if (!userData && getUserData) {
+      const getToken = JSON.parse(getUserData);
+      saveUser(getToken);
     }
-  }, [token, saveToken]);
+  }, [userData, saveUser]);
 
   return (
     <BrowserRouter>

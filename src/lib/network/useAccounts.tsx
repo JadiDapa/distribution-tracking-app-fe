@@ -34,7 +34,7 @@ export const GetAccounts = () => {
   const [data, setData] = useState<AccountProps[]>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
-  const { token } = useAuthStore();
+  const { userData } = useAuthStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,7 +43,7 @@ export const GetAccounts = () => {
       try {
         const response = await axios.get("http://localhost:3000/api/accounts", {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         });
         setData(response.data.data);
@@ -55,7 +55,7 @@ export const GetAccounts = () => {
     };
 
     fetchData();
-  }, [token]);
+  }, [userData]);
 
   return { data, isLoading, error };
 };
@@ -76,7 +76,7 @@ export const GetAccountById = (id: string) => {
   const [data, setData] = useState<AccountProps>(defaultValues);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
-  const { token } = useAuthStore();
+  const { userData } = useAuthStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,7 +88,7 @@ export const GetAccountById = (id: string) => {
           "http://localhost:3000/api/accounts/" + convertId,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${userData?.token}`,
             },
           },
         );
@@ -101,7 +101,7 @@ export const GetAccountById = (id: string) => {
     };
 
     fetchData();
-  }, [id, token]);
+  }, [id, userData]);
 
   return { data, isLoading, error };
 };
@@ -120,7 +120,7 @@ export const CreateAccount = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const { token } = useAuthStore();
+  const { userData } = useAuthStore();
 
   const postAccount = async ({
     name,
@@ -139,7 +139,7 @@ export const CreateAccount = () => {
         { name, user, password, status, unitId: Number(unitId), relation },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         },
       );
@@ -172,7 +172,7 @@ export type EditAccountType = {
 export const EditAccount = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
-  const { token } = useAuthStore();
+  const { userData } = useAuthStore();
 
   const editAccount = async ({
     id,
@@ -191,7 +191,7 @@ export const EditAccount = () => {
         { name, user, password, status, unitId: Number(unitId), relation },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         },
       );
@@ -210,7 +210,7 @@ export const EditAccount = () => {
 export const DeleteAccount = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
-  const { token } = useAuthStore();
+  const { userData } = useAuthStore();
 
   const deleteAccount = async (id: string) => {
     try {
@@ -219,7 +219,7 @@ export const DeleteAccount = () => {
       const convertId = Number(id);
       await axios.delete("http://localhost:3000/api/accounts/" + convertId, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userData?.token}`,
         },
       });
     } catch (error) {

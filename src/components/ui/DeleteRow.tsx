@@ -12,6 +12,7 @@ import {
   AlertDialogTrigger,
 } from "./alert-dialog";
 import useNotificationStore from "@/lib/store/NotificationStore";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   id: string;
@@ -21,11 +22,13 @@ type Props = {
 export default function DeleteRow({ id, name }: Props) {
   const { deleteAccount } = DeleteAccount();
   const { setStatus, setMessage } = useNotificationStore();
+  const navigate = useNavigate();
 
   function handleDelete() {
     deleteAccount(id);
     setStatus("error");
     setMessage("Account Deleted Successfully!");
+    navigate(0);
   }
 
   return (

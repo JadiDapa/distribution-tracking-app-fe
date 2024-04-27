@@ -9,14 +9,19 @@ type Props = {
 };
 
 export default function TableSorter({ column, header }: Props) {
+  function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    column.toggleSorting(column.getIsSorted() === "asc");
+  }
   return (
     <Button
       variant="ghost"
-      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      className="group"
+      size="hug"
+      onClick={handleClick}
+      className="justify-start w-full group hover:bg-transparent"
     >
       {header}
-      <ArrowUpDown className="ml-5 h-4 w-4 opacity-0 duration-150 group-hover:opacity-100" />
+      <ArrowUpDown className="w-4 h-4 ml-6 duration-150 opacity-0 group-hover:opacity-100" />
     </Button>
   );
 }
