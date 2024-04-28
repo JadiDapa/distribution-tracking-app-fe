@@ -6,7 +6,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Control } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -17,26 +16,11 @@ import {
 import { materialCategoryFilter } from "@/utils/static";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { ToolControl, Tools } from "@/lib/types/tool";
 
 type Props = {
-  control: Control<{
-    name: string;
-    category: string;
-    expired: Date;
-    status: string;
-    sku: string;
-    description: string;
-    image: string;
-  }>;
-  values: {
-    name: string;
-    category: string;
-    expired: Date;
-    status: string;
-    sku: string;
-    description: string;
-    image: string;
-  };
+  control: ToolControl;
+  values: Tools;
 };
 
 export default function ToolInfoForm({ control }: Props) {
@@ -59,7 +43,7 @@ export default function ToolInfoForm({ control }: Props) {
       <div className="flex gap-6">
         <FormField
           control={control}
-          name="category"
+          name="categoryId"
           render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>Category</FormLabel>
@@ -99,7 +83,7 @@ export default function ToolInfoForm({ control }: Props) {
 
       <FormField
         control={control}
-        name="description"
+        name="detail"
         render={({ field }) => (
           <FormItem className="h-full">
             <FormLabel>Detail</FormLabel>

@@ -8,33 +8,17 @@ import {
 } from "@/components/ui/form";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { BadgeCheck, BadgeX } from "lucide-react";
-import { Control } from "react-hook-form";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import { format } from "date-fns";
+import { ToolControl, Tools } from "@/lib/types/tool";
 
 type Props = {
-  control: Control<{
-    name: string;
-    category: string;
-    expired: Date;
-    status: string;
-    sku: string;
-    description: string;
-    image: string;
-  }>;
-  values: {
-    name: string;
-    category: string;
-    expired: Date;
-    status: string;
-    sku: string;
-    description: string;
-    image: string;
-  };
+  control: ToolControl;
+  values: Tools;
 };
 export default function ToolStatusForm({ control, values }: Props) {
   return (
@@ -75,7 +59,7 @@ export default function ToolStatusForm({ control, values }: Props) {
       </div>
       <FormField
         control={control}
-        name="expired"
+        name="expired_at"
         render={({ field }) => (
           <FormItem className="flex w-full flex-col">
             <FormLabel>Expired Date</FormLabel>

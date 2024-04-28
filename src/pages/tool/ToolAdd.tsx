@@ -7,33 +7,81 @@ import CreatePageHeader from "@/components/ui/CreatePageHeader";
 import ToolImageForm from "@/components/Tools/ToolImageForm";
 import ToolStatusForm from "@/components/Tools/ToolStatusForm";
 import ToolInfoForm from "@/components/Tools/ToolInfoForm";
+import { CreateTool } from "@/lib/network/useTool";
+import { useNavigate } from "react-router-dom";
+import useNotificationStore from "@/lib/store/NotificationStore";
+import { useState } from "react";
 
 const formSchema = z.object({
-  name: z.string().min(8).max(100),
-  category: z.string().min(8).max(50),
-  expired: z.date(),
-  status: z.string().min(8).max(50),
-  sku: z.string().min(8).max(50),
-  description: z.string().min(8),
-  image: z.string().min(8),
+  name: z
+    .string()
+    .min(4, {
+      message: "Material Name must be atleast 5 characters long!",
+    })
+    .max(50, {
+      message: "Account Name must be lower than 100 characters long!",
+    }),
+  categoryId: z.string().min(1, {
+    message: "Select material category",
+  }),
+  status: z.string().min(1, {
+    message: "Select status category",
+  }),
+  expired_at: z.date(),
+  sku: z
+    .string()
+    .min(4, {
+      message: "SKU Code must be atleast 10 characters long!",
+    })
+    .max(20, {
+      message: "Account Name must be lower than 20 characters",
+    }),
+  detail: z.string(),
 });
 
 export default function ToolAdd() {
+  const [picture, setPicture] = useState("");
+  const { postTool, error } = CreateTool();
+  const navigate = useNavigate();
+  const { setStatus, setMessage } = useNotificationStore();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      category: "",
-      expired: new Date(),
+      expired_at: new Date(),
       status: "",
       sku: "",
-      description: "",
-      image: "",
+      detail: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  function handlePicture(e: React.ChangeEvent<HTMLInputElement>) {
+    const picture = e.target.files[0];
+    const urlPicture = URL.createObjectURL(picture);
+    setPicture(urlPicture);
+  }
+
+  function removePicture() {
+    setPicture("");
+  }
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    await postTool({
+      name: values.name,
+      categoryId: Number(values.categoryId),
+      status: values.status,
+      expired_at: values.expired_at,
+      sku: values.sku,
+      detail: values.detail,
+    });
+    if (error) {
+      setStatus("error");
+      setMessage("Something Went Wrong!");
+    } else {
+      setStatus("success");
+      setMessage("Tool Successfully Created!");
+      navigate("/tool-list");
+    }
   }
 
   return (
@@ -55,7 +103,11 @@ export default function ToolAdd() {
 
             <div className="flex w-1/3 flex-col gap-6">
               <ToolStatusForm control={form.control} values={form.watch()} />
-              <ToolImageForm control={form.control} values={form.watch()} />
+              <ToolImageForm
+                handlePicture={handlePicture}
+                file={picture}
+                removePicture={removePicture}
+              />
             </div>
           </div>
         </form>
