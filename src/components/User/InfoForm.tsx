@@ -8,13 +8,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup } from "@/components/ui/radio-group";
-import { AccountType } from "@/lib/network/useAccounts";
+import { AccountControl, Accounts } from "@/lib/types/account";
 import { Power, PowerOff } from "lucide-react";
-import { Control } from "react-hook-form";
 
 type Props = {
-  control: Control<AccountType>;
-  values: AccountType;
+  control: AccountControl;
+  values: Accounts;
 };
 
 export default function InfoForm({ control, values }: Props) {

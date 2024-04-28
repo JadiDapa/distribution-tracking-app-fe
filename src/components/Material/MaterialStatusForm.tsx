@@ -12,19 +12,19 @@ import { Control } from "react-hook-form";
 type Props = {
   control: Control<{
     name: string;
-    category: string;
+    categoryId: string;
     status: string;
     sku: string;
-    description: string;
-    image: string;
+    detail: string;
+    image?: string | undefined;
   }>;
   values: {
     name: string;
-    category: string;
+    categoryId: string;
     status: string;
     sku: string;
-    description: string;
-    image: string;
+    detail: string;
+    image?: string | undefined;
   };
 };
 
@@ -47,14 +47,14 @@ export default function MaterialStatusForm({ control, values }: Props) {
                   <CustomRadio
                     values={values.status}
                     value="available"
-                    desc="Material will appear"
+                    desc="Show material"
                     label="Available"
                     icon={<BadgeCheck size={32} />}
                   />
                   <CustomRadio
                     values={values.status}
                     value="unavailable"
-                    desc="Material wont appear"
+                    desc="Hide material"
                     label="Unavailable"
                     icon={<BadgeX size={32} />}
                   />

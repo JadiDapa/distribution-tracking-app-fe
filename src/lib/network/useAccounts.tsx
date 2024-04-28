@@ -1,123 +1,52 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
+import useSWR from "swr";
+import { Accounts } from "../types/account";
 
-export type AccountUnit = {
-  id: number;
-  unit: string;
-};
+const fetch = (url: string, token: string | undefined) =>
+  axios
+    .get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => res.data);
 
-export type AccountProps = {
-  id: number;
-  name: string;
-  user: string;
-  password: string;
-  picture?: string;
-  status: string;
-  unitId: string;
-  relation?: string;
-  unit: AccountUnit;
-};
-
-export type AccountType = {
-  name: string;
-  user: string;
-  password: string;
-  confirmPassword: string;
-  status: string;
-  unitId: string;
-  relation?: string | undefined;
-};
-
-// Fetch Accounts Data
-export const GetAccounts = () => {
-  const [data, setData] = useState<AccountProps[]>();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<boolean>(false);
+// Get All Accounts
+export function GetAccounts() {
   const { userData } = useAuthStore();
+  const { data, error, isLoading } = useSWR(
+    ["http://localhost:3000/api/accounts", userData?.token],
+    ([url, token]) => fetch(url, token),
+  );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(false);
-      try {
-        const response = await axios.get("http://localhost:3000/api/accounts", {
-          headers: {
-            Authorization: `Bearer ${userData?.token}`,
-          },
-        });
-        setData(response.data.data);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  return {
+    accounts: data?.data,
+    isLoading,
+    isError: error,
+  };
+}
 
-    fetchData();
-  }, [userData]);
-
-  return { data, isLoading, error };
-};
-
-const defaultValues = {
-  id: 0,
-  name: "",
-  user: "",
-  password: "",
-  confirmPassword: "",
-  status: "active",
-  unitId: "3",
-  relation: "",
-  unit: { id: 0, unit: "" },
-};
-
+// Get Single Account By Id
 export const GetAccountById = (id: string) => {
-  const [data, setData] = useState<AccountProps>(defaultValues);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<boolean>(false);
   const { userData } = useAuthStore();
+  const { data, error, isLoading } = useSWR(
+    [`http://localhost:3000/api/accounts/1`, userData?.token],
+    ([url, token]) => fetch(url, token),
+  );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(false);
-      const convertId = Number(id);
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/accounts/" + convertId,
-          {
-            headers: {
-              Authorization: `Bearer ${userData?.token}`,
-            },
-          },
-        );
-        setData(response.data.data);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  console.log(id);
 
-    fetchData();
-  }, [id, userData]);
-
-  return { data, isLoading, error };
+  return {
+    account: data?.data,
+    isLoading,
+    isError: error,
+  };
 };
 
-export type CreateAccountType = {
-  name: string;
-  user: string;
-  password: string;
-  confirmPassword?: string;
-  status: string;
-  unitId: string;
-  relation?: string | undefined;
-};
-// Create a new Account
+// Create a New Account
 export const CreateAccount = () => {
-  const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const { userData } = useAuthStore();
@@ -128,22 +57,27 @@ export const CreateAccount = () => {
     password,
     status,
     unitId,
-    relation,
-  }: CreateAccountType) => {
+    higherAccountId,
+  }: Accounts) => {
     setLoading(true);
     setError(false);
-    setIsSuccess(false);
     try {
       await axios.post(
         "http://localhost:3000/api/accounts/create",
-        { name, user, password, status, unitId: Number(unitId), relation },
+        {
+          name,
+          user,
+          password,
+          status,
+          unitId,
+          higherAccountId,
+        },
         {
           headers: {
             Authorization: `Bearer ${userData?.token}`,
           },
         },
       );
-      setIsSuccess(true);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error);
@@ -154,18 +88,7 @@ export const CreateAccount = () => {
     }
   };
 
-  return { postAccount, isSuccess, loading, error };
-};
-
-export type EditAccountType = {
-  id: number;
-  name: string;
-  user: string;
-  password: string;
-  confirmPassword: string;
-  status: string;
-  unitId: number;
-  relation?: string | undefined;
+  return { postAccount, loading, error };
 };
 
 // Edit an existing Account
@@ -181,14 +104,21 @@ export const EditAccount = () => {
     password,
     status,
     unitId,
-    relation,
-  }: EditAccountType) => {
+    higherAccountId,
+  }: Accounts) => {
     setIsLoading(true);
     setError(false);
     try {
       await axios.put(
         `http://localhost:3000/api/accounts/${id}`,
-        { name, user, password, status, unitId: Number(unitId), relation },
+        {
+          name,
+          user,
+          password,
+          status,
+          unitId,
+          higherAccountId,
+        },
         {
           headers: {
             Authorization: `Bearer ${userData?.token}`,

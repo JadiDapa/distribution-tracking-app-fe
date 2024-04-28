@@ -1,17 +1,15 @@
 import DeleteRow from "@/components/ui/DeleteRow";
 import TableSorter from "@/components/ui/TableSorter";
-import { AccountProps } from "@/lib/network/useAccounts";
+import { Accounts } from "@/lib/types/account";
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye, Pencil } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export const accountColumns: ColumnDef<AccountProps>[] = [
+export const accountColumns: ColumnDef<Accounts>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => <TableSorter column={column} header="#" />,
-    cell: ({ row }) => (
-      <div className="ml-4 text-primary">#{row.getValue("id")}</div>
-    ),
+    cell: ({ row }) => <div className="ml-4 text-primary">{row.index + 1}</div>,
   },
   {
     accessorKey: "name",

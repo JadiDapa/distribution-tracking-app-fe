@@ -1,4 +1,3 @@
-import { DeleteAccount } from "@/lib/network/useAccounts";
 import { Trash2 } from "lucide-react";
 import {
   AlertDialog,
@@ -12,23 +11,26 @@ import {
   AlertDialogTrigger,
 } from "./alert-dialog";
 import useNotificationStore from "@/lib/store/NotificationStore";
-import { useNavigate } from "react-router-dom";
+import { DeleteMaterial } from "@/lib/network/useMaterial";
 
 type Props = {
   id: string;
   name: string;
 };
 
-export default function DeleteRow({ id, name }: Props) {
-  const { deleteAccount } = DeleteAccount();
+export default function DeleteMaterialRow({ id, name }: Props) {
+  const { deleteMaterial, isError } = DeleteMaterial();
   const { setStatus, setMessage } = useNotificationStore();
-  const navigate = useNavigate();
 
-  function handleDelete() {
-    deleteAccount(id);
-    setStatus("error");
-    setMessage("Data Deleted Successfully!");
-    navigate(0);
+  async function handleDelete() {
+    await deleteMaterial(id);
+    if (isError) {
+      setStatus("error");
+      setMessage("Something Went Wrong!");
+    } else {
+      setStatus("success");
+      setMessage(`Material ${name} Deleted Successfully!`);
+    }
   }
 
   return (
@@ -39,7 +41,7 @@ export default function DeleteRow({ id, name }: Props) {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Delete Data <span className="text-red-500">{name}</span>?
+            Delete Material <span className="text-red-500">{name}</span>?
           </AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. This will permanently delete this data

@@ -132,16 +132,16 @@ export const statusFilter = [
 
 export const materialCategoryFilter = [
   {
-    name: "BH",
-    value: "BH",
+    name: "Buah",
+    value: "2",
   },
   {
-    name: "SMTH",
-    value: "SMTH",
+    name: "Set",
+    value: "3",
   },
   {
-    name: "FR",
-    value: "FR",
+    name: "Kg",
+    value: "4",
   },
 ];
 

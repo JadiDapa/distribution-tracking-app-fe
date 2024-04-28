@@ -18,10 +18,10 @@ export default function TableSorter({ column, header }: Props) {
       variant="ghost"
       size="hug"
       onClick={handleClick}
-      className="justify-start w-full group hover:bg-transparent"
+      className="group w-full justify-start hover:bg-transparent"
     >
       {header}
-      <ArrowUpDown className="w-4 h-4 ml-6 duration-150 opacity-0 group-hover:opacity-100" />
+      <ArrowUpDown className="ml-6 h-4 w-4 opacity-0 duration-150 group-hover:opacity-100" />
     </Button>
   );
 }

@@ -8,13 +8,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup } from "@/components/ui/radio-group";
-import { AccountType } from "@/lib/network/useAccounts";
+import { AccountControl, Accounts } from "@/lib/types/account";
 import { Building, Home, Warehouse } from "lucide-react";
-import { Control } from "react-hook-form";
 
 type Props = {
-  control: Control<AccountType>;
-  values: AccountType;
+  control: AccountControl;
+  values: Accounts;
 };
 
 export default function RelationForm({ control, values }: Props) {
@@ -76,7 +75,7 @@ export default function RelationForm({ control, values }: Props) {
       {values.unitId === "3" && (
         <FormField
           control={control}
-          name="relation"
+          name="higherAccountId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Relation</FormLabel>

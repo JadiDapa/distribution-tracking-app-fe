@@ -1,11 +1,28 @@
-import { useFetch } from "@/hooks/context/useFetch";
+import { GetMaterials } from "@/lib/network/useMaterial";
 import MaterialTable from "./MaterialTable";
-import { materialInventory } from "@/utils/table/material-inventory";
+import { material } from "@/utils/table/material";
+import BarLoader from "react-spinners/BarLoader";
 
-function UserTable() {
-  // const { apiData } = useFetch("http://localhost:3000/material-inventory");
+function MaterialData() {
+  const { materials, isLoading, isError } = GetMaterials();
 
-  return <MaterialTable columns={materialInventory} data={[]} />;
+  if (isError) return <div>Something went wrong...</div>;
+  if (isLoading)
+    return (
+      <div className="mx-auto w-full flex-col gap-8">
+        <p>Loading Your Data</p>
+        <BarLoader
+          color={"blue"}
+          loading={isLoading}
+          width={400}
+          height={5}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+    );
+
+  return <MaterialTable columns={material} data={materials} />;
 }
 
-export default UserTable;
+export default MaterialData;

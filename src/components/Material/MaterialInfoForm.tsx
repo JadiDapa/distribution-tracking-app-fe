@@ -21,19 +21,19 @@ import "react-quill/dist/quill.snow.css";
 type Props = {
   control: Control<{
     name: string;
-    category: string;
+    categoryId: string;
     status: string;
     sku: string;
-    description: string;
-    image: string;
+    detail: string;
+    image?: string | undefined;
   }>;
   values: {
     name: string;
-    category: string;
+    categoryId: string;
     status: string;
     sku: string;
-    description: string;
-    image: string;
+    detail: string;
+    image?: string | undefined;
   };
 };
 
@@ -57,7 +57,7 @@ export default function MaterialInfoForm({ control }: Props) {
       <div className="flex gap-6">
         <FormField
           control={control}
-          name="category"
+          name="categoryId"
           render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>Category</FormLabel>
@@ -77,6 +77,7 @@ export default function MaterialInfoForm({ control }: Props) {
                   ))}
                 </SelectContent>
               </Select>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -96,7 +97,7 @@ export default function MaterialInfoForm({ control }: Props) {
       </div>
       <FormField
         control={control}
-        name="description"
+        name="detail"
         render={({ field }) => (
           <FormItem className="h-80">
             <FormLabel>Detail</FormLabel>

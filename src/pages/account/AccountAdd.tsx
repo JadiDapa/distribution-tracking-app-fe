@@ -46,7 +46,7 @@ const formSchema = z
       }),
     status: z.string(),
     unitId: z.string(),
-    relation: z.string().optional(),
+    higherAccountId: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -54,7 +54,7 @@ const formSchema = z
   })
   .refine(
     (data) => {
-      if (data.unitId === "3" && !data.relation) {
+      if (data.unitId === "3" && !data.higherAccountId) {
         return false;
       }
       return true;
@@ -66,7 +66,7 @@ const formSchema = z
   );
 
 export default function AccountAdd() {
-  const { postAccount } = CreateAccount();
+  const { postAccount, error } = CreateAccount();
   const navigate = useNavigate();
   const { setStatus, setMessage } = useNotificationStore();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -77,16 +77,26 @@ export default function AccountAdd() {
       password: "",
       confirmPassword: "",
       status: "active",
-      unitId: "3",
-      relation: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await postAccount(values);
-    setStatus("success");
-    setMessage("Account Successfully Created!");
-    return navigate("/account-list");
+    await postAccount({
+      name: values.name,
+      user: values.user,
+      password: values.status,
+      status: values.status,
+      unitId: Number(values.unitId),
+      higherAccountId: Number(values.higherAccountId),
+    });
+    if (error) {
+      setStatus("error");
+      setMessage("Something Went Wrong!");
+    } else {
+      setStatus("success");
+      setMessage("Account Successfully Created!");
+      return navigate("/account-list");
+    }
   }
 
   return (

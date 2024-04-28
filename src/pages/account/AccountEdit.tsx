@@ -29,19 +29,14 @@ const formSchema = z
       .max(50, {
         message: "Account User must be lower than 50 characters long!",
       }),
-    password: z.string(),
-    confirmPassword: z.string(),
+    password: z.string().optional(),
     status: z.string(),
     unitId: z.string(),
-    relation: z.string().optional(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
+    higherAccountId: z.string().optional(),
   })
   .refine(
     (data) => {
-      if (data.unitId === "3" && !data.relation) {
+      if (data.unitId === "3" && !data.higherAccountId) {
         return false;
       }
       return true;
@@ -58,19 +53,18 @@ export default function AccountEdit() {
   const navigate = useNavigate();
   const { setStatus, setMessage } = useNotificationStore();
 
-  const { data } = GetAccountById(accountId!);
+  const { account, isError } = GetAccountById(accountId!);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     values: {
-      id: data.id,
-      name: data.name,
-      user: data.user,
-      password: data.password,
-      confirmPassword: data.password,
-      status: data.status,
-      unitId: String(data.unitId),
-      relation: data.relation,
+      id: account.id,
+      name: account.name,
+      user: account.user,
+      password: account.password,
+      status: account.status,
+      unitId: String(account.unitId),
+      higherAccountId: String(account.relation),
     },
   });
 
@@ -80,14 +74,18 @@ export default function AccountEdit() {
       name: values.name,
       user: values.user,
       password: values.password,
-      confirmPassword: values.password,
       status: values.status,
       unitId: Number(values.unitId),
-      relation: values.relation,
+      higherAccountId: Number(values.higherAccountId),
     });
-    setStatus("success");
-    setMessage(`Account ${values.name} Successfully Modified!`);
-    return navigate("/account-list");
+    if (isError) {
+      setStatus("success");
+      setMessage(`Something Went Wrong`);
+    } else {
+      setStatus("success");
+      setMessage(`Account ${values.name} Successfully Updated!`);
+      navigate("/account-list");
+    }
   }
 
   return (
