@@ -36,12 +36,13 @@ const formSchema = z.object({
     .max(20, {
       message: "Account Name must be lower than 20 characters",
     }),
-  detail: z.string(),
+  detail: z.string().optional(),
 });
 
 export default function ToolAdd() {
-  const [picture, setPicture] = useState("");
-  const { postTool, error } = CreateTool();
+  const [picture, setPicture] = useState<File | null>();
+  const [pictureUrl, setPictureUrl] = useState<string | null>();
+  const { postTool, isLoading } = CreateTool();
   const navigate = useNavigate();
   const { setStatus, setMessage } = useNotificationStore();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -51,36 +52,38 @@ export default function ToolAdd() {
       expired_at: new Date(),
       status: "",
       sku: "",
-      detail: "",
     },
   });
 
   function handlePicture(e: React.ChangeEvent<HTMLInputElement>) {
-    const picture = e.target.files[0];
-    const urlPicture = URL.createObjectURL(picture);
-    setPicture(urlPicture);
+    const picture = e.target.files?.[0];
+    setPicture(picture);
+    setPictureUrl(URL.createObjectURL(picture!));
   }
 
   function removePicture() {
-    setPicture("");
+    setPicture(null);
+    setPictureUrl(null);
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await postTool({
-      name: values.name,
-      categoryId: Number(values.categoryId),
-      status: values.status,
-      expired_at: values.expired_at,
-      sku: values.sku,
-      detail: values.detail,
-    });
-    if (error) {
-      setStatus("error");
-      setMessage("Something Went Wrong!");
-    } else {
+    try {
+      await postTool({
+        name: values.name,
+        categoryId: Number(values.categoryId),
+        status: values.status,
+        expired_at: values.expired_at,
+        sku: values.sku,
+        detail: values.detail,
+        picture: picture,
+      });
       setStatus("success");
       setMessage("Tool Successfully Created!");
       navigate("/tool-list");
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+      setMessage("Something went wrong!");
     }
   }
 
@@ -93,6 +96,7 @@ export default function ToolAdd() {
           className="flex flex-col gap-6"
         >
           <CreatePageHeader
+            isLoading={isLoading}
             header="Add New Tool"
             subheader="Add new tool to use accross the app"
           />
@@ -105,7 +109,7 @@ export default function ToolAdd() {
               <ToolStatusForm control={form.control} values={form.watch()} />
               <ToolImageForm
                 handlePicture={handlePicture}
-                file={picture}
+                pictureUrl={pictureUrl}
                 removePicture={removePicture}
               />
             </div>

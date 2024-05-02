@@ -1,4 +1,3 @@
-import DeleteRow from "@/components/ui/DeleteRow";
 import TableSorter from "@/components/ui/TableSorter";
 import { Requests } from "@/lib/types/request";
 import { RequestedItems } from "@/lib/types/requestItem";
@@ -11,8 +10,9 @@ import {
   Eye,
   Wrench,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
-export const requestColumns: ColumnDef<Requests>[] = [
+export const requestInboxs: ColumnDef<Requests>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => (
@@ -30,7 +30,7 @@ export const requestColumns: ColumnDef<Requests>[] = [
   },
   {
     accessorKey: "requested.name",
-    header: ({ column }) => <TableSorter column={column} header="REQUESTED" />,
+    header: ({ column }) => <TableSorter column={column} header="REQUESTER" />,
     cell: ({ getValue }) => (
       <div className="capitalize">{getValue() as string}</div>
     ),
@@ -115,12 +115,12 @@ export const requestColumns: ColumnDef<Requests>[] = [
     header: "ACTION",
     cell: ({ row }) => {
       return (
-        <div className="flex gap-2">
-          <div>
-            <Eye size={22} strokeWidth={1.5} />
-          </div>
-          <DeleteRow id={row.getValue("id")} name={row.getValue("code")} />
-        </div>
+        <Link
+          to={`/request-inbox/${row.getValue("id")}`}
+          className="flex gap-2"
+        >
+          <Eye className="text-primary" size={22} strokeWidth={1.5} />
+        </Link>
       );
     },
   },

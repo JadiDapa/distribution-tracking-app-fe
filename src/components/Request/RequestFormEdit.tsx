@@ -13,9 +13,12 @@ import useRequestItemStore from "@/lib/store/RequestItemStore";
 
 type Props = {
   itemType?: "material" | "tool" | "vehicle" | string;
+  itemInfo?: {
+    requestId: number;
+  };
 };
 
-export default function RequestForm({ itemType }: Props) {
+export default function RequestFormEdit({ itemType, itemInfo }: Props) {
   const { requestedItems, addItem } = useRequestItemStore();
   const [inputValue, setInputValue] = useState("");
   const [selected, setSelected] = useState("");
@@ -40,6 +43,8 @@ export default function RequestForm({ itemType }: Props) {
     e.preventDefault();
     if (selected && quantity >= 1) {
       const newItem = {
+        materialId: selectedId,
+        requestId: itemInfo!.requestId,
         id: selectedId,
         name: selected,
         sku: selectedCode,

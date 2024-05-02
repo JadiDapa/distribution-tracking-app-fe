@@ -81,21 +81,23 @@ export default function AccountAdd() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await postAccount({
-      name: values.name,
-      user: values.user,
-      password: values.status,
-      status: values.status,
-      unitId: Number(values.unitId),
-      higherAccountId: Number(values.higherAccountId),
-    });
-    if (error) {
+    try {
+      await postAccount({
+        name: values.name,
+        user: values.user,
+        password: values.password,
+        status: values.status,
+        unitId: Number(values.unitId),
+        higherAccountId: Number(values.higherAccountId),
+      });
+      if (!error) {
+        setStatus("success");
+        setMessage("Account Successfully Created!");
+        navigate("/account-list");
+      }
+    } catch (error) {
       setStatus("error");
       setMessage("Something Went Wrong!");
-    } else {
-      setStatus("success");
-      setMessage("Account Successfully Created!");
-      return navigate("/account-list");
     }
   }
 

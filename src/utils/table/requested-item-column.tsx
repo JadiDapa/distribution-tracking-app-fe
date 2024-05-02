@@ -1,23 +1,17 @@
-import DeleteRow from "@/components/ui/DeleteRow";
-import NumberInput from "@/components/ui/NumberInput";
+import NumberInputTable from "@/components/ui/NumberInputTable";
+import RemoveRequestedItem from "@/components/ui/RemoveRequestedIteem";
 import TableSorter from "@/components/ui/TableSorter";
+import { RequestedItems } from "@/lib/types/requestItem";
 import { ColumnDef } from "@tanstack/react-table";
 
-type RequestedItemType = {
-  item: string;
-  code: string;
-  stock: number;
-  quantity: number;
-};
-
-export const requestedItemColumns: ColumnDef<RequestedItemType>[] = [
+export const requestedItemColumns: ColumnDef<RequestedItems>[] = [
   {
-    accessorKey: "item",
+    accessorKey: "name",
     header: ({ column }) => <TableSorter column={column} header="ITEM" />,
   },
   {
-    accessorKey: "code",
-    header: ({ column }) => <TableSorter column={column} header="CODE" />,
+    accessorKey: "sku",
+    header: ({ column }) => <TableSorter column={column} header="SKU" />,
   },
   {
     accessorKey: "stock",
@@ -30,17 +24,17 @@ export const requestedItemColumns: ColumnDef<RequestedItemType>[] = [
     header: ({ column }) => (
       <TableSorter column={column} header="REQUESTED QTY" />
     ),
-    cell: ({ row }) => {
-      return <NumberInput value={row.getValue("quantity")} />;
+    cell: ({ getValue, row: { index } }) => {
+      const value = getValue();
+      return <NumberInputTable value={value as number} index={index} />;
     },
   },
+
   {
     accessorKey: "action",
     header: "REMOVE",
-    cell: ({ row }) => {
-      return (
-        <DeleteRow id={row.getValue("item")} name={row.getValue("item")} />
-      );
+    cell: ({ row: { index } }) => {
+      return <RemoveRequestedItem index={index} />;
     },
   },
 ];

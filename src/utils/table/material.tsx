@@ -26,7 +26,9 @@ export const material: ColumnDef<Materials>[] = [
   {
     accessorKey: "category.category",
     header: ({ column }) => <TableSorter column={column} header="UNIT" />,
-    cell: (row) => <div className="capitalize">{row.getValue()}</div>,
+    cell: ({ getValue }) => (
+      <div className="capitalize">{getValue() as string}</div>
+    ),
   },
   {
     accessorKey: "status",

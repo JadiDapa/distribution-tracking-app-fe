@@ -19,7 +19,9 @@ import { useEffect } from "react";
 import useAuthStore from "./lib/store/AuthStore";
 import AccountEdit from "./pages/account/AccountEdit";
 import RequestList from "./pages/request/RequestList";
-import RequestAdd from "./pages/request/RequestAdd";
+import RequestItem from "./pages/request/RequestItem";
+import RequestInbox from "./pages/request/RequestInbox";
+import HandleRequest from "./pages/request/HandleRequest";
 
 export default function App() {
   const { userData, saveUser } = useAuthStore();
@@ -39,7 +41,9 @@ export default function App() {
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/request-list" element={<RequestList />} />
-          <Route path="/request-add" element={<RequestAdd />} />
+          <Route path="/request-inbox" element={<RequestInbox />} />
+          <Route path="/request-inbox/:requestId" element={<HandleRequest />} />
+          <Route path="/request-item/:itemType" element={<RequestItem />} />
 
           <Route path="/account-related" element={<AccountRelated />} />
           <Route path="/account-list" element={<AccountList />} />

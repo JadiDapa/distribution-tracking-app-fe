@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { Tools } from "../types/tool";
 
 const fetch = (url: string, token: string | undefined) =>
@@ -108,6 +108,7 @@ export const EditTool = () => {
         { id, name, sku, status, expired_at, detail, picture, categoryId },
         {
           headers: {
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },
@@ -125,7 +126,7 @@ export const EditTool = () => {
   return { editTool, isLoading, error };
 };
 
-// Delete an Account Data
+// Delete an Tool Data
 export const DeleteTool = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setError] = useState<boolean>(false);
@@ -141,6 +142,7 @@ export const DeleteTool = () => {
           Authorization: `Bearer ${userData?.token}`,
         },
       });
+      mutate(["http://localhost:3000/api/tools", userData?.token]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);

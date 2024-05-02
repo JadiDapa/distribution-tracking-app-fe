@@ -6,7 +6,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Control } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -14,28 +13,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { RequestControl } from "@/lib/types/request";
 
 type Props = {
-  control: Control<{
-    requester: string;
-    requested: string;
-    note?: string | undefined;
-  }>;
+  control: RequestControl;
 };
 
 export default function InfoForm({ control }: Props) {
   return (
     <div className="box-shadow flex w-full flex-col gap-6 rounded-md bg-white p-6">
       <h2 className="text-xl font-medium ">Request Information</h2>
-      <div className="grid grid-cols-3 gap-6">
+      <div className="flex gap-6">
         <FormField
           control={control}
-          name="type"
+          name="reason"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Request Item Type</FormLabel>
+            <FormItem className="grow-[2]">
+              <FormLabel>Request reason</FormLabel>
               <FormControl>
-                <Input {...field} className=" disabled:text-black" />
+                <Input
+                  {...field}
+                  className=""
+                  placeholder="Provide short reason for your request"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -43,14 +43,14 @@ export default function InfoForm({ control }: Props) {
         />
         <FormField
           control={control}
-          name="requested"
+          name="requestedId"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Requested</FormLabel>
+            <FormItem className="grow-[1]">
+              <FormLabel>Requested Account</FormLabel>
               <Select onValueChange={field.onChange}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select Requested Account" />
+                    <SelectValue placeholder="Select requested account" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

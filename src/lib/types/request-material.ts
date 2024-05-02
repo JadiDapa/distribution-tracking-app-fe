@@ -17,7 +17,7 @@ export interface Requests {
 export type RequestControl = Control<{
   type: string;
   reason: string;
-  requesterId: number;
+  requesterId: string;
   requestedId: string;
   note?: string | undefined;
 }>;

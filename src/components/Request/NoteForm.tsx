@@ -6,14 +6,10 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { Control } from "react-hook-form";
+import { RequestControl } from "@/lib/types/request";
 
 type Props = {
-  control: Control<{
-    requester: string;
-    requested: string;
-    note?: string | undefined;
-  }>;
+  control: RequestControl;
 };
 
 export default function NoteForm({ control }: Props) {

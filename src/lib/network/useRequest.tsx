@@ -1,145 +1,93 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
-import { Request } from "../types/request";
+import { Requests } from "../types/request";
+import useSWR from "swr";
 
-export type AccountUnit = {
-  id: number;
-  unit: string;
-};
+const fetch = (url: string, token: string | undefined) =>
+  axios
+    .get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => res.data);
 
-export type RequestType = {
-  requester: number;
-  requested: number;
-  items: string;
-  note: string;
-  status: string;
-};
+// Get All Requests
+export function GetRequests() {
+  const { userData } = useAuthStore();
+  const { data, error, isLoading } = useSWR(
+    ["http://localhost:3000/api/requests/" + userData?.id, userData?.token],
+    ([url, token]) => fetch(url, token),
+  );
 
-export type EditAccountType = {
-  id: number;
-  name: string;
-  user: string;
-  password: string;
-  confirmPassword: string;
-  status: string;
-  unitId: number;
-  relation?: string | undefined;
-};
+  return {
+    requests: data?.data,
+    isLoading,
+    isError: error,
+  };
+}
 
-const defaultValues = {
-  id: 0,
-  name: "",
-  user: "",
-  password: "",
-  confirmPassword: "",
-  status: "active",
-  unitId: "3",
-  relation: "",
-  unit: { id: 0, unit: "" },
-};
+// Get All Requests
+export function GetRequestInboxs() {
+  const { userData } = useAuthStore();
+  const { data, error, isLoading } = useSWR(
+    [
+      "http://localhost:3000/api/requests/inbox/" + userData?.id,
+      userData?.token,
+    ],
+    ([url, token]) => fetch(url, token),
+  );
 
-// Fetch Accounts Data
-export const GetRequests = () => {
-  const [data, setData] = useState<Request[]>([
-    {
-      id: 2,
-      code: "8324034",
-      requested: "ULP",
-      type: "Material",
-      total: 10,
-      status: "pending",
-    },
-  ]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<boolean>(false);
-  //   const { token } = useAuthStore();
+  return {
+    requests: data?.data,
+    isLoading,
+    isError: error,
+  };
+}
 
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       setIsLoading(true);
-  //       setError(false);
-  //       try {
-  //         const response = await axios.get("http://localhost:3000/api/accounts", {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         });
-  //         setData(response.data.data);
-  //       } catch (error) {
-  //         setError(true);
-  //       } finally {
-  //         setIsLoading(false);
-  //       }
-  //     };
-
-  //     fetchData();
-  //   }, [token]);
-
-  return { data, isLoading, error };
-};
-
+// Get Single Request By Id
 export const GetRequestById = (id: string) => {
-  const [data, setData] = useState<AccountProps>(defaultValues);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<boolean>(false);
-  const { token } = useAuthStore();
+  const { userData } = useAuthStore();
+  const { data, error, isLoading } = useSWR(
+    ["http://localhost:3000/api/requests/detail/" + id, userData?.token],
+    ([url, token]) => fetch(url, token),
+  );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(false);
-      const convertId = Number(id);
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/accounts/" + convertId,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-        setData(response.data.data);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [id, token]);
-
-  return { data, isLoading, error };
+  return {
+    request: data?.data,
+    isLoading,
+    isError: error,
+  };
 };
 
+// Create a New Request
 export const CreateRequest = () => {
-  const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const { userData } = useAuthStore();
 
   const postRequest = async ({
-    requester,
-    requested,
+    type,
+    reason,
+    requesterId,
+    requestedId,
     items,
     note,
     status,
-  }: Request) => {
+  }: Requests) => {
     setLoading(true);
     setError(false);
-    setIsSuccess(false);
     try {
       await axios.post(
-        "http://localhost:3000/api/request/create",
-        { requester, requested, items, note, status },
+        "http://localhost:3000/api/requests/create",
+        { type, reason, requesterId, requestedId, items, note, status },
         {
           headers: {
             Authorization: `Bearer ${userData?.token}`,
           },
         },
       );
-      setIsSuccess(true);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error);
@@ -150,33 +98,34 @@ export const CreateRequest = () => {
     }
   };
 
-  return { postRequest, isSuccess, loading, error };
+  return { postRequest, loading, error };
 };
 
-// Edit an existing Account
-export const EditAccount = () => {
+// Edit an existing Request
+export const EditRequest = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
-  const { token } = useAuthStore();
+  const { userData } = useAuthStore();
 
-  const editAccount = async ({
+  const editRequest = async ({
     id,
-    name,
-    user,
-    password,
+    type,
+    reason,
+    requesterId,
+    requestedId,
+    items,
+    note,
     status,
-    unitId,
-    relation,
-  }: EditAccountType) => {
+  }: Requests) => {
     setIsLoading(true);
     setError(false);
     try {
       await axios.put(
-        `http://localhost:3000/api/accounts/${id}`,
-        { name, user, password, status, unitId: Number(unitId), relation },
+        `http://localhost:3000/api/requests/${id}`,
+        { type, reason, requesterId, requestedId, items, note, status },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${userData?.token}`,
           },
         },
       );
@@ -188,23 +137,23 @@ export const EditAccount = () => {
     }
   };
 
-  return { editAccount, isLoading, error };
+  return { editRequest, isLoading, error };
 };
 
-// Delete an Account Data
-export const DeleteAccount = () => {
+// Delete an Request Data
+export const DeleteRequest = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<boolean>(false);
-  const { token } = useAuthStore();
+  const { userData } = useAuthStore();
 
-  const deleteAccount = async (id: string) => {
+  const deleteRequest = async (id: string) => {
     try {
       setIsLoading(true);
       setError(false);
       const convertId = Number(id);
-      await axios.delete("http://localhost:3000/api/accounts/" + convertId, {
+      await axios.delete("http://localhost:3000/api/requests/" + convertId, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userData?.token}`,
         },
       });
     } catch (error) {
@@ -215,5 +164,5 @@ export const DeleteAccount = () => {
     }
   };
 
-  return { deleteAccount, isLoading, error };
+  return { deleteRequest, isLoading, error };
 };

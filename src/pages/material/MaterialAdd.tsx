@@ -35,24 +35,26 @@ const formSchema = z.object({
     .max(20, {
       message: "Account Name must be lower than 20 characters",
     }),
-  detail: z.string(),
+  detail: z.string().optional(),
 });
 
 export default function MaterialAdd() {
-  const [picture, setPicture] = useState("");
+  const [picture, setPicture] = useState<File | null>();
+  const [pictureUrl, setPictureUrl] = useState<string | null>();
   const { setStatus, setMessage } = useNotificationStore();
-  const { postMaterial, error } = CreateMaterial();
+  const { postMaterial, isLoading } = CreateMaterial();
 
   const navigate = useNavigate();
 
   function handlePicture(e: React.ChangeEvent<HTMLInputElement>) {
-    const picture = e.target.files[0];
-    const urlPicture = URL.createObjectURL(picture);
-    setPicture(urlPicture);
+    const picture = e.target.files?.[0];
+    setPicture(picture);
+    setPictureUrl(URL.createObjectURL(picture!));
   }
 
   function removePicture() {
-    setPicture("");
+    setPicture(null);
+    setPictureUrl(null);
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -60,30 +62,31 @@ export default function MaterialAdd() {
     defaultValues: {
       name: "",
       categoryId: "",
-      status: "",
+      status: "available",
       sku: "",
-      detail: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await postMaterial({
-      name: values.name,
-      categoryId: Number(values.categoryId),
-      status: values.status,
-      sku: values.sku,
-      detail: values.detail,
-    });
-    if (error) {
-      setStatus("error");
-      setMessage("Something Wrong!");
-    } else {
+    try {
+      await postMaterial({
+        name: values.name,
+        categoryId: Number(values.categoryId),
+        status: values.status,
+        sku: values.sku,
+        detail: values.detail,
+        picture: picture,
+      });
+
       setStatus("success");
       setMessage("Material Successfully Created!");
       navigate("/material-list");
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+      setMessage("Something went wrong!");
     }
   }
-
   return (
     <section className="flex w-full flex-col gap-6 pt-6">
       <SeactionHeader section="Material" subSection="Add Material" />
@@ -93,6 +96,7 @@ export default function MaterialAdd() {
           className="flex flex-col gap-6"
         >
           <CreatePageHeader
+            isLoading={isLoading}
             header="Add New Material"
             subheader="Add new material to use accross the app"
           />
@@ -108,7 +112,7 @@ export default function MaterialAdd() {
               />
               <MaterialImageForm
                 handlePicture={handlePicture}
-                file={picture}
+                pictureUrl={pictureUrl}
                 removePicture={removePicture}
               />
             </div>

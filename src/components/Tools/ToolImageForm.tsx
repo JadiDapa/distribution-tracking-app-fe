@@ -4,23 +4,27 @@ import { FormControl, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
 
 type Props = {
-  file: string;
+  pictureUrl?: string | null;
   handlePicture: (e: React.ChangeEvent<HTMLInputElement>) => void;
   removePicture: () => void;
 };
 
 export default function ToolImageForm({
   handlePicture,
-  file,
+  pictureUrl,
   removePicture,
 }: Props) {
   return (
     <div className="box-shadow flex flex-col gap-6 rounded-md bg-white p-6">
       <h2 className="text-xl font-medium ">Tool Image (optional)</h2>
-      {file ? (
+      {pictureUrl ? (
         <div className="relative flex h-60 w-full flex-col rounded-md border-[3px] border-dashed">
-          <div className="h-full w-full items-center justify-center p-1">
-            <img src={file} className="border-2 border-double p-1" alt="" />
+          <div className="h-5/6 w-full items-center justify-center p-1 ">
+            <img
+              src={pictureUrl}
+              className="max-h-full border-2 border-double p-1"
+              alt=""
+            />
           </div>
           <div
             onClick={removePicture}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { Materials } from "../types/material";
 
 const fetch = (url: string, token: string | undefined) =>
@@ -66,6 +66,7 @@ export const CreateMaterial = () => {
         { name, sku, status, detail, picture, categoryId },
         {
           headers: {
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },
@@ -73,8 +74,8 @@ export const CreateMaterial = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);
+        setError(true);
       }
-      setError(true);
     } finally {
       setIsLoading(false);
     }
@@ -139,6 +140,7 @@ export const DeleteMaterial = () => {
           Authorization: `Bearer ${userData?.token}`,
         },
       });
+      mutate(["http://localhost:3000/api/materials", userData?.token]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);

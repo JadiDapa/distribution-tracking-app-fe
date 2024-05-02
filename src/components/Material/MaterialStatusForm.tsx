@@ -6,26 +6,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup } from "@/components/ui/radio-group";
+import { MaterialControl, Materials } from "@/lib/types/material";
 import { BadgeCheck, BadgeX } from "lucide-react";
-import { Control } from "react-hook-form";
 
 type Props = {
-  control: Control<{
-    name: string;
-    categoryId: string;
-    status: string;
-    sku: string;
-    detail: string;
-    image?: string | undefined;
-  }>;
-  values: {
-    name: string;
-    categoryId: string;
-    status: string;
-    sku: string;
-    detail: string;
-    image?: string | undefined;
-  };
+  control: MaterialControl;
+  values: Materials;
 };
 
 export default function MaterialStatusForm({ control, values }: Props) {

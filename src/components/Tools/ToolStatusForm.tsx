@@ -39,14 +39,14 @@ export default function ToolStatusForm({ control, values }: Props) {
                   <CustomRadio
                     values={values.status}
                     value="available"
-                    desc="Material will appear"
+                    desc="Show Tool"
                     label="Available"
                     icon={<BadgeCheck size={32} />}
                   />
                   <CustomRadio
                     values={values.status}
                     value="unavailable"
-                    desc="Material wont appear"
+                    desc="Hide Tool"
                     label="Unavailable"
                     icon={<BadgeX size={32} />}
                   />

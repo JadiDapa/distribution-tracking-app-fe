@@ -2,7 +2,7 @@ import RequestData from "@/components/Request/RequestData";
 import ConnectedCard from "@/components/ui/ConnectedCard";
 import SeactionHeader from "@/components/ui/SeactionHeader";
 import { Button } from "@/components/ui/button";
-import { GetRequests } from "@/lib/network/useRequest";
+import { GetRequestInboxs } from "@/lib/network/useRequest";
 import {
   Archive,
   ArchiveRestore,
@@ -12,14 +12,14 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function RequestList() {
-  const { requests, isLoading, isError } = GetRequests();
-  const requestListCard = [
+export default function RequestInbox() {
+  const { requests, isLoading, isError } = GetRequestInboxs();
+  const requestInboxCard = [
     {
       title: "Total Request",
       value: "400",
       icon: <PackageOpen />,
-      detail: "Total of request you accept",
+      detail: "Total requests sent to you",
       bgColor: "#e8e6fc",
       textColor: "#5748ff",
     },
@@ -27,7 +27,7 @@ export default function RequestList() {
       title: "Accepted",
       value: "3",
       icon: <ArchiveRestore />,
-      detail: "Total of accepted request",
+      detail: "Requests accepted by you",
       bgColor: "#d6ffe9",
       textColor: "#45d387",
     },
@@ -35,7 +35,7 @@ export default function RequestList() {
       title: "Pending",
       value: "7",
       icon: <Archive />,
-      detail: "Total of pending request",
+      detail: "Requests waiting for you",
       bgColor: "#fff9d6",
       textColor: "#d3c945",
     },
@@ -43,20 +43,19 @@ export default function RequestList() {
       title: "Declined",
       value: "7",
       icon: <ArchiveX />,
-      detail: "Total of declined request",
+      detail: "Requests declined by you",
       bgColor: "#ffd3d5",
       textColor: "#ff5e66",
     },
   ];
-
   return (
     <section className="flex w-full flex-col gap-6 py-6">
       <div>
         <div className="flex items-center justify-between">
-          <SeactionHeader section="Request" subSection="Request List" />
-          <Link to={"/request-inbox"}>
+          <SeactionHeader section="Request" subSection="Request Inbox" />
+          <Link to={"/request-list"}>
             <Button className="flex items-center gap-3">
-              Request Inbox
+              Request List
               <span>
                 <Mailbox />
               </span>
@@ -64,12 +63,12 @@ export default function RequestList() {
           </Link>
         </div>
         <div className="mt-1 text-lg text-primary">
-          This is your request list
+          This are list of requests directed to you
         </div>
       </div>
 
       <div className="box-shadow flex divide-x rounded-md bg-white p-6">
-        {requestListCard.map((list) => (
+        {requestInboxCard.map((list) => (
           <ConnectedCard
             key={list.title}
             title={list.title}
@@ -85,6 +84,7 @@ export default function RequestList() {
         requests={requests}
         isLoading={isLoading}
         isError={isError}
+        isInbox
       />
     </section>
   );

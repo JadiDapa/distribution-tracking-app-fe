@@ -6,7 +6,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Control } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -17,30 +16,17 @@ import {
 import { materialCategoryFilter } from "@/utils/static";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { MaterialControl, Materials } from "@/lib/types/material";
 
 type Props = {
-  control: Control<{
-    name: string;
-    categoryId: string;
-    status: string;
-    sku: string;
-    detail: string;
-    image?: string | undefined;
-  }>;
-  values: {
-    name: string;
-    categoryId: string;
-    status: string;
-    sku: string;
-    detail: string;
-    image?: string | undefined;
-  };
+  control: MaterialControl;
+  values: Materials;
 };
 
 export default function MaterialInfoForm({ control }: Props) {
   return (
     <div className="box-shadow flex flex-col gap-6 rounded-md bg-white p-6">
-      <h2 className="text-xl font-medium ">Account Information</h2>
+      <h2 className="text-xl font-medium ">Material Information</h2>
       <FormField
         control={control}
         name="name"

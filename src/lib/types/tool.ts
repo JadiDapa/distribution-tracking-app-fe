@@ -7,7 +7,7 @@ export interface Tools {
   status: string;
   expired_at: Date;
   detail?: string;
-  picture?: string;
+  picture?: File | null;
   categoryId: number | string;
   category?: {
     category: string;
@@ -20,5 +20,5 @@ export type ToolControl = Control<{
   status: string;
   expired_at: Date;
   sku: string;
-  detail: string;
+  detail?: string | undefined;
 }>;

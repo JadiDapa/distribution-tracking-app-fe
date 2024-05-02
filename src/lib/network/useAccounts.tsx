@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { Accounts } from "../types/account";
 
 const fetch = (url: string, token: string | undefined) =>
@@ -32,11 +32,9 @@ export function GetAccounts() {
 export const GetAccountById = (id: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    [`http://localhost:3000/api/accounts/1`, userData?.token],
+    [`http://localhost:3000/api/accounts/${id}`, userData?.token],
     ([url, token]) => fetch(url, token),
   );
-
-  console.log(id);
 
   return {
     account: data?.data,
@@ -152,6 +150,7 @@ export const DeleteAccount = () => {
           Authorization: `Bearer ${userData?.token}`,
         },
       });
+      mutate(["http://localhost:3000/api/accounts", userData?.token]);
     } catch (error) {
       console.log(error);
       setError(true);

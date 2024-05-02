@@ -20,7 +20,16 @@ import {
 import { materialCategoryFilter, materialStatusFilter } from "@/utils/static";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { CirclePlus, Upload } from "lucide-react";
+import {
+  Bus,
+  Cable,
+  Car,
+  CarFront,
+  CirclePlus,
+  Trash2,
+  Upload,
+  Wrench,
+} from "lucide-react";
 import {
   Table,
   TableBody,
@@ -31,6 +40,17 @@ import {
 } from "../ui/table";
 import Pagination from "../ui/Pagination";
 import { Link } from "react-router-dom";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
+import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -150,14 +170,48 @@ export default function AccountTable<TData, TValue>({
           >
             Export
           </Button>
-          <Link to="/request-add">
-            <Button
-              variant="default"
-              icon={<CirclePlus size={20} strokeWidth={2.25} />}
-            >
-              Create New Request
-            </Button>
-          </Link>
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button
+                variant="default"
+                icon={<CirclePlus size={20} strokeWidth={2.25} />}
+              >
+                Create New Request
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Select item type you want to request
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  You can only choose one type of item to request, you can make
+                  another request if you want to ask for other item type
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <Link to="/request-item/material">
+                  <AlertDialogAction className="flex gap-2 bg-primary hover:opacity-95">
+                    Material
+                    <Cable size={20} />
+                  </AlertDialogAction>
+                </Link>
+                <Link to="/request-item/tool">
+                  <AlertDialogAction className="flex gap-2 bg-teal-400 hover:bg-teal-600">
+                    Tool
+                    <Wrench size={20} />
+                  </AlertDialogAction>
+                </Link>
+                <Link to="/request-item/vehicle">
+                  <AlertDialogAction className="flex gap-2 bg-yellow-400 hover:bg-yellow-600">
+                    Vehicle
+                    <CarFront size={20} />
+                  </AlertDialogAction>
+                </Link>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
       <hr />
