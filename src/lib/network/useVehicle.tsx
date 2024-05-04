@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
 import useSWR, { mutate } from "swr";
-import { Materials } from "../types/material";
+import { Vehicles } from "../types/vehicle";
 
 const fetch = (url: string, token: string | undefined) =>
   axios
@@ -13,57 +13,87 @@ const fetch = (url: string, token: string | undefined) =>
     })
     .then((res) => res.data);
 
-// Get All Materials
-export function GetMaterials() {
+// Get All Vehicles
+export function GetVehicles() {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/materials", userData?.token],
+    ["http://localhost:3000/api/vehicles", userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
   return {
-    materials: data?.data,
+    vehicles: data?.data,
     isLoading,
     isError: error,
   };
 }
 
-// Get Single Material By Id
-export const GetAccountById = (id: string) => {
+// Get All Vehicles
+export function GetVehiclesByAccountId(accountId?: string) {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/materials/" + id, userData?.token],
+    ["http://localhost:3000/api/vehicles/" + accountId, userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
   return {
-    materials: data?.data,
+    vehicles: data?.data,
+    isLoading,
+    isError: error,
+  };
+}
+
+// Get Single Vehicle By Id
+export const GetVehicleById = (id: string) => {
+  const { userData } = useAuthStore();
+  const { data, error, isLoading } = useSWR(
+    ["http://localhost:3000/api/vehicles/" + id, userData?.token],
+    ([url, token]) => fetch(url, token),
+  );
+
+  return {
+    vehicle: data?.data,
     isLoading,
     isError: error,
   };
 };
 
-// Create a new Material
-export const CreateMaterial = () => {
+// Create a new Vehicle
+export const CreateVehicle = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const { userData } = useAuthStore();
 
-  const postMaterial = async ({
-    name,
-    sku,
-    status,
+  const postVehicle = async ({
+    police_number,
+    variantId,
+    brand,
     detail,
+    manufacture_year,
+    contract_start,
+    contract_end,
+    areaId,
+    locationId,
     picture,
-    categoryId,
-  }: Materials) => {
+  }: Vehicles) => {
     setIsLoading(true);
     setError(false);
     try {
       setIsLoading(true);
       await axios.post(
-        "http://localhost:3000/api/materials/create",
-        { name, sku, status, detail, picture, categoryId },
+        "http://localhost:3000/api/vehicles/create",
+        {
+          police_number,
+          variantId,
+          brand,
+          detail,
+          manufacture_year,
+          contract_start,
+          contract_end,
+          areaId,
+          locationId,
+          picture,
+        },
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -81,30 +111,46 @@ export const CreateMaterial = () => {
     }
   };
 
-  return { postMaterial, isLoading, error };
+  return { postVehicle, isLoading, error };
 };
 
-// Update existing Material
-export const EditMaterial = () => {
+// Update existing Vehicle
+export const EditVehicle = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const { userData } = useAuthStore();
 
-  const editMaterial = async ({
+  const editVehicle = async ({
     id,
-    name,
-    sku,
-    status,
+    police_number,
+    variantId,
+    brand,
     detail,
+    manufacture_year,
+    contract_start,
+    contract_end,
+    areaId,
+    locationId,
     picture,
-    categoryId,
-  }: Materials) => {
+  }: Vehicles) => {
     setIsLoading(true);
     setError(false);
     try {
       await axios.put(
-        `http://localhost:3000/api/materials/${id}`,
-        { id, name, sku, status, detail, picture, categoryId },
+        `http://localhost:3000/api/vehicles/${id}`,
+        {
+          id,
+          police_number,
+          variantId: Number(variantId),
+          brand,
+          detail,
+          manufacture_year,
+          contract_start,
+          contract_end,
+          areaId: Number(areaId),
+          locationId: Number(locationId),
+          picture,
+        },
         {
           headers: {
             Authorization: `Bearer ${userData?.token}`,
@@ -121,26 +167,40 @@ export const EditMaterial = () => {
     }
   };
 
-  return { editMaterial, isLoading, error };
+  return { editVehicle, isLoading, error };
 };
 
-// Delete an Account Data
-export const DeleteMaterial = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setError] = useState<boolean>(false);
+// Update existing Vehicle
+export const MoveVehicle = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
   const { userData } = useAuthStore();
 
-  const deleteMaterial = async (id: string) => {
+  const moveVehicle = async ({
+    id,
+    locationId,
+  }: {
+    id: string;
+    locationId: number | string;
+  }) => {
+    setIsLoading(true);
+    setError(false);
     try {
-      setIsLoading(true);
-      setError(false);
-      const convertId = Number(id);
-      await axios.delete("http://localhost:3000/api/materials/" + convertId, {
-        headers: {
-          Authorization: `Bearer ${userData?.token}`,
+      await axios.put(
+        `http://localhost:3000/api/vehicles/${id}`,
+        {
+          locationId: Number(locationId),
         },
-      });
-      mutate(["http://localhost:3000/api/materials", userData?.token]);
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+          },
+        },
+      );
+      mutate([
+        "http://localhost:3000/api/vehicles/" + userData?.id,
+        userData?.token,
+      ]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);
@@ -151,5 +211,35 @@ export const DeleteMaterial = () => {
     }
   };
 
-  return { deleteMaterial, isLoading, isError };
+  return { moveVehicle, isLoading, error };
+};
+
+// Delete an Vehicle Data
+export const DeleteVehicle = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setError] = useState<boolean>(false);
+  const { userData } = useAuthStore();
+
+  const deleteVehicle = async (id: string) => {
+    try {
+      setIsLoading(true);
+      setError(false);
+      const convertId = Number(id);
+      await axios.delete("http://localhost:3000/api/vehicles/" + convertId, {
+        headers: {
+          Authorization: `Bearer ${userData?.token}`,
+        },
+      });
+      mutate(["http://localhost:3000/api/vehicle", userData?.token]);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error.response);
+      }
+      setError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { deleteVehicle, isLoading, isError };
 };

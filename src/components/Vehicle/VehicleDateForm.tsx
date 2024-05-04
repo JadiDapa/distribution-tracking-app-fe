@@ -6,19 +6,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { Control } from "react-hook-form";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import { format } from "date-fns";
-import { VehicleType } from "@/pages/vehicle/VehicleAdd";
 import { Input } from "../ui/input";
+import { VehicleControl, Vehicles } from "@/lib/types/vehicle";
 
 type Props = {
-  control: Control<VehicleType>;
-  values: VehicleType;
+  control: VehicleControl;
+  values: Vehicles;
 };
 
 export default function VehicleDateForm({ control }: Props) {
@@ -27,7 +26,7 @@ export default function VehicleDateForm({ control }: Props) {
       <h2 className="text-xl font-medium">Vehicle Date/Year Informations</h2>
       <FormField
         control={control}
-        name="year"
+        name="manufacture_year"
         render={({ field }) => (
           <FormItem className="w-full">
             <FormLabel>Vehicle Manufacture Year</FormLabel>
@@ -40,7 +39,7 @@ export default function VehicleDateForm({ control }: Props) {
       />
       <FormField
         control={control}
-        name="year"
+        name="contract_start"
         render={({ field }) => (
           <FormItem className="flex w-full flex-col">
             <FormLabel>Vehicle Contract Start</FormLabel>
@@ -79,7 +78,7 @@ export default function VehicleDateForm({ control }: Props) {
       />
       <FormField
         control={control}
-        name="year"
+        name="contract_end"
         render={({ field }) => (
           <FormItem className="flex w-full flex-col">
             <FormLabel>Vehicle Contract End</FormLabel>

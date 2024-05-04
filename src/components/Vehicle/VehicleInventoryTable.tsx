@@ -9,18 +9,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { materialCategoryFilter, materialStatusFilter } from "@/utils/static";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Cable, CarFront, CirclePlus, Upload, Wrench } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -28,27 +16,28 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} from "@/components/ui/table";
+import { useState } from "react";
 import Pagination from "../ui/Pagination";
-import { Link } from "react-router-dom";
+import { materialCategoryFilter, materialStatusFilter } from "@/utils/static";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTrigger,
-} from "../ui/alert-dialog";
-import { AlertDialogTitle } from "@radix-ui/react-alert-dialog";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Diff, Upload } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export default function AccountTable<TData, TValue>({
+export default function VehicleInventoryTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -73,10 +62,10 @@ export default function AccountTable<TData, TValue>({
   return (
     <div className="box-shadow w-full rounded-md bg-white">
       <div className="p-6">
-        <div className="text-lg">Search Filters</div>
+        <div className="text-xl">Filters</div>
         <div className="mt-4 grid grid-cols-3 gap-6">
           <Select>
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full text-base">
               <SelectValue placeholder="Select Category" />
             </SelectTrigger>
             <SelectContent>
@@ -84,23 +73,7 @@ export default function AccountTable<TData, TValue>({
                 <SelectItem
                   key={option.value}
                   value={option.value}
-                  className="mt-1.5 text-slate-600"
-                >
-                  {option.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select Status" />
-            </SelectTrigger>
-            <SelectContent>
-              {materialStatusFilter.map((option) => (
-                <SelectItem
-                  key={option.value}
-                  value={option.value}
-                  className="mt-1.5 text-slate-600"
+                  className="mt-1.5 text-base text-slate-600"
                 >
                   {option.name}
                 </SelectItem>
@@ -123,13 +96,21 @@ export default function AccountTable<TData, TValue>({
               ))}
             </SelectContent>
           </Select>
+          <Input
+            placeholder="Search Material"
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="rounded-md border text-base transition-all duration-500 focus:border-transparent focus:outline-none focus:outline-transparent focus:ring-2 focus:ring-primary"
+          />
         </div>
       </div>
       <hr />
-      <div className="flex justify-between gap-4 px-6 py-6">
+      <div className="flex justify-end gap-4 p-6">
         <div className="w-28">
           <Select>
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full text-base">
               <SelectValue placeholder="10" />
             </SelectTrigger>
             <SelectContent>
@@ -137,7 +118,7 @@ export default function AccountTable<TData, TValue>({
                 <SelectItem
                   key={option.value}
                   value={option.value}
-                  className="mt-1.5 text-slate-600"
+                  className="mt-1.5 text-base text-slate-600"
                 >
                   {option.name}
                 </SelectItem>
@@ -146,64 +127,17 @@ export default function AccountTable<TData, TValue>({
           </Select>
         </div>
 
-        <div className="flex gap-4">
-          <Input
-            placeholder="Search Account"
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            className="w-64 rounded-md border text-base transition-all duration-500 focus:border-transparent focus:outline-none focus:outline-transparent focus:ring-2 focus:ring-primary"
-          />
+        <Button variant="muted" icon={<Upload size={20} strokeWidth={2.25} />}>
+          Export
+        </Button>
+        <Link to="/material-quantity">
           <Button
-            variant="muted"
-            icon={<Upload size={20} strokeWidth={2.25} />}
+            variant="default"
+            icon={<Diff size={20} strokeWidth={2.25} />}
           >
-            Export
+            Update Quantity
           </Button>
-          <AlertDialog>
-            <AlertDialogTrigger>
-              <Button
-                variant="default"
-                icon={<CirclePlus size={20} strokeWidth={2.25} />}
-              >
-                Create New Request
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  Select item type you want to request
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  You can only choose one type of item to request, you can make
-                  another request if you want to ask for other item type
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <Link to="/request-item/material">
-                  <AlertDialogAction className="flex gap-2 bg-primary hover:opacity-95">
-                    Material
-                    <Cable size={20} />
-                  </AlertDialogAction>
-                </Link>
-                <Link to="/request-item/tool">
-                  <AlertDialogAction className="flex gap-2 bg-teal-400 hover:bg-teal-600">
-                    Tool
-                    <Wrench size={20} />
-                  </AlertDialogAction>
-                </Link>
-                <Link to="/request-item/vehicle">
-                  <AlertDialogAction className="flex gap-2 bg-yellow-400 hover:bg-yellow-600">
-                    Vehicle
-                    <CarFront size={20} />
-                  </AlertDialogAction>
-                </Link>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
+        </Link>
       </div>
       <hr />
       <Table>

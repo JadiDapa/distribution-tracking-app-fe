@@ -6,7 +6,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Control } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -14,30 +13,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { materialCategoryFilter } from "@/utils/static";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { VehicleType } from "@/pages/vehicle/VehicleAdd";
+import { Vehicles, VehicleControl, VehicleVariants } from "@/lib/types/vehicle";
+import { GetVehicleVariants } from "@/lib/network/useVehicleVariant";
+import { GetAccounts } from "@/lib/network/useAccounts";
+import { Accounts } from "@/lib/types/account";
 
 type Props = {
-  control: Control<VehicleType>;
-  values: VehicleType;
+  control: VehicleControl;
+  values: Vehicles;
 };
 
-// "police-number": string;
-// variant: string;
-// brand: string;
-// color: string;
-// cc: string;
-// fuel: string;
-// year: string;
-// "contract-start": Date;
-// "contract-end": Date;
-// area: string;
-// location: string;
-// image: string;
-
 export default function VehicleInfoForm({ control }: Props) {
+  const { variants } = GetVehicleVariants();
+  const { accounts } = GetAccounts();
   return (
     <div className="box-shadow flex h-full flex-col gap-6 rounded-md bg-white p-6">
       <h2 className="text-xl font-medium ">Vehicle Information</h2>
@@ -57,7 +47,7 @@ export default function VehicleInfoForm({ control }: Props) {
       <div className="flex gap-6">
         <FormField
           control={control}
-          name="variant"
+          name="variantId"
           render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>Vehicle Variant</FormLabel>
@@ -66,17 +56,18 @@ export default function VehicleInfoForm({ control }: Props) {
                   <SelectValue placeholder="Select Variant" />
                 </SelectTrigger>
                 <SelectContent>
-                  {materialCategoryFilter.map((option) => (
+                  {variants?.map((variant: VehicleVariants) => (
                     <SelectItem
-                      key={option.value}
-                      value={option.value}
-                      className="mt-1.5 text-base text-slate-600"
+                      key={variant.id}
+                      value={variant.id.toString()}
+                      className="mt-1.5 text-base capitalize text-slate-600"
                     >
-                      {option.name}
+                      {variant.category}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -97,32 +88,47 @@ export default function VehicleInfoForm({ control }: Props) {
       <div className="flex gap-6">
         <FormField
           control={control}
-          name="cc"
+          name="areaId"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Cilinder Capacity</FormLabel>
-              <FormControl>
-                <Input type="number" placeholder="ex: 1000" {...field} />
-              </FormControl>
+              <FormLabel>Vehicle Area (UL)</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <SelectTrigger className="w-full text-base ">
+                  <SelectValue placeholder="Select current vehicle area" />
+                </SelectTrigger>
+                <SelectContent>
+                  {accounts
+                    ?.filter((account: Accounts) => Number(account.unitId) < 3)
+                    ?.map((account: Accounts) => (
+                      <SelectItem
+                        key={account.id}
+                        value={account.id!.toString()}
+                        className="mt-1.5 text-base text-slate-600"
+                      >
+                        {account.name}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
           control={control}
-          name="fuel"
+          name="locationId"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Type of Fuel</FormLabel>
+              <FormLabel>Vehicle Location</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <SelectTrigger className="w-full text-base ">
-                  <SelectValue placeholder="Select the vehicle type of fuel" />
+                  <SelectValue placeholder="Select vehicle current exact location" />
                 </SelectTrigger>
                 <SelectContent>
-                  {materialCategoryFilter.map((option) => (
+                  {accounts?.map((option: Accounts) => (
                     <SelectItem
-                      key={option.value}
-                      value={option.value}
+                      key={option.id}
+                      value={option.id!.toString()}
                       className="mt-1.5 text-base text-slate-600"
                     >
                       {option.name}
@@ -130,6 +136,7 @@ export default function VehicleInfoForm({ control }: Props) {
                   ))}
                 </SelectContent>
               </Select>
+              <FormMessage />
             </FormItem>
           )}
         />

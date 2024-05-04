@@ -1,19 +1,12 @@
+import MoveVehicleDialog from "@/components/ui/MoveVehicleDialog";
 import TableSorter from "@/components/ui/TableSorter";
+import { Vehicles } from "@/lib/types/vehicle";
+
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export type Vehicle = {
-  id: number;
-  police_number: string;
-  variant: string;
-  brand: string;
-  year: string;
-  location: string;
-  action: string;
-};
-
-export const vehicleColumns: ColumnDef<Vehicle>[] = [
+export const vehicleInventory: ColumnDef<Vehicles>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => (
@@ -51,20 +44,16 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
     ),
   },
   {
-    accessorKey: "location.name",
-    header: ({ column }) => <TableSorter column={column} header="LOCATION" />,
-    cell: ({ getValue }) => (
-      <div className="capitalize">{getValue() as string}</div>
-    ),
-  },
-  {
     accessorKey: "action",
     header: "ACTION",
-    cell: () => (
+    cell: ({ row }) => (
       <div className="flex gap-2">
-        <Link to="#">
-          <Trash2 size={22} strokeWidth={1.5} />
-        </Link>
+        <div className="cursor-pointer">
+          <MoveVehicleDialog
+            vehicle={`${row.getValue("police_number")} (${row.getValue("brand")})`}
+            id={row.getValue("id")}
+          />
+        </div>
         <Link to="#">
           <Pencil size={22} strokeWidth={1.5} />
         </Link>
