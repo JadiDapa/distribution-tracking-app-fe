@@ -7,59 +7,46 @@ import { useState } from "react";
 import NumberInput from "../ui/NumberInput";
 import { Plus } from "lucide-react";
 import { Button } from "../ui/button";
-import { GetMaterials } from "@/lib/network/useMaterial";
-import { GetTools } from "@/lib/network/useTool";
 import useRequestItemStore from "@/lib/store/RequestItemStore";
+import { GetMaterialInventories } from "@/lib/network/useMaterialInventory";
+import useAuthStore from "@/lib/store/AuthStore";
 
-type Props = {
-  itemType?: "material" | "tool" | "vehicle" | string;
-  itemInfo?: {
-    requestId: number;
-  };
-};
-
-export default function RequestFormEdit({ itemType, itemInfo }: Props) {
+export default function RequestFormEdit() {
   const { requestedItems, addItem } = useRequestItemStore();
+  const { userData } = useAuthStore();
   const [inputValue, setInputValue] = useState("");
   const [selected, setSelected] = useState("");
   const [selectedCode, setSelectedCode] = useState("");
   const [selectedId, setSelectedId] = useState(0);
+  const [selectedStock, setSelectedStock] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [open, setOpen] = useState(false);
 
-  const { materials } = GetMaterials();
-  const { tools } = GetTools();
-  // const { vehicle } = getVehicle();
+  const { materials } = GetMaterialInventories(userData?.id.toString());
 
-  let itemOptions;
-  if (itemType === "material") {
-    itemOptions = materials;
-  } else if (itemType === "tool") {
-    itemOptions = tools;
-  } else if (itemType === "vehicle") {
-    // nne
-  }
+  console.log(materials);
+
   function createRequest(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     if (selected && quantity >= 1) {
       const newItem = {
         materialId: selectedId,
-        requestId: itemInfo!.requestId,
         id: selectedId,
         name: selected,
         sku: selectedCode,
-        stock: 200,
+        stock: selectedStock,
         quantity: quantity,
       };
       addItem(newItem);
       setSelected("");
+      setSelectedStock(0);
       setQuantity(1);
     }
   }
 
   return (
     <div className="box-shadow flex w-full flex-col gap-6 rounded-md bg-white p-6">
-      <h2 className="text-xl font-medium ">Select Requested Items</h2>
+      <h2 className="text-xl font-medium ">Select Items From your Inventory</h2>
       <div className="flex gap-6">
         <div className="relative grow font-medium">
           <div
@@ -89,8 +76,13 @@ export default function RequestFormEdit({ itemType, itemInfo }: Props) {
                 className="p-2 outline-none placeholder:text-gray-700"
               />
             </div>
-            {itemOptions?.map(
-              (item: { name: string; sku: string; id: number }) => (
+            {materials?.map(
+              (item: {
+                name: string;
+                sku: string;
+                id: number;
+                quantity: number;
+              }) => (
                 <li
                   key={item.name}
                   className={`group px-4 py-2 text-sm hover:bg-sky-600 hover:text-white
@@ -113,6 +105,7 @@ export default function RequestFormEdit({ itemType, itemInfo }: Props) {
                       setSelected(item.name);
                       setSelectedCode(item.sku);
                       setSelectedId(item.id);
+                      setSelectedStock(item.quantity);
                       setOpen(false);
                       setInputValue("");
                     }

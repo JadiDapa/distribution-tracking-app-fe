@@ -1,4 +1,4 @@
-import MaterialData from "@/components/Material/MaterialData";
+import MaterialInventoryData from "@/components/Material/MaterialInventoryData";
 import SeperatedCard from "@/components/ui/ConnectedCard";
 import SeactionHeader from "@/components/ui/SeactionHeader";
 import { Cable, CircuitBoard, LampCeiling } from "lucide-react";
@@ -47,7 +47,7 @@ export default function MaterialInventory() {
           />
         ))}
       </div>
-      <MaterialData />
+      <MaterialInventoryData />
     </section>
   );
 }

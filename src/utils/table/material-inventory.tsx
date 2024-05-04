@@ -14,18 +14,27 @@ export type Material = {
 export const materialInventory: ColumnDef<Material>[] = [
   {
     accessorKey: "id",
-    header: ({ column }) => <TableSorter column={column} header="#" />,
-    cell: ({ row }) => (
-      <div className="ml-4 text-primary">#{row.getValue("id")}</div>
+    header: ({ column }) => (
+      <div className="pl-4">
+        <TableSorter column={column} header="#" />
+      </div>
     ),
+    cell: ({ row }) => <div className="ml-4 text-primary">{row.index + 1}</div>,
   },
   {
-    accessorKey: "material",
+    accessorKey: "material.name",
     header: ({ column }) => <TableSorter column={column} header="MATERIAL" />,
   },
   {
-    accessorKey: "category",
-    header: ({ column }) => <TableSorter column={column} header="CATEGORY" />,
+    accessorKey: "material.sku",
+    header: ({ column }) => <TableSorter column={column} header="SKU" />,
+  },
+  {
+    accessorKey: "material.category.category",
+    header: ({ column }) => <TableSorter column={column} header="UNIT" />,
+    cell: ({ getValue }) => (
+      <div className="capitalize">{getValue() as string}</div>
+    ),
   },
   {
     accessorKey: "quantity",

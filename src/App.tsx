@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./index.css";
+import { useEffect } from "react";
 import Login from "./pages/auth/Login";
 import Layout from "./components/Layout/Layout";
 import Dashboard from "./pages/dashboard/Dashboard";
@@ -15,13 +16,13 @@ import AccountRelated from "./pages/account/AccountRelated";
 import MaterialInventory from "./pages/material/MaterialInventory";
 import ToolInventory from "./pages/tool/ToolInventory";
 import VehicleInventory from "./pages/vehicle/VehicleInventory";
-import { useEffect } from "react";
 import useAuthStore from "./lib/store/AuthStore";
 import AccountEdit from "./pages/account/AccountEdit";
 import RequestList from "./pages/request/RequestList";
 import RequestItem from "./pages/request/RequestItem";
 import RequestInbox from "./pages/request/RequestInbox";
 import HandleRequest from "./pages/request/HandleRequest";
+import MaterialInventoryUpdate from "./pages/material/MaterialInventoryUpdate";
 
 export default function App() {
   const { userData, saveUser } = useAuthStore();
@@ -51,6 +52,10 @@ export default function App() {
           <Route path="/account-edit/:accountId" element={<AccountEdit />} />
 
           <Route path="/material-inventory" element={<MaterialInventory />} />
+          <Route
+            path="/material-quantity"
+            element={<MaterialInventoryUpdate />}
+          />
           <Route path="/material-list" element={<MaterialList />} />
           <Route path="/material-add" element={<MaterialAdd />} />
 

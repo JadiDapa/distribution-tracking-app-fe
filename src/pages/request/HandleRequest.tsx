@@ -57,6 +57,17 @@ export default function HandleRequest() {
   const navigate = useNavigate();
   const { setStatus, setMessage } = useNotificationStore();
 
+  console.log({
+    id: request?.id,
+    type: request?.type,
+    reason: request?.reason,
+    requestedId: request?.requestedId,
+    requesterId: request?.requesterId,
+    note: request?.note,
+    items: requestedItems,
+    status: "rejected",
+  });
+
   async function handleReject() {
     await editRequest({
       id: request?.id,

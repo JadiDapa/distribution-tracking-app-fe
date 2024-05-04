@@ -39,7 +39,7 @@ export default function RequestItem() {
     defaultValues: {
       reason: "",
       requestedId: "",
-      note: undefined,
+      note: null,
     },
     values: {
       requesterId: userData?.id,
