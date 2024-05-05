@@ -24,7 +24,6 @@ export type HigherAccounts = {
 };
 
 export type AccountControl = Control<{
-  id: string;
   name: string;
   user: string;
   password: string;

@@ -2,7 +2,7 @@ import { FormControl, FormItem, FormLabel } from "./form";
 import { RadioGroupItem } from "./radio-group";
 
 type Props = {
-  values: string | undefined;
+  values: string | number | undefined;
   value: string;
   label: string;
   desc: string;

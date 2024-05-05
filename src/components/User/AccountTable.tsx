@@ -13,11 +13,11 @@ import { useState } from "react";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { materialCategoryFilter, materialStatusFilter } from "@/utils/static";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { CirclePlus, Upload } from "lucide-react";
@@ -64,54 +64,90 @@ export default function AccountTable<TData, TValue>({
       <div className="p-6">
         <div className="text-lg">Search Filters</div>
         <div className="mt-4 grid grid-cols-3 gap-6">
-          <Select>
+          <Select
+            onValueChange={(value) => {
+              if (value === "clear") {
+                table.getColumn("unit")?.setFilterValue("");
+              } else {
+                table.getColumn("unit")?.setFilterValue(value);
+              }
+            }}
+          >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select Category" />
+              <SelectValue placeholder="Select Unit" />
             </SelectTrigger>
             <SelectContent>
-              {materialCategoryFilter.map((option) => (
+              <SelectGroup>
                 <SelectItem
-                  key={option.value}
-                  value={option.value}
-                  className="mt-1.5 text-slate-600"
+                  className="mt-1.5 text-base text-slate-600"
+                  value="clear"
                 >
-                  {option.name}
+                  Select Unit
                 </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select Status" />
-            </SelectTrigger>
-            <SelectContent>
-              {materialStatusFilter.map((option) => (
                 <SelectItem
-                  key={option.value}
-                  value={option.value}
-                  className="mt-1.5 text-slate-600"
-                >
-                  {option.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger className="w-full text-base">
-              <SelectValue placeholder="Select Status" />
-            </SelectTrigger>
-            <SelectContent>
-              {materialStatusFilter.map((option) => (
-                <SelectItem
-                  key={option.value}
-                  value={option.value}
+                  value="Unit Pelaksana"
                   className="mt-1.5 text-base text-slate-600"
                 >
-                  {option.name}
+                  Unit Pelaksana
                 </SelectItem>
-              ))}
+                <SelectItem
+                  value="Unit Layanan"
+                  className="mt-1.5 text-base text-slate-600"
+                >
+                  Unit Layanan
+                </SelectItem>
+                <SelectItem
+                  value="Posko"
+                  className="mt-1.5 text-base text-slate-600"
+                >
+                  Posko
+                </SelectItem>
+              </SelectGroup>
             </SelectContent>
           </Select>
+          <Select
+            onValueChange={(value) => {
+              if (value === "clear") {
+                table.getColumn("status")?.setFilterValue("");
+              } else {
+                table.getColumn("status")?.setFilterValue(value);
+              }
+            }}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem
+                  value="clear"
+                  className="mt-1.5 text-base text-slate-600"
+                >
+                  Select Status
+                </SelectItem>
+                <SelectItem
+                  value="active"
+                  className="mt-1.5 text-base text-slate-600"
+                >
+                  Active
+                </SelectItem>
+                <SelectItem
+                  value="inactive"
+                  className="mt-1.5 text-base text-slate-600"
+                >
+                  Inactive
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Input
+            placeholder="Search Account"
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="rounded-md border text-base transition-all duration-500 focus:border-transparent focus:outline-none focus:outline-transparent focus:ring-2 focus:ring-primary"
+          />
         </div>
       </div>
       <hr />
@@ -122,28 +158,14 @@ export default function AccountTable<TData, TValue>({
               <SelectValue placeholder="10" />
             </SelectTrigger>
             <SelectContent>
-              {materialStatusFilter.map((option) => (
-                <SelectItem
-                  key={option.value}
-                  value={option.value}
-                  className="mt-1.5 text-slate-600"
-                >
-                  {option.name}
-                </SelectItem>
-              ))}
+              <SelectItem value="10" className="mt-1.5 text-slate-600">
+                10
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div className="flex gap-4">
-          <Input
-            placeholder="Search Account"
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            className="w-64 rounded-md border text-base transition-all duration-500 focus:border-transparent focus:outline-none focus:outline-transparent focus:ring-2 focus:ring-primary"
-          />
           <Button
             variant="muted"
             icon={<Upload size={20} strokeWidth={2.25} />}

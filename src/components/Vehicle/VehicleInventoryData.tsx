@@ -1,15 +1,19 @@
-import useAuthStore from "@/lib/store/AuthStore";
-import { GetVehiclesByAccountId } from "@/lib/network/useVehicle";
 import { vehicleInventory } from "@/utils/table/vehicle-inventory";
 import VehicleInventoryTable from "./VehicleInventoryTable";
 import DataLoading from "../ui/DataLoading";
+import { Vehicles } from "@/lib/types/vehicle";
 
-export default function VehicleInventoryData() {
-  const { userData } = useAuthStore();
-  const { vehicles, isLoading, isError } = GetVehiclesByAccountId(
-    userData?.id.toString(),
-  );
+type Props = {
+  vehicles: Vehicles[];
+  isLoading?: boolean;
+  isError?: boolean;
+};
 
+export default function VehicleInventoryData({
+  vehicles,
+  isLoading,
+  isError,
+}: Props) {
   if (isError) return <div>Something went wrong...</div>;
   if (isLoading) return <DataLoading isLoading={isLoading} />;
 

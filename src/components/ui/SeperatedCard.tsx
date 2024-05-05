@@ -23,7 +23,7 @@ export default function SeperatedCard({
         <div className="text-sm font-light">{detail}</div>
       </div>
       <div
-        className="flex h-10 w-10 items-center justify-center rounded-md"
+        className="flex h-10 w-10 items-center justify-center rounded-md text-2xl"
         style={{ backgroundColor: bgColor, color: textColor }}
       >
         {icon}

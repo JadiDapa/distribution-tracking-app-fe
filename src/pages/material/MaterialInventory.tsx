@@ -1,6 +1,8 @@
 import MaterialInventoryData from "@/components/Material/MaterialInventoryData";
 import SeperatedCard from "@/components/ui/ConnectedCard";
 import SeactionHeader from "@/components/ui/SeactionHeader";
+import { GetMaterialInventories } from "@/lib/network/useMaterialInventory";
+import useAuthStore from "@/lib/store/AuthStore";
 import { Cable, CircuitBoard, LampCeiling } from "lucide-react";
 
 const materialInventoryCard = [
@@ -31,6 +33,10 @@ const materialInventoryCard = [
 ];
 
 export default function MaterialInventory() {
+  const { userData } = useAuthStore();
+  const { materials, isLoading, isError } = GetMaterialInventories(
+    userData?.id.toString(),
+  );
   return (
     <section className="flex w-full flex-col gap-6 py-6">
       <SeactionHeader section="Material" subSection="Material Inventory" />
@@ -47,7 +53,11 @@ export default function MaterialInventory() {
           />
         ))}
       </div>
-      <MaterialInventoryData />
+      <MaterialInventoryData
+        materials={materials}
+        isError={isError}
+        isLoading={isLoading}
+      />
     </section>
   );
 }

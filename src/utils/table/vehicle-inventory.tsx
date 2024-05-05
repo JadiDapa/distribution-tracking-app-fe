@@ -55,9 +55,6 @@ export const vehicleInventory: ColumnDef<Vehicles>[] = [
           />
         </div>
         <Link to="#">
-          <Pencil size={22} strokeWidth={1.5} />
-        </Link>
-        <Link to="#">
           <Eye size={22} strokeWidth={1.5} />
         </Link>
       </div>

@@ -14,10 +14,10 @@ const fetch = (url: string, token: string | undefined) =>
     .then((res) => res.data);
 
 // Get All Requests
-export function GetRequests() {
+export function GetRequestByAccountId(accountId?: string) {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/requests/" + userData?.id, userData?.token],
+    ["http://localhost:3000/api/requests/" + accountId, userData?.token],
     ([url, token]) => fetch(url, token),
   );
 

@@ -9,6 +9,7 @@ import SeactionHeader from "@/components/ui/SeactionHeader";
 import { EditAccount, GetAccountById } from "@/lib/network/useAccounts";
 import { useNavigate, useParams } from "react-router-dom";
 import useNotificationStore from "@/lib/store/NotificationStore";
+import InfoFormEdit from "@/components/User/InfoFormEdit";
 
 const formSchema = z
   .object({
@@ -58,13 +59,12 @@ export default function AccountEdit() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     values: {
-      id: account.id,
-      name: account.name,
-      user: account.user,
-      password: account.password,
-      status: account.status,
-      unitId: String(account.unitId),
-      higherAccountId: String(account.relation),
+      id: account?.id,
+      name: account?.name,
+      user: account?.user,
+      status: account?.status,
+      unitId: String(account?.unitId),
+      higherAccountId: String(account?.relation),
     },
   });
 
@@ -90,18 +90,18 @@ export default function AccountEdit() {
 
   return (
     <section className="flex w-full flex-col gap-6 py-6">
-      <SeactionHeader section="Account" subSection="Add Account" />
+      <SeactionHeader section="Account" subSection="Edit Account" />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-6"
         >
           <CreatePageHeader
-            header="Add New Account"
-            subheader="Add new account to use accross the app"
+            header="Edit an Account"
+            subheader="Update an account information as you needed"
           />
           <div className="flex gap-6">
-            <InfoForm control={form.control} values={form.watch()} />
+            <InfoFormEdit control={form.control} values={form.watch()} />
             <RelationForm control={form.control} values={form.watch()} />
           </div>
         </form>

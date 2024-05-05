@@ -23,6 +23,7 @@ import RequestItem from "./pages/request/RequestItem";
 import RequestInbox from "./pages/request/RequestInbox";
 import HandleRequest from "./pages/request/HandleRequest";
 import MaterialInventoryUpdate from "./pages/material/MaterialInventoryUpdate";
+import AccountDetail from "./pages/account/AccountDetail";
 
 export default function App() {
   const { userData, saveUser } = useAuthStore();
@@ -49,6 +50,11 @@ export default function App() {
           <Route path="/account-related" element={<AccountRelated />} />
           <Route path="/account-list" element={<AccountList />} />
           <Route path="/account-add" element={<AccountAdd />} />
+
+          <Route
+            path="/account-detail/:accountId"
+            element={<AccountDetail />}
+          />
           <Route path="/account-edit/:accountId" element={<AccountEdit />} />
 
           <Route path="/material-inventory" element={<MaterialInventory />} />

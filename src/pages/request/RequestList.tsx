@@ -2,7 +2,8 @@ import RequestData from "@/components/Request/RequestData";
 import ConnectedCard from "@/components/ui/ConnectedCard";
 import SeactionHeader from "@/components/ui/SeactionHeader";
 import { Button } from "@/components/ui/button";
-import { GetRequests } from "@/lib/network/useRequest";
+import { GetRequestByAccountId } from "@/lib/network/useRequest";
+import useAuthStore from "@/lib/store/AuthStore";
 import {
   Archive,
   ArchiveRestore,
@@ -13,7 +14,10 @@ import {
 import { Link } from "react-router-dom";
 
 export default function RequestList() {
-  const { requests, isLoading, isError } = GetRequests();
+  const { userData } = useAuthStore();
+  const { requests, isLoading, isError } = GetRequestByAccountId(
+    userData!.id.toString(),
+  );
   const requestListCard = [
     {
       title: "Total Request",

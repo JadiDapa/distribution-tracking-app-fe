@@ -1,15 +1,18 @@
 import BarLoader from "react-spinners/BarLoader";
 import MaterialInventoryTable from "./MaterialInventoryTable";
-import { GetMaterialInventories } from "@/lib/network/useMaterialInventory";
 import { materialInventory } from "@/utils/table/material-inventory";
-import useAuthStore from "@/lib/store/AuthStore";
 
-export default function MaterialInventoryData() {
-  const { userData } = useAuthStore();
-  const { materialInventories, isLoading, isError } = GetMaterialInventories(
-    userData?.id.toString(),
-  );
+type Props = {
+  materials: [];
+  isError?: boolean;
+  isLoading?: boolean;
+};
 
+export default function MaterialInventoryData({
+  materials,
+  isError,
+  isLoading,
+}: Props) {
   if (isError) return <div>Something went wrong...</div>;
   if (isLoading)
     return (
@@ -27,9 +30,6 @@ export default function MaterialInventoryData() {
     );
 
   return (
-    <MaterialInventoryTable
-      columns={materialInventory}
-      data={materialInventories}
-    />
+    <MaterialInventoryTable columns={materialInventory} data={materials} />
   );
 }

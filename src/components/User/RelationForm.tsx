@@ -8,8 +8,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup } from "@/components/ui/radio-group";
+import { GetAccounts } from "@/lib/network/useAccounts";
 import { AccountControl, Accounts } from "@/lib/types/account";
 import { Building, Home, Warehouse } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 type Props = {
   control: AccountControl;
@@ -17,6 +25,7 @@ type Props = {
 };
 
 export default function RelationForm({ control, values }: Props) {
+  const { accounts } = GetAccounts();
   return (
     <div className="box-shadow flex w-[47%]  flex-col gap-6 rounded-md bg-white p-6">
       <h2 className="text-xl font-medium">Account Relation</h2>
@@ -77,11 +86,26 @@ export default function RelationForm({ control, values }: Props) {
           control={control}
           name="higherAccountId"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Relation</FormLabel>
-              <FormControl>
-                <Input placeholder="Related into" {...field} />
-              </FormControl>
+            <FormItem className="w-full">
+              <FormLabel>Related Accounts</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <SelectTrigger className="w-full text-base">
+                  <SelectValue placeholder="Select related account" />
+                </SelectTrigger>
+                <SelectContent>
+                  {accounts
+                    .filter((account: Accounts) => account.unitId === 2)
+                    .map((account: Accounts) => (
+                      <SelectItem
+                        key={account.id}
+                        value={account.id!.toString()}
+                        className="mt-1.5 text-base text-slate-600"
+                      >
+                        {account.name}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

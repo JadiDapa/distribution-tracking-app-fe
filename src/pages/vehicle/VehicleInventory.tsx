@@ -1,6 +1,8 @@
 import VehicleInventoryData from "@/components/Vehicle/VehicleInventoryData";
 import SeperatedCard from "@/components/ui/ConnectedCard";
 import SeactionHeader from "@/components/ui/SeactionHeader";
+import { GetVehiclesByAccountId } from "@/lib/network/useVehicle";
+import useAuthStore from "@/lib/store/AuthStore";
 import { Cable, CircuitBoard, LampCeiling } from "lucide-react";
 
 const materialInventoryCard = [
@@ -31,6 +33,10 @@ const materialInventoryCard = [
 ];
 
 export default function VehicleInventory() {
+  const { userData } = useAuthStore();
+  const { vehicles, isLoading, isError } = GetVehiclesByAccountId(
+    userData?.id.toString(),
+  );
   return (
     <section className="flex w-full flex-col gap-6 py-6">
       <SeactionHeader section="Vehicle" subSection="Vehicle Inventory" />
@@ -47,7 +53,11 @@ export default function VehicleInventory() {
           />
         ))}
       </div>
-      <VehicleInventoryData />
+      <VehicleInventoryData
+        vehicles={vehicles}
+        isLoading={isLoading}
+        isError={isError}
+      />
     </section>
   );
 }

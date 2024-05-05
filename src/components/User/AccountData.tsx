@@ -1,26 +1,17 @@
 import { accountColumns } from "@/utils/table/account-column";
 import AccountTable from "./AccountTable";
-import { GetAccounts } from "@/lib/network/useAccounts";
-import BarLoader from "react-spinners/BarLoader";
+import { Accounts } from "@/lib/types/account";
+import DataLoading from "../ui/DataLoading";
 
-export default function AccountData() {
-  const { accounts, isError, isLoading } = GetAccounts();
+type Props = {
+  accounts: Accounts[];
+  isError?: boolean;
+  isLoading?: boolean;
+};
 
+export default function AccountData({ accounts, isError, isLoading }: Props) {
   if (isError) return <div>Something went wrong...</div>;
-  if (isLoading)
-    return (
-      <div className="mx-auto w-full flex-col gap-8">
-        <p>Loading Your Data</p>
-        <BarLoader
-          color={"blue"}
-          loading={isLoading}
-          width={400}
-          height={5}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
-      </div>
-    );
+  if (isLoading) return <DataLoading isLoading={isLoading} />;
 
   return <AccountTable columns={accountColumns} data={accounts} />;
 }

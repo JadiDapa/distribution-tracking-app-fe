@@ -24,7 +24,7 @@ export function GetMaterialInventories(accountId?: string) {
   );
 
   return {
-    materialInventories: data?.data,
+    materials: data?.data,
     isLoading,
     isError: error,
   };
@@ -39,7 +39,7 @@ export const GetAccountById = (id: string) => {
   );
 
   return {
-    materials: data?.data,
+    material: data?.data,
     isLoading,
     isError: error,
   };
