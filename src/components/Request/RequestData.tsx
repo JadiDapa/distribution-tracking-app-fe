@@ -1,8 +1,7 @@
-import { requestColumns } from "@/utils/table/request-column";
 import RequestTable from "./RequestTable";
-import BarLoader from "react-spinners/BarLoader";
 import { Requests } from "@/lib/types/request";
 import { requestInboxs } from "@/utils/table/request-inbox";
+import DataLoading from "../ui/DataLoading";
 
 type Props = {
   requests: Requests[];
@@ -11,32 +10,9 @@ type Props = {
   isInbox?: boolean;
 };
 
-export default function requestData({
-  requests,
-  isLoading,
-  isError,
-  isInbox,
-}: Props) {
+export default function requestData({ requests, isLoading, isError }: Props) {
   if (isError) return <div>Something went wrong...</div>;
-  if (isLoading)
-    return (
-      <div className="mx-auto w-full flex-col gap-8">
-        <p>Loading Your Data</p>
-        <BarLoader
-          color={"blue"}
-          loading={isLoading}
-          width={400}
-          height={5}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
-      </div>
-    );
+  if (isLoading) return <DataLoading isLoading={isLoading} />;
 
-  return (
-    <RequestTable
-      columns={isInbox ? requestInboxs : requestColumns}
-      data={requests}
-    />
-  );
+  return <RequestTable columns={requestInboxs} data={requests} />;
 }

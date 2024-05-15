@@ -29,7 +29,7 @@ export function GetTools() {
 }
 
 // Get Single Tool By Id
-export const GetToolById = (id: string) => {
+export const GetToolById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
     ["http://localhost:3000/api/tools/" + id, userData?.token],
@@ -105,7 +105,7 @@ export const EditTool = () => {
     try {
       await axios.put(
         `http://localhost:3000/api/tools/${id}`,
-        { id, name, sku, status, expired_at, detail, picture, categoryId },
+        { name, sku, status, expired_at, detail, picture, categoryId },
         {
           headers: {
             "Content-Type": "multipart/form-data",

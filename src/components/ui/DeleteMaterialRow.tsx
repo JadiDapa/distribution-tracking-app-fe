@@ -35,8 +35,9 @@ export default function DeleteMaterialRow({ id, name }: Props) {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        <Trash2 size={22} strokeWidth={1.5} />
+      <AlertDialogTrigger className="flex items-center gap-2 rounded-md bg-red-200/70 px-2 py-1 text-red-400">
+        <Trash2 size={18} />
+        Delete
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

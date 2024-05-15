@@ -13,12 +13,12 @@ export default function CreatePageHeader({
   isLoading,
 }: Props) {
   return (
-    <header className="flex items-center justify-between">
+    <header className="items-center justify-between lg:flex">
       <div className="">
         <h1 className="text-2xl font-medium">{header}</h1>
         <p className="mt-1 text-gray-400">{subheader}</p>
       </div>
-      <div className="flex gap-4">
+      <div className="mt-4 flex gap-4 lg:mt-0">
         <Button variant="muted">Discard</Button>
         <Button variant="default" type="submit">
           {isLoading ? (

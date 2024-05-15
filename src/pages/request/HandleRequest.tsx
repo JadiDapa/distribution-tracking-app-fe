@@ -9,18 +9,34 @@ import { ArchiveRestore, ArchiveX } from "lucide-react";
 import { useEffect } from "react";
 import { RequestedItems } from "@/lib/types/requestItem";
 import RequestFormEdit from "@/components/Request/RequestFormEdit";
+import DataLoading from "@/components/ui/DataLoading";
+import { GetMaterialInventories } from "@/lib/network/useMaterialInventory";
+import useAuthStore from "@/lib/store/AuthStore";
+import { GetToolInventories } from "@/lib/network/useToolInventory";
+import { MaterialInventories } from "@/lib/types/material";
+import { ToolInventories } from "@/lib/types/tool";
 
 export default function HandleRequest() {
   const { requestId } = useParams();
+  const { userData } = useAuthStore();
   const { requestedItems, clearItem, addItem } = useRequestItemStore();
-  const { request } = GetRequestById(requestId!);
-
+  const {
+    request,
+    isLoading: requestLoading,
+    isError,
+  } = GetRequestById(requestId!);
   const { editRequest, isLoading } = EditRequest();
+  const { materials } = GetMaterialInventories(userData?.id.toString());
+  const { tools } = GetToolInventories(userData?.id.toString());
 
   useEffect(() => {
     if (requestedItems.length < 1) {
       request?.items.forEach((item: RequestedItems) => {
         if (request?.type === "material") {
+          const getStock = materials?.find(
+            (request: MaterialInventories) =>
+              request.material.sku === item.material!.sku,
+          );
           addItem({
             id: item.id,
             materialId: item.materialId,
@@ -28,10 +44,13 @@ export default function HandleRequest() {
             requestId: item.requestId,
             name: item.material!.name,
             sku: item.material!.sku,
-            stock: 200,
+            stock: getStock?.quantity,
           });
         }
         if (request?.type === "tool") {
+          const getStock = tools?.find(
+            (request: ToolInventories) => request.tool.sku === item.tool!.sku,
+          );
           addItem({
             id: item.id,
             toolId: item.toolId,
@@ -39,12 +58,18 @@ export default function HandleRequest() {
             requestId: item.requestId,
             name: item.material!.name,
             sku: item.material!.sku,
-            stock: 200,
+            stock: getStock?.quantity,
           });
         }
       });
     }
   });
+
+  useEffect(() => {
+    return () => {
+      clearItem();
+    };
+  }, [clearItem]);
 
   const createdAt = new Date(request?.createdAt).toLocaleDateString("en-US", {
     year: "numeric",
@@ -56,17 +81,6 @@ export default function HandleRequest() {
 
   const navigate = useNavigate();
   const { setStatus, setMessage } = useNotificationStore();
-
-  console.log({
-    id: request?.id,
-    type: request?.type,
-    reason: request?.reason,
-    requestedId: request?.requestedId,
-    requesterId: request?.requesterId,
-    note: request?.note,
-    items: requestedItems,
-    status: "rejected",
-  });
 
   async function handleReject() {
     await editRequest({
@@ -100,71 +114,74 @@ export default function HandleRequest() {
     navigate("/request-inbox");
   }
 
-  return (
-    <section className="flex w-full flex-col gap-6 py-6">
-      <SeactionHeader section="Request" subSection="Handle Request" />
-      <div className="">
-        <div className="text-xl text-primary">Request #{request?.code}</div>
-        <header className="flex items-center justify-between">
-          <div className="">
-            <h1 className="text-2xl font-medium">
-              By {request?.requester.name}
-            </h1>
-            <p className="mt-1 text-gray-400">{createdAt}</p>
-          </div>
-          <div className="flex gap-4">
-            <Button
-              onClick={handleAccept}
-              className="bg-green-400 hover:bg-green-600"
-              variant="default"
-              type="submit"
-            >
-              {isLoading ? (
-                <div className="flex items-center justify-center gap-2 ">
-                  <ClipLoader
-                    color={"white"}
-                    loading={isLoading}
-                    size={28}
-                    aria-label="Loading Spinner"
-                    data-testid="loader"
-                  />
-                  <span>Submitting</span>
-                </div>
-              ) : (
-                <div className="flex items-center gap-3">
-                  Accept <ArchiveRestore size={20} />
-                </div>
-              )}
-            </Button>
-            <Button
-              onClick={handleReject}
-              className="flex items-center gap-2 bg-red-400 hover:bg-red-600"
-            >
-              Reject <ArchiveX size={20} />
-            </Button>
-          </div>
-        </header>
-      </div>
-      <div className="flex flex-col gap-6">
-        <div className="box-shadow flex w-full flex-col gap-5 rounded-md bg-white p-6">
-          <h2 className="text-xl font-medium">Request Information</h2>
-          <div className="">
-            <div className="text-lg font-medium text-primary">Reason</div>
-            <div className="">{request?.reason}</div>
-          </div>
-
-          {request?.note && (
+  if (isError) return <div>Something went wrong...</div>;
+  if (requestLoading) return <DataLoading isLoading={isLoading} />;
+  if (request && tools && materials) {
+    return (
+      <section className="flex w-full flex-col gap-6 py-6">
+        <SeactionHeader section="Request" subSection="Handle Request" />
+        <div className="">
+          <div className="text-xl text-primary">Request #{request?.code}</div>
+          <header className="flex items-center justify-between">
             <div className="">
-              <div className="font-medium text-yellow-500">Note*</div>
-              <div dangerouslySetInnerHTML={{ __html: request?.note }} />
+              <h1 className="text-2xl font-medium">
+                By {request?.requester.name}
+              </h1>
+              <p className="mt-1 text-gray-400">{createdAt}</p>
             </div>
-          )}
+            <div className="flex gap-4">
+              <Button
+                onClick={handleAccept}
+                className="bg-green-400 hover:bg-green-600"
+                variant="default"
+                type="submit"
+              >
+                {isLoading ? (
+                  <div className="flex items-center justify-center gap-2 ">
+                    <ClipLoader
+                      color={"white"}
+                      loading={isLoading}
+                      size={28}
+                      aria-label="Loading Spinner"
+                      data-testid="loader"
+                    />
+                    <span>Submitting</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    Accept <ArchiveRestore size={20} />
+                  </div>
+                )}
+              </Button>
+              <Button
+                onClick={handleReject}
+                className="flex items-center gap-2 bg-red-400 hover:bg-red-600"
+              >
+                Reject <ArchiveX size={20} />
+              </Button>
+            </div>
+          </header>
         </div>
-        <RequestFormEdit
-          itemType={request?.type}
-          itemInfo={request?.items[0]}
-        />
-      </div>
-    </section>
-  );
+        <div className="flex flex-col gap-6">
+          <div className="box-shadow flex w-full flex-col gap-5 rounded-md bg-white p-6">
+            <h2 className="text-xl font-medium">Request Information</h2>
+            <div className="">
+              <div className="text-lg font-medium text-primary">Reason</div>
+              <div className="">{request?.reason}</div>
+            </div>
+
+            {request?.note && (
+              <div className="">
+                <div className="font-medium text-yellow-500">Note*</div>
+                <div dangerouslySetInnerHTML={{ __html: request?.note }} />
+              </div>
+            )}
+          </div>
+          <RequestFormEdit
+            displayedItems={request?.type === "material" ? materials : tools}
+          />
+        </div>
+      </section>
+    );
+  }
 }

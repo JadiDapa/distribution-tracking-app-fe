@@ -22,7 +22,7 @@ export function GetVehicleVariants() {
   );
 
   return {
-    variants: data?.data,
+    categories: data?.data,
     isLoading,
     isError: error,
   };

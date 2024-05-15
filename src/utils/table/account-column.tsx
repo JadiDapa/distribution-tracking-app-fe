@@ -41,24 +41,24 @@ export const accountColumns: ColumnDef<Accounts>[] = [
     cell: ({ getValue }) => {
       if (getValue() === "Unit Pelaksana") {
         return (
-          <div className="flex  items-center gap-2 text-[#5748ff]">
-            <HiBuildingOffice2 className="text-xl" />
+          <div className="flex  items-center gap-2 text-sm text-[#5748ff] lg:text-base">
+            <HiBuildingOffice2 className="hidden text-xl lg:block" />
             Unit Pelaksana
           </div>
         );
       }
       if (getValue() === "Unit Layanan") {
         return (
-          <div className="flex items-center gap-2 text-[#d37945]">
-            <HiMiniBuildingOffice className="text-xl" />
+          <div className="flex items-center gap-2 text-sm text-[#d37945] lg:text-base">
+            <HiMiniBuildingOffice className="hidden text-xl lg:block" />
             Unit Layanan
           </div>
         );
       }
       if (getValue() === "Posko") {
         return (
-          <div className="flex items-center gap-2 text-[#ff3eff]">
-            <HiMiniBuildingStorefront className="text-xl" />
+          <div className="flex items-center gap-2 text-sm text-[#ff3eff] lg:text-base">
+            <HiMiniBuildingStorefront className="hidden text-xl lg:block" />
             Posko
           </div>
         );
@@ -71,11 +71,11 @@ export const accountColumns: ColumnDef<Accounts>[] = [
     cell: ({ row }) => (
       <div className="capitalize">
         {row.getValue("status") === "active" ? (
-          <div className="flex max-w-fit items-center gap-2 rounded-md bg-green-200/70 px-4 py-1 text-sm font-semibold text-green-600">
+          <div className="flex max-w-fit items-center gap-2 rounded-md bg-green-200/70 px-2 py-0.5 text-xs font-medium text-green-600 lg:px-4 lg:py-1 lg:text-sm lg:font-semibold">
             Active
           </div>
         ) : (
-          <div className="flex max-w-fit items-center gap-2 rounded-md bg-red-200/70 px-4 py-1 text-sm font-semibold text-red-600">
+          <div className="flex max-w-fit items-center gap-2 rounded-md bg-red-200/70 px-2 py-0.5 text-xs font-medium text-red-600 lg:px-4 lg:py-1 lg:text-sm lg:font-semibold">
             Inactive
           </div>
         )}

@@ -3,10 +3,16 @@ import { RequestedItems } from "./requestItem";
 
 export interface Requests {
   id?: number;
-  type: string;
+  type?: string;
   reason: string;
-  requesterId: number | string;
+  requesterId?: number | string;
   requestedId: number | string;
+  requested?: {
+    name: string;
+  };
+  requester?: {
+    name: string;
+  };
   items?: RequestedItems[];
   note?: string;
   status?: string | undefined;
@@ -15,9 +21,7 @@ export interface Requests {
 }
 
 export type RequestControl = Control<{
-  type: string;
   reason: string;
-  requesterId: number;
   requestedId: string;
   note?: string | undefined;
 }>;

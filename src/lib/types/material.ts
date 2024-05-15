@@ -13,6 +13,21 @@ export interface Materials {
   };
 }
 
+export interface MaterialInventories {
+  id: number;
+  material: {
+    name: string;
+    sku: string;
+  };
+  category: string;
+  quantity: number;
+}
+
+export interface MaterialCategories {
+  id: number | string;
+  category: string;
+}
+
 export type MaterialControl = Control<{
   name: string;
   sku: string;

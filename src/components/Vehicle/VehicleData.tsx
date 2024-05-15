@@ -1,26 +1,17 @@
 import { vehicleColumns } from "@/utils/table/vehicle-column";
 import VehicleTable from "./VehicleTable";
-import { GetVehicles } from "@/lib/network/useVehicle";
-import BarLoader from "react-spinners/BarLoader";
+import { Vehicles } from "@/lib/types/vehicle";
+import DataLoading from "../ui/DataLoading";
 
-export default function VehicleData() {
-  const { vehicles, isLoading, isError } = GetVehicles();
+type Props = {
+  vehicles: Vehicles[];
+  isLoading?: boolean;
+  isError?: boolean;
+};
 
+export default function VehicleData({ vehicles, isLoading, isError }: Props) {
   if (isError) return <div>Something went wrong...</div>;
-  if (isLoading)
-    return (
-      <div className="mx-auto w-full flex-col gap-8">
-        <p>Loading Your Data</p>
-        <BarLoader
-          color={"blue"}
-          loading={isLoading}
-          width={400}
-          height={5}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
-      </div>
-    );
+  if (isLoading) return <DataLoading isLoading={isLoading} />;
 
   return <VehicleTable columns={vehicleColumns} data={vehicles} />;
 }

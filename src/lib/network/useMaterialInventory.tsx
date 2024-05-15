@@ -31,7 +31,7 @@ export function GetMaterialInventories(accountId?: string) {
 }
 
 // Get Single Material Inventory By Id
-export const GetAccountById = (id: string) => {
+export const GetMaterialById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
     ["http://localhost:3000/api/material-inventories/" + id, userData?.token],

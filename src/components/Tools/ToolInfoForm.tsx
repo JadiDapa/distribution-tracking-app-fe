@@ -13,10 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { materialCategoryFilter } from "@/utils/static";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { ToolControl, Tools } from "@/lib/types/tool";
+import { ToolCategory, ToolControl, Tools } from "@/lib/types/tool";
+import { GetToolCategories } from "@/lib/network/useToolCategory";
+import AddToolCategory from "./AddToolCategory";
 
 type Props = {
   control: ToolControl;
@@ -24,6 +25,8 @@ type Props = {
 };
 
 export default function ToolInfoForm({ control }: Props) {
+  const { categories } = GetToolCategories();
+
   return (
     <div className="box-shadow flex h-full flex-col gap-6 rounded-md bg-white p-6">
       <h2 className="text-xl font-medium ">Tool Information</h2>
@@ -47,25 +50,31 @@ export default function ToolInfoForm({ control }: Props) {
           render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <SelectTrigger className="w-full text-base">
-                  <SelectValue placeholder="Select Category" />
+                  <SelectValue
+                    className="capitalize"
+                    placeholder="Select Category"
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  {materialCategoryFilter.map((option) => (
+                  {categories?.map((category: ToolCategory) => (
                     <SelectItem
-                      key={option.value}
-                      value={option.value}
-                      className="mt-1.5 text-base text-slate-600"
+                      key={category.id}
+                      value={category.id!.toString()}
+                      className="mt-1.5 text-base capitalize text-slate-600"
                     >
-                      {option.name}
+                      {category.category}
                     </SelectItem>
                   ))}
+
+                  <AddToolCategory />
                 </SelectContent>
               </Select>
             </FormItem>
           )}
         />
+
         <FormField
           control={control}
           name="sku"

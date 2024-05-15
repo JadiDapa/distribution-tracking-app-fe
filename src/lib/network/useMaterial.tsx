@@ -29,7 +29,7 @@ export function GetMaterials() {
 }
 
 // Get Single Material By Id
-export const GetAccountById = (id: string) => {
+export const GetMaterialById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
     ["http://localhost:3000/api/materials/" + id, userData?.token],
@@ -37,7 +37,7 @@ export const GetAccountById = (id: string) => {
   );
 
   return {
-    materials: data?.data,
+    material: data?.data,
     isLoading,
     isError: error,
   };
@@ -66,7 +66,6 @@ export const CreateMaterial = () => {
         { name, sku, status, detail, picture, categoryId },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },
@@ -74,8 +73,8 @@ export const CreateMaterial = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);
-        setError(true);
       }
+      setError(true);
     } finally {
       setIsLoading(false);
     }
@@ -104,7 +103,7 @@ export const EditMaterial = () => {
     try {
       await axios.put(
         `http://localhost:3000/api/materials/${id}`,
-        { id, name, sku, status, detail, picture, categoryId },
+        { name, sku, status, detail, picture, categoryId },
         {
           headers: {
             Authorization: `Bearer ${userData?.token}`,

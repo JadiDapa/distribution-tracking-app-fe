@@ -18,7 +18,7 @@ type Props = {
 
 export default function InfoForm({ control, values }: Props) {
   return (
-    <div className="box-shadow flex w-[53%] flex-col gap-6 rounded-md bg-white p-6">
+    <div className="box-shadow flex w-full flex-col gap-6 rounded-md bg-white p-6 lg:w-[53%]">
       <h2 className="text-xl font-medium ">Account Information</h2>
       <FormField
         control={control}
@@ -69,7 +69,7 @@ export default function InfoForm({ control, values }: Props) {
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className="flex gap-6"
+                className="flex gap-4 lg:gap-6"
               >
                 <CustomRadio
                   values={values.status}

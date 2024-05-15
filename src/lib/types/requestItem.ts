@@ -11,5 +11,9 @@ export interface RequestedItems {
     sku: string;
   };
   toolId?: number;
+  tool?: {
+    name: string;
+    sku: string;
+  };
   requestId?: number;
 }

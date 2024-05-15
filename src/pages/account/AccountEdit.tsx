@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
-import InfoForm from "@/components/User/InfoForm";
 import RelationForm from "@/components/User/RelationForm";
 import CreatePageHeader from "@/components/ui/CreatePageHeader";
 import SeactionHeader from "@/components/ui/SeactionHeader";

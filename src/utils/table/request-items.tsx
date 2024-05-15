@@ -4,14 +4,20 @@ import TableSorter from "@/components/ui/TableSorter";
 import { RequestedItems } from "@/lib/types/requestItem";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const requestedItemColumns: ColumnDef<RequestedItems>[] = [
+export const requestItemsColumn: ColumnDef<RequestedItems>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => <TableSorter column={column} header="ITEM" />,
+    cell: ({ getValue }) => (
+      <div className="capitalize">{getValue() as string}</div>
+    ),
   },
   {
     accessorKey: "sku",
     header: ({ column }) => <TableSorter column={column} header="SKU" />,
+    cell: ({ getValue }) => (
+      <div className="capitalize">{getValue() as string}</div>
+    ),
   },
   {
     accessorKey: "stock",

@@ -31,6 +31,7 @@ import {
 } from "../ui/table";
 import Pagination from "../ui/Pagination";
 import { Link } from "react-router-dom";
+import useAuthStore from "@/lib/store/AuthStore";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -41,6 +42,7 @@ export default function AccountTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const { userData } = useAuthStore();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -61,9 +63,9 @@ export default function AccountTable<TData, TValue>({
 
   return (
     <div className="box-shadow w-full rounded-md bg-white">
-      <div className="p-6">
+      <div className="p-4 lg:p-6">
         <div className="text-lg">Search Filters</div>
-        <div className="mt-4 grid grid-cols-3 gap-6">
+        <div className="mt-4 grid gap-4 lg:grid-cols-3 lg:gap-6">
           <Select
             onValueChange={(value) => {
               if (value === "clear") {
@@ -151,8 +153,8 @@ export default function AccountTable<TData, TValue>({
         </div>
       </div>
       <hr />
-      <div className="flex justify-between gap-4 px-6 py-6">
-        <div className="w-28">
+      <div className="flex flex-wrap justify-between gap-4 px-4 py-4 lg:px-6 lg:py-6">
+        <div className="flex w-full gap-4 lg:w-28">
           <Select>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="10" />
@@ -163,27 +165,38 @@ export default function AccountTable<TData, TValue>({
               </SelectItem>
             </SelectContent>
           </Select>
+          <Button
+            variant="muted"
+            icon={<Upload size={20} strokeWidth={2.25} />}
+            className="h-9 lg:hidden"
+          >
+            Export
+          </Button>
         </div>
 
         <div className="flex gap-4">
           <Button
             variant="muted"
             icon={<Upload size={20} strokeWidth={2.25} />}
+            className="hidden lg:flex"
           >
             Export
           </Button>
-          <Link to="/account-add">
-            <Button
-              variant="default"
-              icon={<CirclePlus size={20} strokeWidth={2.25} />}
-            >
-              Add New Account
-            </Button>
-          </Link>
+
+          {userData?.id === 1 && (
+            <Link to="/account-add">
+              <Button
+                variant="default"
+                icon={<CirclePlus size={20} strokeWidth={2.25} />}
+              >
+                Add New Account
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
       <hr />
-      <Table>
+      <Table className="max-lg:hidden">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -223,6 +236,54 @@ export default function AccountTable<TData, TValue>({
               </TableCell>
             </TableRow>
           )}
+        </TableBody>
+      </Table>
+
+      {/* Mobile Table */}
+      <Table className="lg:hidden">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-xl font-medium ">Account List</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows.map((row) => {
+            return (
+              <TableRow
+                key={row.id}
+                className="flex items-center justify-between px-4 py-2"
+              >
+                <div className="flex flex-col">
+                  <div className="font-medium">
+                    {flexRender(
+                      row.getVisibleCells()[1].column.columnDef.cell,
+                      row.getVisibleCells()[1].getContext(),
+                    )}
+                  </div>
+                  <div className="text-sm">
+                    {flexRender(
+                      row.getVisibleCells()[2].column.columnDef.cell,
+                      row.getVisibleCells()[2].getContext(),
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-1 text-end">
+                  <div className="">
+                    {flexRender(
+                      row.getVisibleCells()[4].column.columnDef.cell,
+                      row.getVisibleCells()[4].getContext(),
+                    )}
+                  </div>
+                  <div>
+                    {flexRender(
+                      row.getVisibleCells()[3].column.columnDef.cell,
+                      row.getVisibleCells()[3].getContext(),
+                    )}
+                  </div>
+                </div>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
       <hr />

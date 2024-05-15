@@ -19,10 +19,11 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import Pagination from "../ui/Pagination";
-import { materialCategoryFilter, materialStatusFilter } from "@/utils/static";
+import { materialStatusFilter } from "@/utils/static";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -31,6 +32,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { CirclePlus, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
+import { GetMaterialCategories } from "@/lib/network/useMaterialCategory";
+import { MaterialCategories } from "@/lib/types/material";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -41,6 +44,7 @@ export default function MaterialTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const { categories } = GetMaterialCategories();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -64,36 +68,71 @@ export default function MaterialTable<TData, TValue>({
       <div className="p-6">
         <div className="text-xl">Filters</div>
         <div className="mt-4 grid grid-cols-3 gap-6">
-          <Select>
-            <SelectTrigger className="w-full text-base">
-              <SelectValue placeholder="Select Category" />
+          <Select
+            onValueChange={(value) => {
+              if (value === "clear") {
+                table.getColumn("category")?.setFilterValue("");
+              } else {
+                table.getColumn("category")?.setFilterValue(value);
+              }
+            }}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Unit" />
             </SelectTrigger>
             <SelectContent>
-              {materialCategoryFilter.map((option) => (
+              <SelectGroup>
                 <SelectItem
-                  key={option.value}
-                  value={option.value}
                   className="mt-1.5 text-base text-slate-600"
+                  value="clear"
                 >
-                  {option.name}
+                  Select Unit
                 </SelectItem>
-              ))}
+                {categories?.map((category: MaterialCategories) => (
+                  <SelectItem
+                    key={category.id}
+                    className="mt-1.5 text-base text-slate-600"
+                    value={category.category}
+                  >
+                    {category.category}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
             </SelectContent>
           </Select>
-          <Select>
-            <SelectTrigger className="w-full text-base">
+          <Select
+            onValueChange={(value) => {
+              if (value === "clear") {
+                table.getColumn("status")?.setFilterValue("");
+              } else {
+                table.getColumn("status")?.setFilterValue(value);
+              }
+            }}
+          >
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Select Status" />
             </SelectTrigger>
             <SelectContent>
-              {materialStatusFilter.map((option) => (
+              <SelectGroup>
                 <SelectItem
-                  key={option.value}
-                  value={option.value}
+                  value="clear"
                   className="mt-1.5 text-base text-slate-600"
                 >
-                  {option.name}
+                  Select Status
                 </SelectItem>
-              ))}
+                <SelectItem
+                  value="available"
+                  className="mt-1.5 text-base text-slate-600"
+                >
+                  Available
+                </SelectItem>
+                <SelectItem
+                  value="unavailable"
+                  className="mt-1.5 text-base text-slate-600"
+                >
+                  Unavailable
+                </SelectItem>
+              </SelectGroup>
             </SelectContent>
           </Select>
           <Input

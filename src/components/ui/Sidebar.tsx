@@ -6,12 +6,13 @@ import {
   CarFront,
   CircuitBoard,
   Home,
-  Truck,
   UserRound,
   UsersRound,
   WrenchIcon,
+  X,
 } from "lucide-react";
 import { LiaToolsSolid } from "react-icons/lia";
+import { CiInboxIn } from "react-icons/ci";
 
 const sidebarLink = [
   {
@@ -20,7 +21,7 @@ const sidebarLink = [
     icon: <Home strokeWidth={1.5} size={20} />,
   },
   {
-    name: "Related Account",
+    name: "Relation",
     url: "/account-related",
     icon: <UserRound strokeWidth={1.5} size={20} />,
   },
@@ -28,6 +29,11 @@ const sidebarLink = [
     name: "Request",
     url: "/request-list",
     icon: <ArchiveRestore strokeWidth={1.5} size={20} />,
+  },
+  {
+    name: "Inbox",
+    url: "/request-inbox",
+    icon: <CiInboxIn className="text-2xl font-semibold" />,
   },
   {
     name: "Materials",
@@ -71,33 +77,22 @@ const adminSidebarLink = [
 
 type Props = {
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleOpen: () => void;
 };
 
-export default function Sidebar({ isOpen, setIsOpen }: Props) {
+export default function Sidebar({ isOpen, handleOpen }: Props) {
   return (
-    <nav
-      className={`${isOpen ? "w-[260px]" : "w-[84px]"} box-shadow fixed min-h-screen overflow-hidden bg-white p-4 transition-all duration-500`}
+    <aside
+      className={`box-shadow fixed z-50 min-h-screen w-[260px] overflow-hidden bg-white p-4 transition-all duration-500 ${isOpen ? "translate-x-0" : "max-lg:-translate-x-full"}`}
     >
       <div className="flex items-center justify-between ">
         <div className="flex items-center gap-4">
-          <img
-            onClick={() => setIsOpen(!isOpen)}
-            src="/images/logo-only.png"
-            className="w-11"
-          />
-          <div
-            className={`${isOpen ? "block" : "hidden"} text-2xl font-extrabold tracking-wider text-[#00AFEF]`}
-          >
+          <img src="/images/logo-only.png" className="w-11" />
+          <div className="blocktext-2xl font-extrabold tracking-wider text-[#00AFEF]">
             PLN
           </div>
         </div>
-        <div
-          onClick={() => setIsOpen(!isOpen)}
-          className="text-xl text-slate-900"
-        >
-          <i className="bi bi-chevron-double-left"></i>
-        </div>
+        <X onClick={handleOpen} size={24} strokeWidth={1.5} />
       </div>
 
       <div className="mt-4">
@@ -107,24 +102,20 @@ export default function Sidebar({ isOpen, setIsOpen }: Props) {
             name={link.name}
             url={link.url}
             icon={link.icon}
-            isOpen={isOpen}
           />
         ))}
-        {isOpen ? (
-          <div className="mt-4">ADMIN WORKSPACE</div>
-        ) : (
-          <hr className="mx-2 mt-4" />
-        )}
+
+        <div className="mt-4">ADMIN WORKSPACE</div>
+
         {adminSidebarLink.map((link) => (
           <SiderbarLink
             key={link.name}
             name={link.name}
             url={link.url}
             icon={link.icon}
-            isOpen={isOpen}
           />
         ))}
       </div>
-    </nav>
+    </aside>
   );
 }

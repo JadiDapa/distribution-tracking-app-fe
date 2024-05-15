@@ -1,16 +1,9 @@
-import DeleteRow from "@/components/ui/DeleteRow";
 import TableSorter from "@/components/ui/TableSorter";
 import { Requests } from "@/lib/types/request";
 import { RequestedItems } from "@/lib/types/requestItem";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  Archive,
-  ArchiveRestore,
-  ArchiveX,
-  Cable,
-  Eye,
-  Wrench,
-} from "lucide-react";
+import { Cable, Dot, Wrench } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const requestColumns: ColumnDef<Requests>[] = [
   {
@@ -27,10 +20,19 @@ export const requestColumns: ColumnDef<Requests>[] = [
     header: ({ column }) => (
       <TableSorter column={column} header="REQUEST CODE" />
     ),
+    cell: ({ row }) => (
+      <Link
+        to={`/request-detail/${row.getValue("id")}`}
+        className="duration-300 hover:text-primary"
+      >
+        {row.getValue("code") as string}
+      </Link>
+    ),
   },
   {
-    accessorKey: "requested.name",
+    accessorKey: "requested",
     header: ({ column }) => <TableSorter column={column} header="REQUESTED" />,
+    accessorFn: (row) => row.requested?.name,
     cell: ({ getValue }) => (
       <div className="capitalize">{getValue() as string}</div>
     ),
@@ -43,20 +45,16 @@ export const requestColumns: ColumnDef<Requests>[] = [
       if (value === "material") {
         return (
           <div className="flex items-center gap-2 rounded-md font-semibold capitalize text-primary">
-            Material
-            <span>
-              <Cable size={18} />
-            </span>
+            <Cable size={18} />
+            <span>Material</span>
           </div>
         );
       }
       if (value === "tool") {
         return (
           <div className="flex items-center gap-2 rounded-md font-semibold capitalize text-teal-500">
-            Tool
-            <span>
-              <Wrench size={18} />
-            </span>
+            <Wrench size={18} />
+            <span>Tool</span>
           </div>
         );
       }
@@ -80,48 +78,28 @@ export const requestColumns: ColumnDef<Requests>[] = [
       const value = getValue();
       if (value === "accepted") {
         return (
-          <div className="flex max-w-fit items-center gap-2 rounded-md bg-green-400 px-3 py-1.5 text-sm capitalize text-white">
+          <li className="flex -translate-x-4 list-disc items-center rounded-md font-semibold capitalize text-green-500">
+            <Dot size={40} />
             Accepted
-            <span>
-              <ArchiveRestore size={18} />
-            </span>
-          </div>
+          </li>
         );
       }
       if (value === "pending") {
         return (
-          <div className="accepted flex max-w-fit items-center gap-2 rounded-md bg-yellow-500 px-3 py-1.5 text-sm text-white">
+          <li className="flex -translate-x-4 list-disc items-center rounded-md font-semibold capitalize text-yellow-500">
+            <Dot size={40} />
             Pending
-            <span>
-              <Archive size={18} />
-            </span>
-          </div>
+          </li>
         );
       }
-      if (value === "delined") {
+      if (value === "rejected") {
         return (
-          <div className="accepted flex max-w-fit items-center gap-2 rounded-md bg-red-400 px-3 py-1.5 text-sm text-white">
+          <li className="flex -translate-x-4 list-disc items-center rounded-md font-semibold capitalize text-red-500">
+            <Dot size={40} />
             Declined
-            <span>
-              <ArchiveX size={18} />
-            </span>
-          </div>
+          </li>
         );
       }
-    },
-  },
-  {
-    accessorKey: "action",
-    header: "ACTION",
-    cell: ({ row }) => {
-      return (
-        <div className="flex gap-2">
-          <div>
-            <Eye size={22} strokeWidth={1.5} />
-          </div>
-          <DeleteRow id={row.getValue("id")} name={row.getValue("code")} />
-        </div>
-      );
     },
   },
 ];

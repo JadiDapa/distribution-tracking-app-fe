@@ -113,7 +113,7 @@ export default function AccountAdd() {
             header="Add New Account"
             subheader="Add new account to use accross the app"
           />
-          <div className="flex gap-6">
+          <div className="flex flex-col gap-6 lg:flex-row">
             <InfoForm control={form.control} values={form.watch()} />
             <RelationForm control={form.control} values={form.watch()} />
           </div>

@@ -12,12 +12,12 @@ type Props = {
 const CustomRadio = ({ values, value, label, desc, icon }: Props) => {
   return (
     <FormItem
-      className={`${values === value && "border-primary bg-blue-100/20 text-primary"} relative  size-36  overflow-hidden rounded-md border-[3px] transition-all duration-300`}
+      className={`${values === value && "border-primary bg-blue-100/20 text-primary"} relative size-32 overflow-hidden rounded-md  border-[3px] transition-all duration-300 lg:size-36`}
     >
       <FormLabel className="flex h-full w-full flex-col items-center justify-center gap-1">
         {icon}
-        <div className="text-lg">{label}</div>
-        <p className="text-center text-sm font-light">{desc}</p>
+        <div className="mt-2 text-base">{label}</div>
+        <p className="text-center text-xs font-light lg:text-sm">{desc}</p>
       </FormLabel>
       <FormControl className="relative ">
         <RadioGroupItem

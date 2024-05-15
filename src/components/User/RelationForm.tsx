@@ -27,7 +27,7 @@ type Props = {
 export default function RelationForm({ control, values }: Props) {
   const { accounts } = GetAccounts();
   return (
-    <div className="box-shadow flex w-[47%]  flex-col gap-6 rounded-md bg-white p-6">
+    <div className="box-shadow flex w-full flex-col  gap-6 rounded-md bg-white p-6 lg:w-[47%]">
       <h2 className="text-xl font-medium">Account Relation</h2>
       <FormField
         control={control}
@@ -52,7 +52,7 @@ export default function RelationForm({ control, values }: Props) {
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue="3"
-                className="flex justify-between"
+                className="flex flex-wrap gap-4 lg:flex-nowrap"
               >
                 <CustomRadio
                   values={values.unitId}

@@ -1,35 +1,32 @@
-import RequestData from "@/components/Request/RequestData";
+import RequestTable from "@/components/Request/RequestTable";
 import ConnectedCard from "@/components/ui/ConnectedCard";
+import DataLoading from "@/components/ui/DataLoading";
 import SeactionHeader from "@/components/ui/SeactionHeader";
-import { Button } from "@/components/ui/button";
 import { GetRequestByAccountId } from "@/lib/network/useRequest";
 import useAuthStore from "@/lib/store/AuthStore";
-import {
-  Archive,
-  ArchiveRestore,
-  ArchiveX,
-  Mailbox,
-  PackageOpen,
-} from "lucide-react";
-import { Link } from "react-router-dom";
+import { Requests } from "@/lib/types/request";
+import { requestColumns } from "@/utils/table/request-column";
+import { Archive, ArchiveRestore, ArchiveX } from "lucide-react";
+import { FaTruckLoading } from "react-icons/fa";
 
 export default function RequestList() {
   const { userData } = useAuthStore();
   const { requests, isLoading, isError } = GetRequestByAccountId(
-    userData!.id.toString(),
+    userData?.id.toString(),
   );
   const requestListCard = [
     {
       title: "Total Request",
-      value: "400",
-      icon: <PackageOpen />,
+      value: requests?.length,
+      icon: <FaTruckLoading />,
       detail: "Total of request you accept",
       bgColor: "#e8e6fc",
       textColor: "#5748ff",
     },
     {
       title: "Accepted",
-      value: "3",
+      value: requests?.filter((tool: Requests) => tool.status === "accepted")
+        .length,
       icon: <ArchiveRestore />,
       detail: "Total of accepted request",
       bgColor: "#d6ffe9",
@@ -37,15 +34,17 @@ export default function RequestList() {
     },
     {
       title: "Pending",
-      value: "7",
+      value: requests?.filter((tool: Requests) => tool.status === "pending")
+        .length,
       icon: <Archive />,
       detail: "Total of pending request",
       bgColor: "#fff9d6",
       textColor: "#d3c945",
     },
     {
-      title: "Declined",
-      value: "7",
+      title: "Rejected",
+      value: requests?.filter((tool: Requests) => tool.status === "rejected")
+        .length,
       icon: <ArchiveX />,
       detail: "Total of declined request",
       bgColor: "#ffd3d5",
@@ -53,43 +52,33 @@ export default function RequestList() {
     },
   ];
 
-  return (
-    <section className="flex w-full flex-col gap-6 py-6">
-      <div>
-        <div className="flex items-center justify-between">
+  if (isError) return <div>Something went wrong...</div>;
+  if (isLoading) return <DataLoading isLoading={isLoading} />;
+  if (requests) {
+    return (
+      <section className="flex w-full flex-col gap-6 py-6">
+        <div>
           <SeactionHeader section="Request" subSection="Request List" />
-          <Link to={"/request-inbox"}>
-            <Button className="flex items-center gap-3">
-              Request Inbox
-              <span>
-                <Mailbox />
-              </span>
-            </Button>
-          </Link>
+          <div className="mt-1 text-lg text-primary">
+            This is your request list
+          </div>
         </div>
-        <div className="mt-1 text-lg text-primary">
-          This is your request list
-        </div>
-      </div>
 
-      <div className="box-shadow flex divide-x rounded-md bg-white p-6">
-        {requestListCard.map((list) => (
-          <ConnectedCard
-            key={list.title}
-            title={list.title}
-            value={list.value}
-            detail={list.detail}
-            icon={list.icon}
-            bgColor={list.bgColor}
-            textColor={list.textColor}
-          />
-        ))}
-      </div>
-      <RequestData
-        requests={requests}
-        isLoading={isLoading}
-        isError={isError}
-      />
-    </section>
-  );
+        <div className="box-shadow flex divide-x rounded-md bg-white p-6">
+          {requestListCard.map((list) => (
+            <ConnectedCard
+              key={list.title}
+              title={list.title}
+              value={list.value}
+              detail={list.detail}
+              icon={list.icon}
+              bgColor={list.bgColor}
+              textColor={list.textColor}
+            />
+          ))}
+        </div>
+        <RequestTable columns={requestColumns} data={requests} inbox />
+      </section>
+    );
+  }
 }

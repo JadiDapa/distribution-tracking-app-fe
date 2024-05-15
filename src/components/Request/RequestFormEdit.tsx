@@ -1,19 +1,31 @@
-import { requestedItemColumns } from "@/utils/table/requested-item-column";
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
-
 import RequestedItemTable from "./RequestedItemTable";
 import { useState } from "react";
 import NumberInput from "../ui/NumberInput";
 import { Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import useRequestItemStore from "@/lib/store/RequestItemStore";
-import { GetMaterialInventories } from "@/lib/network/useMaterialInventory";
-import useAuthStore from "@/lib/store/AuthStore";
+import { requestItemsColumn } from "@/utils/table/request-items";
 
-export default function RequestFormEdit() {
+type Props = {
+  displayedItems?: {
+    id: number;
+    material: {
+      name: string;
+      sku: string;
+    };
+    tool: {
+      name: string;
+      sku: string;
+    };
+    category: string;
+    quantity: number;
+  }[];
+};
+
+export default function RequestFormEdit({ displayedItems }: Props) {
   const { requestedItems, addItem } = useRequestItemStore();
-  const { userData } = useAuthStore();
   const [inputValue, setInputValue] = useState("");
   const [selected, setSelected] = useState("");
   const [selectedCode, setSelectedCode] = useState("");
@@ -21,10 +33,6 @@ export default function RequestFormEdit() {
   const [selectedStock, setSelectedStock] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [open, setOpen] = useState(false);
-
-  const { materials } = GetMaterialInventories(userData?.id.toString());
-
-  console.log(materials);
 
   function createRequest(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -76,34 +84,35 @@ export default function RequestFormEdit() {
                 className="p-2 outline-none placeholder:text-gray-700"
               />
             </div>
-            {materials?.map(
-              (item: {
-                name: string;
-                sku: string;
-                id: number;
-                quantity: number;
-              }) => (
+            {displayedItems?.map((item, index: number) => {
+              const itemName = item.material.name
+                ? item.material.name
+                : item.tool.name;
+              const itemSku = item.material.sku
+                ? item.material.sku
+                : item.tool.sku;
+              return (
                 <li
-                  key={item.name}
+                  key={index}
                   className={`group px-4 py-2 text-sm hover:bg-sky-600 hover:text-white
                 ${
-                  (item.name?.toLowerCase() === selected?.toLowerCase() ||
-                    item.sku?.toLowerCase() === selected?.toLowerCase()) &&
+                  (itemName?.toLowerCase() === selected?.toLowerCase() ||
+                    itemSku?.toLowerCase() === selected?.toLowerCase()) &&
                   "bg-sky-600 text-white"
                 }
                 ${
-                  item.name?.toLowerCase().startsWith(inputValue) ||
-                  item.sku?.toLowerCase().startsWith(inputValue)
+                  itemName?.toLowerCase().startsWith(inputValue) ||
+                  itemSku?.toLowerCase().startsWith(inputValue)
                     ? "block"
                     : "hidden"
                 }`}
                   onClick={() => {
                     if (
-                      item.sku?.toLowerCase() !== selected?.toLowerCase() &&
-                      item.name?.toLowerCase() !== selected?.toLowerCase()
+                      itemSku?.toLowerCase() !== selected?.toLowerCase() &&
+                      itemName?.toLowerCase() !== selected?.toLowerCase()
                     ) {
-                      setSelected(item.name);
-                      setSelectedCode(item.sku);
+                      setSelected(itemName);
+                      setSelectedCode(itemSku);
                       setSelectedId(item.id);
                       setSelectedStock(item.quantity);
                       setOpen(false);
@@ -113,13 +122,13 @@ export default function RequestFormEdit() {
                 >
                   <div className="flex gap-3">
                     <span className="text-primary group-hover:text-white">
-                      {item.sku}
+                      {itemSku}
                     </span>
-                    <span>{item.name}</span>
+                    <span>{itemName}</span>
                   </div>
                 </li>
-              ),
-            )}
+              );
+            })}
           </ul>
         </div>
         <div>
@@ -137,10 +146,7 @@ export default function RequestFormEdit() {
         </Button>
       </div>
 
-      <RequestedItemTable
-        columns={requestedItemColumns}
-        data={requestedItems}
-      />
+      <RequestedItemTable columns={requestItemsColumn} data={requestedItems} />
     </div>
   );
 }

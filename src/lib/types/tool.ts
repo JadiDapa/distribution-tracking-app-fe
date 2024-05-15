@@ -7,12 +7,27 @@ export interface Tools {
   status: string;
   expired_at: Date;
   detail?: string;
-  picture?: File | null;
+  picture?: File | null | string;
   categoryId: number | string;
   category?: {
     category: string;
   };
 }
+
+export interface ToolInventories {
+  id: number;
+  tool: {
+    name: string;
+    sku: string;
+  };
+  category: string;
+  quantity: number;
+}
+
+export type ToolCategory = {
+  id?: number | string;
+  category: string;
+};
 
 export type ToolControl = Control<{
   name: string;

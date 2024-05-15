@@ -12,21 +12,24 @@ import {
   AlertDialogTrigger,
 } from "./alert-dialog";
 import useNotificationStore from "@/lib/store/NotificationStore";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   id: string;
   name: string;
 };
 
-export default function DeleteRow({ id, name }: Props) {
+export default function DeleteAccountRow({ id, name }: Props) {
   const { deleteAccount } = DeleteAccount();
   const { setStatus, setMessage } = useNotificationStore();
+  const navigate = useNavigate();
 
   async function handleDelete() {
     try {
       await deleteAccount(id);
       setStatus("success");
       setMessage("Account Deleted Successfully!");
+      navigate("/account-list");
     } catch (error) {
       setStatus("error");
       setMessage("Something Went Wrong!");

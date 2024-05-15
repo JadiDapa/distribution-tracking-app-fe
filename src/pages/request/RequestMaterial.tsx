@@ -4,33 +4,26 @@ import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import CreatePageHeader from "@/components/ui/CreatePageHeader";
 import SeactionHeader from "@/components/ui/SeactionHeader";
-import { redirect, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useNotificationStore from "@/lib/store/NotificationStore";
 import InfoForm from "@/components/Request/InfoForm";
 import RequestSummary from "@/components/Request/RequestSummary";
 import NoteForm from "@/components/Request/NoteForm";
 import useAuthStore from "@/lib/store/AuthStore";
 import { CreateRequest } from "@/lib/network/useRequest";
-import RequestForm from "@/components/Request/RequestForm";
 import useRequestItemStore from "@/lib/store/RequestItemStore";
+import SelectMaterial from "@/components/Request/SelectMaterial";
 
 const formSchema = z.object({
-  type: z.string(),
-  reason: z
-    .string()
-    .min(5, { message: "Fill the request reason at least 5 character" }),
-  requesterId: z.number(),
-  requestedId: z
-    .string()
-    .min(1, { message: "Select account you want to request" }),
+  reason: z.string(),
+  requestedId: z.string(),
   note: z.string().optional(),
 });
 
-export default function RequestItem() {
+export default function RequestMaterial() {
   const { requestedItems, clearItem } = useRequestItemStore();
   const { userData } = useAuthStore();
   const { postRequest } = CreateRequest();
-  const { itemType } = useParams();
 
   const navigate = useNavigate();
   const { setStatus, setMessage } = useNotificationStore();
@@ -39,20 +32,16 @@ export default function RequestItem() {
     defaultValues: {
       reason: "",
       requestedId: "",
-      note: null,
-    },
-    values: {
-      requesterId: userData?.id,
-      type: itemType,
+      note: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await postRequest({
-        type: values.type,
+        type: "material",
         reason: values.reason,
-        requesterId: Number(values.requesterId),
+        requesterId: Number(userData?.id),
         requestedId: Number(values.requestedId),
         items: requestedItems,
         note: values.note,
@@ -60,9 +49,8 @@ export default function RequestItem() {
       });
 
       setStatus("success");
-      setMessage("Account Successfully Created!");
+      setMessage("Request Successfully Sent!");
       clearItem();
-
       navigate("/request-list");
     } catch (error) {
       setStatus("error");
@@ -71,26 +59,21 @@ export default function RequestItem() {
     }
   }
 
-  const type = "material" || "tool" || "vehicle";
-  if (itemType !== type) {
-    redirect("/request-list");
-  }
-
   return (
     <section className="flex w-full flex-col gap-6 py-6">
-      <SeactionHeader section="Request" subSection={`Request ${itemType}`} />
+      <SeactionHeader section="Request" subSection={`Request Material`} />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-6"
         >
           <CreatePageHeader
-            header={`Create Request for ${itemType}`}
-            subheader={`Ask for restocking ${itemType} from your related instance`}
+            header={`Create Request for Material`}
+            subheader={`Ask for restocking material from your related instance`}
           />
           <div className="flex flex-col gap-6">
             <InfoForm control={form.control} />
-            <RequestForm itemType={itemType} />
+            <SelectMaterial />
             <div className="flex gap-6">
               <NoteForm control={form.control} />
               <RequestSummary

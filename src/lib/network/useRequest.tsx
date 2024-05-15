@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
 import { Requests } from "../types/request";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 const fetch = (url: string, token: string | undefined) =>
   axios
@@ -29,13 +29,10 @@ export function GetRequestByAccountId(accountId?: string) {
 }
 
 // Get All Requests
-export function GetRequestInboxs() {
+export function GetRequestInboxs(accountId?: string) {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    [
-      "http://localhost:3000/api/requests/inbox/" + userData?.id,
-      userData?.token,
-    ],
+    ["http://localhost:3000/api/requests/inbox/" + accountId, userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -47,7 +44,7 @@ export function GetRequestInboxs() {
 }
 
 // Get Single Request By Id
-export const GetRequestById = (id: string) => {
+export const GetRequestById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
     ["http://localhost:3000/api/requests/detail/" + id, userData?.token],
@@ -129,6 +126,10 @@ export const EditRequest = () => {
           },
         },
       );
+      mutate([
+        "http://localhost:3000/api/requests/inbox/" + userData?.id,
+        userData?.token,
+      ]);
     } catch (error) {
       console.log(error);
       setError(true);

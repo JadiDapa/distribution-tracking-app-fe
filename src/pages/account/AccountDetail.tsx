@@ -1,11 +1,7 @@
 import { useState } from "react";
 import SeactionHeader from "@/components/ui/SeactionHeader";
-import DeleteRow from "@/components/ui/DeleteRow";
+import DeleteAccountRow from "@/components/ui/DeleteAccountRow";
 import DataLoading from "@/components/ui/DataLoading";
-import MaterialInventoryData from "@/components/Material/MaterialInventoryData";
-import ToolInventory from "../tool/ToolInventory";
-import VehicleInventoryData from "@/components/Vehicle/VehicleInventoryData";
-import RequestData from "@/components/Request/RequestData";
 import { GetAccountById } from "@/lib/network/useAccounts";
 import { Cable, CarFront, Pencil, Wrench } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
@@ -18,25 +14,23 @@ import { Accounts } from "@/lib/types/account";
 import { GetMaterialInventories } from "@/lib/network/useMaterialInventory";
 import { GetVehiclesByAccountId } from "@/lib/network/useVehicle";
 import { GetRequestByAccountId } from "@/lib/network/useRequest";
+import ToolInventoryTable from "@/components/Tools/ToolInventoryTable";
+import { GetToolInventories } from "@/lib/network/useToolInventory";
+import { toolInventory } from "@/utils/table/tool-inventory";
+import MaterialInventoryTable from "@/components/Material/MaterialInventoryTable";
+import { materialInventory } from "@/utils/table/material-inventory";
+import { vehicleInventory } from "@/utils/table/vehicle-inventory";
+import { requestColumns } from "@/utils/table/request-column";
+import RequestTable from "@/components/Request/RequestTable";
+import VehicleInventoryTable from "@/components/Vehicle/VehicleInventoryTable";
 
 export default function AccountDetail() {
   const { accountId } = useParams();
 
-  const {
-    materials,
-    isLoading: materialLoading,
-    isError: materialError,
-  } = GetMaterialInventories(accountId);
-  const {
-    vehicles,
-    isLoading: vehicleLoading,
-    isError: vehicleError,
-  } = GetVehiclesByAccountId(accountId);
-  const {
-    requests,
-    isLoading: requestLoading,
-    isError: requestError,
-  } = GetRequestByAccountId(accountId);
+  const { materials } = GetMaterialInventories(accountId);
+  const { tools } = GetToolInventories(accountId);
+  const { vehicles } = GetVehiclesByAccountId(accountId);
+  const { requests } = GetRequestByAccountId(accountId);
 
   const { account, isLoading, isError } = GetAccountById(accountId!);
   const [displayedData, setDisplayedData] = useState<
@@ -49,8 +43,8 @@ export default function AccountDetail() {
   return (
     <section className="flex w-full flex-col gap-6 py-6">
       <SeactionHeader section="Account" subSection="Account Detail" />
-      <div className="flex w-full gap-6">
-        <div className="box-shadow flex w-[70%] gap-6 rounded-md bg-white p-6">
+      <div className="flex w-full flex-col gap-6 lg:flex-row">
+        <div className="box-shadow flex w-full flex-col gap-6 rounded-md bg-white p-6 lg:w-[70%] lg:flex-row">
           <div className="flex flex-col items-center justify-center gap-3">
             <div className="w-28 overflow-hidden rounded-md border-[3px]">
               <img
@@ -74,7 +68,7 @@ export default function AccountDetail() {
                 <Pencil size={16} />
                 Edit
               </Link>
-              <DeleteRow id={account?.id} name={account?.name} />
+              <DeleteAccountRow id={account?.id} name={account?.name} />
             </div>
           </div>
           <div className="h-auto w-[1px] bg-slate-300"></div>
@@ -116,7 +110,7 @@ export default function AccountDetail() {
             </div>
           </div>
         </div>
-        <div className="box-shadow flex w-[30%] flex-col gap-3 rounded-md bg-white p-6">
+        <div className="box-shadow flex  w-full flex-col gap-3 rounded-md bg-white p-6 lg:w-[30%]">
           <h2 className="text-xl font-medium ">Account Relation</h2>
           <div className="flex flex-col gap-3 text-slate-500">
             <div className="flex flex-col gap-1">
@@ -155,58 +149,50 @@ export default function AccountDetail() {
           </div>
         </div>
       </div>
-      <div className="box-shadow flex w-full items-center gap-6 rounded-md bg-white p-6">
+      <div className="box-shadow flex w-full flex-col gap-6 rounded-md bg-white p-6 lg:flex-row lg:items-center">
         <div className="text-xl font-medium">Select Data to Display:</div>
-        <div
-          onClick={() => setDisplayedData("materials")}
-          className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "materials" ? "bg-[#5748ff] text-white" : "text-slate-700 hover:bg-[#5748ff] hover:text-white"}`}
-        >
-          <Cable size={18} strokeWidth={1.7} />
-          Materials
-        </div>
-        <div
-          onClick={() => setDisplayedData("tools")}
-          className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "tools" ? "bg-[#47bcc0] text-white" : "text-slate-700 hover:bg-[#47bcc0] hover:text-white"}`}
-        >
-          <Wrench size={18} strokeWidth={1.7} />
-          Tools
-        </div>
-        <div
-          onClick={() => setDisplayedData("vehicles")}
-          className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "vehicles" ? "bg-[#b6734d] text-white" : "text-slate-700 hover:bg-[#b6734d] hover:text-white"}`}
-        >
-          <CarFront size={18} strokeWidth={1.7} />
-          Vehicles
-        </div>
-        <div
-          onClick={() => setDisplayedData("requests")}
-          className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "requests" ? "bg-[#c750c7] text-white" : "text-slate-700 hover:bg-[#c750c7] hover:text-white"}`}
-        >
-          <CarFront size={18} strokeWidth={1.7} />
-          Requests
+        <div className="flex w-full flex-wrap gap-4 lg:gap-6">
+          <div
+            onClick={() => setDisplayedData("materials")}
+            className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "materials" ? "bg-[#5748ff] text-white" : "text-slate-700 hover:bg-[#5748ff] hover:text-white"}`}
+          >
+            <Cable size={18} strokeWidth={1.7} />
+            Materials
+          </div>
+          <div
+            onClick={() => setDisplayedData("tools")}
+            className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "tools" ? "bg-[#47bcc0] text-white" : "text-slate-700 hover:bg-[#47bcc0] hover:text-white"}`}
+          >
+            <Wrench size={18} strokeWidth={1.7} />
+            Tools
+          </div>
+          <div
+            onClick={() => setDisplayedData("vehicles")}
+            className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "vehicles" ? "bg-[#b6734d] text-white" : "text-slate-700 hover:bg-[#b6734d] hover:text-white"}`}
+          >
+            <CarFront size={18} strokeWidth={1.7} />
+            Vehicles
+          </div>
+          <div
+            onClick={() => setDisplayedData("requests")}
+            className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "requests" ? "bg-[#c750c7] text-white" : "text-slate-700 hover:bg-[#c750c7] hover:text-white"}`}
+          >
+            <CarFront size={18} strokeWidth={1.7} />
+            Requests
+          </div>
         </div>
       </div>
       {displayedData === "materials" && (
-        <MaterialInventoryData
-          materials={materials}
-          isLoading={materialLoading}
-          isError={materialError}
-        />
+        <MaterialInventoryTable columns={materialInventory} data={materials} />
       )}
-      {displayedData === "tools" && <ToolInventory />}
+      {displayedData === "tools" && (
+        <ToolInventoryTable columns={toolInventory} data={tools} />
+      )}
       {displayedData === "vehicles" && (
-        <VehicleInventoryData
-          vehicles={vehicles}
-          isLoading={vehicleLoading}
-          isError={vehicleError}
-        />
+        <VehicleInventoryTable columns={vehicleInventory} data={vehicles} />
       )}
       {displayedData === "requests" && (
-        <RequestData
-          requests={requests}
-          isLoading={requestLoading}
-          isError={requestError}
-        />
+        <RequestTable columns={requestColumns} data={requests} />
       )}
     </section>
   );

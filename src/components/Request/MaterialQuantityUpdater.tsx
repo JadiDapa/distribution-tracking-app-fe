@@ -3,12 +3,12 @@ import NumberInput from "../ui/NumberInput";
 import useRequestItemStore from "@/lib/store/RequestItemStore";
 import useAuthStore from "@/lib/store/AuthStore";
 import { GetMaterialInventories } from "@/lib/network/useMaterialInventory";
-import { requestedItemColumns } from "@/utils/table/requested-item-column";
 import { Plus } from "lucide-react";
 import { BiChevronDown } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useState } from "react";
 import { GetMaterials } from "@/lib/network/useMaterial";
+import { requestItemsColumn } from "@/utils/table/request-items";
 
 export default function MaterialQuantityUpdater() {
   const { requestedItems, addItem, updateQuantity } = useRequestItemStore();
@@ -23,7 +23,7 @@ export default function MaterialQuantityUpdater() {
   const [quantity, setQuantity] = useState(1);
   const [open, setOpen] = useState(false);
 
-  const { materialInventories } = GetMaterialInventories(
+  const { materials: materialInventories } = GetMaterialInventories(
     userData?.id.toString(),
   );
 
@@ -147,10 +147,7 @@ export default function MaterialQuantityUpdater() {
         </div>
       </div>
 
-      <RequestedItemTable
-        columns={requestedItemColumns}
-        data={requestedItems}
-      />
+      <RequestedItemTable columns={requestItemsColumn} data={requestedItems} />
     </div>
   );
 }

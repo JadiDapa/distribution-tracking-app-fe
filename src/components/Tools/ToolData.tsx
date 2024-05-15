@@ -1,26 +1,17 @@
 import ToolTable from "./ToolTable";
 import { toolColumns } from "@/utils/table/tool-column";
-import { GetTools } from "@/lib/network/useTool";
-import BarLoader from "react-spinners/BarLoader";
+import { Tools } from "@/lib/types/tool";
+import DataLoading from "../ui/DataLoading";
 
-export default function ToolData() {
-  const { tools, isLoading, isError } = GetTools();
+type Props = {
+  tools: Tools[];
+  isLoading?: boolean;
+  isError?: boolean;
+};
 
+export default function ToolData({ tools, isLoading, isError }: Props) {
   if (isError) return <div>Something went wrong...</div>;
-  if (isLoading)
-    return (
-      <div className="mx-auto w-full flex-col gap-8">
-        <p>Loading Your Data</p>
-        <BarLoader
-          color={"blue"}
-          loading={isLoading}
-          width={400}
-          height={5}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
-      </div>
-    );
+  if (isLoading) return <DataLoading isLoading={isLoading} />;
 
   return <ToolTable columns={toolColumns} data={tools} />;
 }

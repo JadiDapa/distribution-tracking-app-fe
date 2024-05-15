@@ -1,19 +1,9 @@
+import VehicleDetail from "@/components/Vehicle/VehicleDetail";
 import TableSorter from "@/components/ui/TableSorter";
+import { Vehicles } from "@/lib/types/vehicle";
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye, Pencil, Trash2 } from "lucide-react";
-import { Link } from "react-router-dom";
 
-export type Vehicle = {
-  id: number;
-  police_number: string;
-  variant: string;
-  brand: string;
-  year: string;
-  location: string;
-  action: string;
-};
-
-export const vehicleColumns: ColumnDef<Vehicle>[] = [
+export const vehicleColumns: ColumnDef<Vehicles>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => (
@@ -28,10 +18,12 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
     header: ({ column }) => (
       <TableSorter column={column} header="POLICE NUMBER" />
     ),
+    cell: ({ row }) => <VehicleDetail id={row.getValue("id")} />,
   },
   {
-    accessorKey: "variant.category",
+    accessorKey: "variant",
     header: ({ column }) => <TableSorter column={column} header="VARIANT" />,
+    accessorFn: (row) => row.variant?.category,
     cell: ({ getValue }) => (
       <div className="capitalize">{getValue() as string}</div>
     ),
@@ -55,23 +47,6 @@ export const vehicleColumns: ColumnDef<Vehicle>[] = [
     header: ({ column }) => <TableSorter column={column} header="LOCATION" />,
     cell: ({ getValue }) => (
       <div className="capitalize">{getValue() as string}</div>
-    ),
-  },
-  {
-    accessorKey: "action",
-    header: "ACTION",
-    cell: () => (
-      <div className="flex gap-2">
-        <Link to="#">
-          <Trash2 size={22} strokeWidth={1.5} />
-        </Link>
-        <Link to="#">
-          <Pencil size={22} strokeWidth={1.5} />
-        </Link>
-        <Link to="#">
-          <Eye size={22} strokeWidth={1.5} />
-        </Link>
-      </div>
     ),
   },
 ];

@@ -10,7 +10,7 @@ import { ToasterUI } from "../ui/toaster";
 function Layout() {
   const { userData } = useAuthStore();
   const { status, message, setStatus, setMessage } = useNotificationStore();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,18 +32,25 @@ function Layout() {
     }, 3000);
   }, [message, status, setMessage, setStatus]);
 
+  function handleOpen() {
+    setIsOpen(!isOpen);
+  }
+
   if (!userData) {
     navigate("/login");
   }
 
   return (
     <>
-      <section className="flex min-h-screen w-full gap-12 border bg-[#F8F7FA]">
-        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+      <section className="flex min-h-screen w-full border bg-[#F8F7FA] lg:gap-12">
+        <div className="">
+          <Sidebar isOpen={isOpen} handleOpen={handleOpen} />
+        </div>
+
         <main
-          className={`${isOpen ? "ml-[268px]" : "ml-[92px]"}  w-full p-4 transition-all duration-500`}
+          className={`w-full  p-4 transition-all duration-500 lg:ml-[268px]`}
         >
-          <Navbar />
+          <Navbar handleOpen={handleOpen} />
           <Outlet />
         </main>
       </section>

@@ -44,10 +44,10 @@ export function GetVehiclesByAccountId(accountId?: string) {
 }
 
 // Get Single Vehicle By Id
-export const GetVehicleById = (id: string) => {
+export const GetVehicleById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/vehicles/" + id, userData?.token],
+    ["http://localhost:3000/api/vehicles/detail/" + id, userData?.token],
     ([url, token]) => fetch(url, token),
   );
 

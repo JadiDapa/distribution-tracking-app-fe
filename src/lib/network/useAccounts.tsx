@@ -29,7 +29,7 @@ export function GetAccounts() {
 }
 
 // Get Single Account By Id
-export const GetAccountById = (id: string) => {
+export const GetAccountById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
     [`http://localhost:3000/api/accounts/${id}`, userData?.token],
