@@ -155,16 +155,6 @@ export default function AccountTable<TData, TValue>({
       <hr />
       <div className="flex flex-wrap justify-between gap-4 px-4 py-4 lg:px-6 lg:py-6">
         <div className="flex w-full gap-4 lg:w-28">
-          <Select>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="10" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="10" className="mt-1.5 text-slate-600">
-                10
-              </SelectItem>
-            </SelectContent>
-          </Select>
           <Button
             variant="muted"
             icon={<Upload size={20} strokeWidth={2.25} />}

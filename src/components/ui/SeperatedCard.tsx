@@ -30,6 +30,8 @@ export default function SeperatedCard({
           {icon}
         </div>
       </div>
+
+      {/* Mobile Card */}
       <div className="box-shadow flex w-full justify-between rounded-md bg-white p-6 lg:hidden">
         <div className="flex items-center gap-4">
           <div

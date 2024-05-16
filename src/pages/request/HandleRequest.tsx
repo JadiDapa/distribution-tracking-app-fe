@@ -44,7 +44,7 @@ export default function HandleRequest() {
             requestId: item.requestId,
             name: item.material!.name,
             sku: item.material!.sku,
-            stock: getStock?.quantity,
+            stock: getStock ? getStock?.quantity : 0,
           });
         }
         if (request?.type === "tool") {
@@ -58,7 +58,7 @@ export default function HandleRequest() {
             requestId: item.requestId,
             name: item.material!.name,
             sku: item.material!.sku,
-            stock: getStock?.quantity,
+            stock: getStock ? getStock?.quantity : 0,
           });
         }
       });
@@ -116,20 +116,20 @@ export default function HandleRequest() {
 
   if (isError) return <div>Something went wrong...</div>;
   if (requestLoading) return <DataLoading isLoading={isLoading} />;
-  if (request && tools && materials) {
+  if (request && tools && materials && requestedItems) {
     return (
       <section className="flex w-full flex-col gap-6 py-6">
         <SeactionHeader section="Request" subSection="Handle Request" />
         <div className="">
           <div className="text-xl text-primary">Request #{request?.code}</div>
-          <header className="flex items-center justify-between">
+          <header className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div className="">
               <h1 className="text-2xl font-medium">
                 By {request?.requester.name}
               </h1>
               <p className="mt-1 text-gray-400">{createdAt}</p>
             </div>
-            <div className="flex gap-4">
+            <div className="mt-4 flex justify-end gap-4 lg:mt-0 lg:justify-normal">
               <Button
                 onClick={handleAccept}
                 className="bg-green-400 hover:bg-green-600"

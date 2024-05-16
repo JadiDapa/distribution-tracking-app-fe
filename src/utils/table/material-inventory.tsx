@@ -1,4 +1,3 @@
-import MaterialDetail from "@/components/Material/MaterialDetail";
 import TableSorter from "@/components/ui/TableSorter";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -26,28 +25,18 @@ export const materialInventory: ColumnDef<Material>[] = [
     ),
     cell: ({ row }) => <div className="ml-4 text-primary">{row.index + 1}</div>,
   },
-  {
-    accessorKey: "materialId",
-    header: () => <></>,
-    cell: () => <></>,
-  },
+
   {
     accessorKey: "material",
     header: ({ column }) => <TableSorter column={column} header="MATERIAL" />,
     accessorFn: (row) => row.material?.name,
-    cell: ({ row }) => (
-      <MaterialDetail
-        id={row.getValue("materialId")}
-        quantity={row.getValue("quantity")}
-      />
-    ),
   },
   {
     accessorKey: "sku",
     header: ({ column }) => <TableSorter column={column} header="SKU" />,
     accessorFn: (row) => row.material?.sku,
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue() as string}</div>
+      <div className="text-xs lg:text-base">{getValue() as string}</div>
     ),
   },
   {
@@ -61,5 +50,10 @@ export const materialInventory: ColumnDef<Material>[] = [
   {
     accessorKey: "quantity",
     header: ({ column }) => <TableSorter column={column} header="QUANTITY" />,
+  },
+  {
+    accessorKey: "materialId",
+    header: () => <></>,
+    cell: () => <></>,
   },
 ];

@@ -2,7 +2,7 @@ import TableSorter from "@/components/ui/TableSorter";
 import { Requests } from "@/lib/types/request";
 import { RequestedItems } from "@/lib/types/requestItem";
 import { ColumnDef } from "@tanstack/react-table";
-import { Cable, Dot, Wrench } from "lucide-react";
+import { Cable, CircleDot, Wrench } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const requestColumns: ColumnDef<Requests>[] = [
@@ -25,7 +25,7 @@ export const requestColumns: ColumnDef<Requests>[] = [
         to={`/request-detail/${row.getValue("id")}`}
         className="duration-300 hover:text-primary"
       >
-        {row.getValue("code") as string}
+        {("#" + row.getValue("code")) as string}
       </Link>
     ),
   },
@@ -78,24 +78,32 @@ export const requestColumns: ColumnDef<Requests>[] = [
       const value = getValue();
       if (value === "accepted") {
         return (
-          <li className="flex -translate-x-4 list-disc items-center rounded-md font-semibold capitalize text-green-500">
-            <Dot size={40} />
+          <li className="flex list-disc items-center gap-2 rounded-md font-semibold capitalize text-green-500">
+            <CircleDot size={12} />
             Accepted
+          </li>
+        );
+      }
+      if (value === "aggreement") {
+        return (
+          <li className="flex list-disc items-center gap-2 rounded-md font-semibold capitalize text-orange-500">
+            <CircleDot size={12} />
+            Aggreement
           </li>
         );
       }
       if (value === "pending") {
         return (
-          <li className="flex -translate-x-4 list-disc items-center rounded-md font-semibold capitalize text-yellow-500">
-            <Dot size={40} />
+          <li className="flex list-disc items-center gap-2 rounded-md font-semibold capitalize text-yellow-500">
+            <CircleDot size={12} />
             Pending
           </li>
         );
       }
       if (value === "rejected") {
         return (
-          <li className="flex -translate-x-4 list-disc items-center rounded-md font-semibold capitalize text-red-500">
-            <Dot size={40} />
+          <li className="flex list-disc items-center gap-2 rounded-md font-semibold capitalize text-red-500">
+            <CircleDot size={12} />
             Declined
           </li>
         );

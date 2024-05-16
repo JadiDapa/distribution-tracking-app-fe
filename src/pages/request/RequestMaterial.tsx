@@ -45,7 +45,7 @@ export default function RequestMaterial() {
         requestedId: Number(values.requestedId),
         items: requestedItems,
         note: values.note,
-        status: "pending",
+        status: "aggreement",
       });
 
       setStatus("success");
@@ -74,7 +74,7 @@ export default function RequestMaterial() {
           <div className="flex flex-col gap-6">
             <InfoForm control={form.control} />
             <SelectMaterial />
-            <div className="flex gap-6">
+            <div className="flex flex-col gap-6 lg:flex-row">
               <NoteForm control={form.control} />
               <RequestSummary
                 values={form.watch()}

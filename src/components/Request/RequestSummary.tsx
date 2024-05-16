@@ -11,7 +11,7 @@ type Props = {
 export default function RequestSummary({ values, requestedItems }: Props) {
   const { userData } = useAuthStore();
   return (
-    <div className="box-shadow relative flex w-1/2 flex-col gap-6 rounded-md bg-white p-6">
+    <div className="box-shadow relative flex flex-col gap-6 rounded-md bg-white p-6 lg:w-1/2">
       <h2 className="text-xl font-medium ">Summary</h2>
       <ul className="divide-y">
         <li className="flex justify-between py-2.5">
@@ -26,7 +26,7 @@ export default function RequestSummary({ values, requestedItems }: Props) {
           <span>ITEM TYPE COUNT :</span>
           <span className="font-semibold">{requestedItems.length}</span>
         </li>
-        <li className="flex justify-between py-2.5">
+        <li className="flex justify-between py-2.5 max-lg:mb-12">
           <span>TOTAL QTY :</span>
           <span className="font-semibold">
             {requestedItems.reduce((acc, item) => acc + item.quantity, 0)}

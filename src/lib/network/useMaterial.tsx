@@ -60,12 +60,12 @@ export const CreateMaterial = () => {
     setIsLoading(true);
     setError(false);
     try {
-      setIsLoading(true);
       await axios.post(
         "http://localhost:3000/api/materials/create",
         { name, sku, status, detail, picture, categoryId },
         {
           headers: {
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },
@@ -106,6 +106,7 @@ export const EditMaterial = () => {
         { name, sku, status, detail, picture, categoryId },
         {
           headers: {
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },

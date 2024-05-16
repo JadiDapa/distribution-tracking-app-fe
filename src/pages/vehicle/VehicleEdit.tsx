@@ -56,8 +56,8 @@ export default function VehicleEdit() {
       police_number: vehicle?.police_number,
       variantId: vehicle?.variantId.toString(),
       brand: vehicle?.brand,
-      contract_start: vehicle?.contract_start,
-      contract_end: vehicle?.contract_end,
+      contract_start: new Date(vehicle?.contract_start),
+      contract_end: new Date(vehicle?.contract_end),
       areaId: vehicle?.areaId.toString(),
       locationId: vehicle?.locationId.toString(),
       detail: vehicle?.detail,
@@ -68,6 +68,7 @@ export default function VehicleEdit() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await editVehicle({
+        id: vehicle?.id,
         police_number: values.police_number,
         variantId: parseInt(values.variantId),
         brand: values.brand,
@@ -94,7 +95,7 @@ export default function VehicleEdit() {
   if (isLoading) return <DataLoading isLoading={isLoading} />;
   if (vehicle) {
     return (
-      <section className="flex w-full flex-col gap-6 pt-6">
+      <section className="flex w-full flex-col gap-6 py-6">
         <SeactionHeader section="Vehicle" subSection="Edit Vehicle" />
         <Form {...form}>
           <form
@@ -106,12 +107,12 @@ export default function VehicleEdit() {
               header="Edit a Vehicle"
               subheader="Update existing vehicle to use accross the app"
             />
-            <div className="flex gap-6">
-              <div className="w-2/3">
+            <div className="flex flex-col gap-6 lg:flex-row">
+              <div className="w-full lg:w-2/3">
                 <VehicleInfoForm control={form.control} values={form.watch()} />
               </div>
 
-              <div className="flex w-1/3 flex-col gap-6">
+              <div className="flex w-full flex-col gap-6 lg:w-1/3">
                 <VehicleDateForm control={form.control} values={form.watch()} />
                 <VehicleImageForm
                   handlePicture={handlePicture}

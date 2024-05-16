@@ -14,6 +14,7 @@ export interface Materials {
 }
 
 export interface MaterialInventories {
+  materialId: number;
   id: number;
   material: {
     name: string;

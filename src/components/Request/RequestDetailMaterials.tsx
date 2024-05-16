@@ -48,7 +48,7 @@ export default function RequestDetailMaterials<TData, TValue>({
 
   return (
     <div className="w-full">
-      <Table>
+      <Table className="max-lg:hidden">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -84,10 +84,53 @@ export default function RequestDetailMaterials<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No items have been added yet
+                No results.
               </TableCell>
             </TableRow>
           )}
+        </TableBody>
+      </Table>
+
+      {/* Mobile Table */}
+      <Table className="lg:hidden">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-xl font-medium ">
+              Request Sent List
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows.map((row) => {
+            return (
+              <TableRow
+                key={row.id}
+                className="flex items-center justify-between px-4 py-2"
+              >
+                <div className="flex h-full flex-col gap-1">
+                  <div className="text-start font-medium">
+                    {flexRender(
+                      row.getVisibleCells()[0].column.columnDef.cell,
+                      row.getVisibleCells()[0].getContext(),
+                    )}
+                  </div>
+                  <div className="text-sm">
+                    {flexRender(
+                      row.getVisibleCells()[1].column.columnDef.cell,
+                      row.getVisibleCells()[1].getContext(),
+                    )}
+                  </div>
+                </div>
+                <div className="flex text-primary">
+                  Qty:{" "}
+                  {flexRender(
+                    row.getVisibleCells()[2].column.columnDef.cell,
+                    row.getVisibleCells()[2].getContext(),
+                  )}
+                </div>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
       <hr />

@@ -15,6 +15,7 @@ export interface Tools {
 }
 
 export interface ToolInventories {
+  toolId?: number;
   id: number;
   tool: {
     name: string;

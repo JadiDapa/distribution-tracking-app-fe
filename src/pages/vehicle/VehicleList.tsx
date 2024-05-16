@@ -1,9 +1,11 @@
-import VehicleData from "@/components/Vehicle/VehicleData";
-import ConnectedCard from "@/components/ui/ConnectedCard";
+import VehicleTable from "@/components/Vehicle/VehicleTable";
+import DataLoading from "@/components/ui/DataLoading";
 import SeactionHeader from "@/components/ui/SeactionHeader";
+import SeperatedCard from "@/components/ui/SeperatedCard";
 import { GetVehicles } from "@/lib/network/useVehicle";
 import { GetVehicleVariants } from "@/lib/network/useVehicleVariant";
 import { Vehicles } from "@/lib/types/vehicle";
+import { vehicleColumns } from "@/utils/table/vehicle-column";
 import { BadgeCheck, BadgeX, Bike, Car } from "lucide-react";
 
 export default function VehicleList() {
@@ -22,7 +24,7 @@ export default function VehicleList() {
       textColor: "#5748ff",
     },
     {
-      title: "Tool Categories",
+      title: "Vehicle Variants",
       value: categories?.length,
       icon: <Bike />,
       detail: "Total tool categories",
@@ -30,7 +32,7 @@ export default function VehicleList() {
       textColor: "#30d2d8",
     },
     {
-      title: "Available Tools",
+      title: "Oldest Vehicle",
       value: Math.min(getVehicleYear),
       icon: <BadgeCheck />,
       detail: "Total Vehicles available",
@@ -38,7 +40,7 @@ export default function VehicleList() {
       textColor: "#45d387",
     },
     {
-      title: "Unavailable Tools",
+      title: "Latest Vehicle",
       value: Math.max(getVehicleYear),
       icon: <BadgeX />,
       detail: "Total tools available",
@@ -46,27 +48,28 @@ export default function VehicleList() {
       textColor: "#ff5e66",
     },
   ];
-  return (
-    <section className="flex w-full flex-col gap-6 py-6">
-      <SeactionHeader section="Vehicle" subSection="Vehicle List" />
-      <div className="box-shadow flex divide-x rounded-md bg-white p-6">
-        {vehicleListCard.map((list) => (
-          <ConnectedCard
-            key={list.title}
-            title={list.title}
-            value={list.value}
-            detail={list.detail}
-            icon={list.icon}
-            bgColor={list.bgColor}
-            textColor={list.textColor}
-          />
-        ))}
-      </div>
-      <VehicleData
-        vehicles={vehicles}
-        isError={isError}
-        isLoading={isLoading}
-      />
-    </section>
-  );
+
+  if (isError) return <div>Something went wrong...</div>;
+  if (isLoading) return <DataLoading isLoading={isLoading} />;
+  if (vehicles) {
+    return (
+      <section className="flex w-full flex-col gap-4 py-6 lg:gap-6">
+        <SeactionHeader section="Material" subSection="Vehicle List" />
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-6">
+          {vehicleListCard.map((list) => (
+            <SeperatedCard
+              key={list.title}
+              title={list.title}
+              value={list.value}
+              detail={list.detail}
+              icon={list.icon}
+              bgColor={list.bgColor}
+              textColor={list.textColor}
+            />
+          ))}
+        </div>
+        <VehicleTable columns={vehicleColumns} data={vehicles} />
+      </section>
+    );
+  }
 }

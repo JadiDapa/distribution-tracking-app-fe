@@ -5,11 +5,10 @@ import { ColumnDef } from "@tanstack/react-table";
 export const requestDetailColumn: ColumnDef<RequestedItems>[] = [
   {
     accessorKey: "name",
-    header: ({ column }) => (
-      <TableSorter column={column} header="MATERIAL NAME" />
-    ),
     accessorFn: (row) =>
       row.material?.name ? row.material?.name : row.tool?.name,
+    header: ({ column }) => <TableSorter column={column} header="ITEM NAME" />,
+
     cell: ({ getValue }) => (
       <div className="capitalize">{getValue() as string}</div>
     ),
@@ -20,12 +19,14 @@ export const requestDetailColumn: ColumnDef<RequestedItems>[] = [
     accessorFn: (row) =>
       row.material?.sku ? row.material?.sku : row.tool?.sku,
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue() as string}</div>
+      <div className="text-xs lg:text-base">{getValue() as string}</div>
     ),
   },
   {
     accessorKey: "quantity",
     header: ({ column }) => <TableSorter column={column} header="QUANTITY" />,
-    cell: ({ getValue }) => <div className="ps-7">{getValue() as string}</div>,
+    cell: ({ getValue }) => (
+      <div className="lg:ps-7">{getValue() as string}</div>
+    ),
   },
 ];

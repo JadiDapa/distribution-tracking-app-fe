@@ -1,9 +1,13 @@
-import MaterialInventoryData from "@/components/Material/MaterialInventoryData";
+import MaterialInventoryTable from "@/components/Material/MaterialInventoryTable";
 import SeperatedCard from "@/components/ui/ConnectedCard";
+import DataLoading from "@/components/ui/DataLoading";
 import SeactionHeader from "@/components/ui/SeactionHeader";
+import { Button } from "@/components/ui/button";
 import { GetMaterialInventories } from "@/lib/network/useMaterialInventory";
 import useAuthStore from "@/lib/store/AuthStore";
-import { Cable, CircuitBoard, LampCeiling } from "lucide-react";
+import { materialInventory } from "@/utils/table/material-inventory";
+import { Cable, CircuitBoard, Clock, LampCeiling } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const materialInventoryCard = [
   {
@@ -37,27 +41,36 @@ export default function MaterialInventory() {
   const { materials, isLoading, isError } = GetMaterialInventories(
     userData?.id.toString(),
   );
-  return (
-    <section className="flex w-full flex-col gap-6 py-6">
-      <SeactionHeader section="Material" subSection="Material Inventory" />
-      <div className="box-shadow flex divide-x rounded-md bg-white p-6">
-        {materialInventoryCard.map((list) => (
-          <SeperatedCard
-            key={list.title}
-            title={list.title}
-            value={list.value}
-            detail={list.detail}
-            icon={list.icon}
-            bgColor={list.bgColor}
-            textColor={list.textColor}
-          />
-        ))}
-      </div>
-      <MaterialInventoryData
-        materials={materials}
-        isError={isError}
-        isLoading={isLoading}
-      />
-    </section>
-  );
+
+  if (isError) return <div>Something went wrong...</div>;
+  if (isLoading) return <DataLoading isLoading={isLoading} />;
+  if (materials) {
+    return (
+      <section className="flex w-full flex-col gap-6 py-6">
+        <div className="flex w-full flex-col justify-between gap-4 lg:flex-row lg:items-center">
+          <SeactionHeader section="Material" subSection="Material Inventory" />
+          <Link className="flex max-lg:justify-end" to="/material-updates">
+            <Button className="flex items-center gap-3 bg-yellow-500 hover:bg-yellow-600">
+              Quantity Update History
+              <Clock />
+            </Button>
+          </Link>
+        </div>
+        <div className="box-shadow flex flex-col divide-y rounded-md bg-white p-6 lg:flex-row lg:divide-x lg:divide-y-0">
+          {materialInventoryCard.map((list) => (
+            <SeperatedCard
+              key={list.title}
+              title={list.title}
+              value={list.value}
+              detail={list.detail}
+              icon={list.icon}
+              bgColor={list.bgColor}
+              textColor={list.textColor}
+            />
+          ))}
+        </div>
+        <MaterialInventoryTable columns={materialInventory} data={materials} />
+      </section>
+    );
+  }
 }

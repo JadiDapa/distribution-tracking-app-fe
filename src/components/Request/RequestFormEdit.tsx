@@ -34,6 +34,8 @@ export default function RequestFormEdit({ displayedItems }: Props) {
   const [quantity, setQuantity] = useState(1);
   const [open, setOpen] = useState(false);
 
+  console.log(requestedItems);
+
   function createRequest(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     if (selected && quantity >= 1) {
@@ -55,7 +57,7 @@ export default function RequestFormEdit({ displayedItems }: Props) {
   return (
     <div className="box-shadow flex w-full flex-col gap-6 rounded-md bg-white p-6">
       <h2 className="text-xl font-medium ">Select Items From your Inventory</h2>
-      <div className="flex gap-6">
+      <div className="flex flex-col gap-6 lg:flex-row">
         <div className="relative grow font-medium">
           <div
             onClick={() => setOpen(!open)}
@@ -131,15 +133,25 @@ export default function RequestFormEdit({ displayedItems }: Props) {
             })}
           </ul>
         </div>
-        <div>
+        <div className="flex justify-between gap-4 lg:block">
           <NumberInput value={quantity} onChange={setQuantity} />
+          <Button
+            onClick={(e) => {
+              e.preventDefault;
+              createRequest(e);
+            }}
+            className="flex w-full items-center gap-2 lg:hidden"
+          >
+            <span>Add</span>
+            <Plus />
+          </Button>
         </div>
         <Button
           onClick={(e) => {
             e.preventDefault;
             createRequest(e);
           }}
-          className="flex items-center gap-2"
+          className="hidden items-center gap-2 lg:flex"
         >
           <span>Add</span>
           <Plus />

@@ -139,7 +139,6 @@ export const EditVehicle = () => {
       await axios.put(
         `http://localhost:3000/api/vehicles/${id}`,
         {
-          id,
           police_number,
           variantId: Number(variantId),
           brand,
@@ -153,6 +152,7 @@ export const EditVehicle = () => {
         },
         {
           headers: {
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },

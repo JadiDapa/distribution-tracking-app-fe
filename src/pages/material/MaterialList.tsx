@@ -1,7 +1,7 @@
 import MaterialTable from "@/components/Material/MaterialTable";
-import SeperatedCard from "@/components/ui/ConnectedCard";
 import DataLoading from "@/components/ui/DataLoading";
 import SeactionHeader from "@/components/ui/SeactionHeader";
+import SeperatedCard from "@/components/ui/SeperatedCard";
 import { GetMaterials } from "@/lib/network/useMaterial";
 import { GetMaterialCategories } from "@/lib/network/useMaterialCategory";
 import { Materials } from "@/lib/types/material";
@@ -54,9 +54,9 @@ export default function MaterialList() {
   if (isLoading) return <DataLoading isLoading={isLoading} />;
   if (materials) {
     return (
-      <section className="flex w-full flex-col gap-6 py-6">
+      <section className="flex w-full flex-col gap-4 py-6 lg:gap-6">
         <SeactionHeader section="Material" subSection="Material List" />
-        <div className="box-shadow flex divide-x rounded-md bg-white p-6">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-6">
           {materialListCard.map((list) => (
             <SeperatedCard
               key={list.title}
@@ -69,7 +69,7 @@ export default function MaterialList() {
             />
           ))}
         </div>
-        <MaterialTable columns={material} data={materials} />;
+        <MaterialTable columns={material} data={materials} />
       </section>
     );
   }

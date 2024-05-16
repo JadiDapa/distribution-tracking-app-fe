@@ -18,9 +18,9 @@ export default function DashboardStatistic({
   vehicles,
 }: Props) {
   return (
-    <div className="box-shadow w-4/6 rounded-md bg-white p-6">
+    <div className="box-shadow rounded-md bg-white p-6 lg:w-4/6">
       <p className="text-xl text-primary">Statistics</p>
-      <div className="mt-6 flex w-full justify-between">
+      <div className="mt-6 flex w-full flex-wrap justify-between gap-6">
         <div className="flex items-center gap-4">
           <div className="flex size-10 items-center justify-center rounded-full bg-blue-200/50">
             <ArchiveRestore size={20} className="text-blue-500" />

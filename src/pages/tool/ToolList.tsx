@@ -1,10 +1,12 @@
-import ToolData from "@/components/Tools/ToolData";
-import SeperatedCard from "@/components/ui/ConnectedCard";
+import SeperatedCard from "@/components/ui/SeperatedCard";
 import SeactionHeader from "@/components/ui/SeactionHeader";
 import { GetTools } from "@/lib/network/useTool";
 import { GetToolCategories } from "@/lib/network/useToolCategory";
 import { Tools } from "@/lib/types/tool";
 import { BadgeCheck, BadgeX, PencilRuler, Wrench } from "lucide-react";
+import ToolTable from "@/components/Tools/ToolTable";
+import { toolColumns } from "@/utils/table/tool-column";
+import DataLoading from "@/components/ui/DataLoading";
 
 export default function ToolList() {
   const { tools, isError, isLoading } = GetTools();
@@ -44,23 +46,28 @@ export default function ToolList() {
       textColor: "#ff5e66",
     },
   ];
-  return (
-    <section className="flex w-full flex-col gap-6 py-6">
-      <SeactionHeader section="Tool" subSection="Tool List" />
-      <div className="box-shadow flex divide-x rounded-md bg-white p-6">
-        {toolListCard.map((list) => (
-          <SeperatedCard
-            key={list.title}
-            title={list.title}
-            value={list.value}
-            detail={list.detail}
-            icon={list.icon}
-            bgColor={list.bgColor}
-            textColor={list.textColor}
-          />
-        ))}
-      </div>
-      <ToolData tools={tools} isError={isError} isLoading={isLoading} />
-    </section>
-  );
+
+  if (isError) return <div>Something went wrong...</div>;
+  if (isLoading) return <DataLoading isLoading={isLoading} />;
+  if (tools) {
+    return (
+      <section className="flex w-full flex-col gap-4 py-6 lg:gap-6">
+        <SeactionHeader section="Tool" subSection="Tool List" />
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-6">
+          {toolListCard.map((list) => (
+            <SeperatedCard
+              key={list.title}
+              title={list.title}
+              value={list.value}
+              detail={list.detail}
+              icon={list.icon}
+              bgColor={list.bgColor}
+              textColor={list.textColor}
+            />
+          ))}
+        </div>
+        <ToolTable columns={toolColumns} data={tools} />
+      </section>
+    );
+  }
 }

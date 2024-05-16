@@ -9,6 +9,8 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { useState } from "react";
 import { GetMaterials } from "@/lib/network/useMaterial";
 import { requestItemsColumn } from "@/utils/table/request-items";
+import { MaterialInventories, Materials } from "@/lib/types/material";
+import { Button } from "../ui/button";
 
 export default function MaterialQuantityUpdater() {
   const { requestedItems, addItem, updateQuantity } = useRequestItemStore();
@@ -53,7 +55,7 @@ export default function MaterialQuantityUpdater() {
   return (
     <div className="box-shadow flex w-full flex-col gap-6 rounded-md bg-white p-6">
       <h2 className="text-xl font-medium ">Select Items From your Inventory</h2>
-      <div className="flex gap-6">
+      <div className="flex flex-col gap-6 lg:flex-row">
         <div className="relative grow font-medium">
           <div
             onClick={() => setOpen(!open)}
@@ -82,9 +84,10 @@ export default function MaterialQuantityUpdater() {
                 className="p-2 outline-none placeholder:text-gray-700"
               />
             </div>
-            {materials?.map((item, index) => {
+            {materials?.map((item: Materials, index: number) => {
               const isHaved = materialInventories.filter(
-                (material) => item.id === material.materialId,
+                (material: MaterialInventories) =>
+                  item.id === material.materialId,
               );
 
               const isMatch =
@@ -135,16 +138,31 @@ export default function MaterialQuantityUpdater() {
             })}
           </ul>
         </div>
-        <div>
+        <div className="flex justify-between gap-4 lg:block">
           <NumberInput value={quantity} onChange={setQuantity} />
+          <Button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault;
+              createRequest();
+            }}
+            className="flex w-full items-center gap-2 lg:hidden"
+          >
+            <span>Add</span>
+            <Plus />
+          </Button>
         </div>
-        <div
-          onClick={createRequest}
-          className="flex items-center gap-2 rounded-md bg-green-500 px-4 text-white"
+        <Button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault;
+            createRequest();
+          }}
+          className="hidden items-center gap-2 lg:flex"
         >
           <span>Add</span>
           <Plus />
-        </div>
+        </Button>
       </div>
 
       <RequestedItemTable columns={requestItemsColumn} data={requestedItems} />

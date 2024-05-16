@@ -21,6 +21,9 @@ export const material: ColumnDef<Materials>[] = [
   {
     accessorKey: "sku",
     header: ({ column }) => <TableSorter column={column} header="SKU" />,
+    cell: ({ getValue }) => (
+      <div className="text-xs lg:text-base">{getValue() as string}</div>
+    ),
   },
   {
     accessorKey: "category",
@@ -36,14 +39,14 @@ export const material: ColumnDef<Materials>[] = [
     cell: ({ getValue }) => {
       if (getValue() === "available") {
         return (
-          <div className="flex max-w-fit items-center gap-2 rounded-md bg-green-200/70 px-4 py-1 text-sm font-semibold text-green-600">
+          <div className="flex max-w-fit items-center gap-2 rounded-md bg-green-200/70 px-2 py-0.5 text-xs font-semibold text-green-600 lg:px-4 lg:py-1 lg:text-sm">
             Available
           </div>
         );
       }
       if (getValue() === "unavailable") {
         return (
-          <div className="flex max-w-fit items-center gap-2 rounded-md bg-red-200/70 px-4 py-1 text-sm font-semibold text-red-600">
+          <div className="flex max-w-fit items-center gap-2 rounded-md bg-red-200/70 px-2 py-0.5 text-xs font-semibold text-red-600 lg:px-4 lg:py-1 lg:text-sm">
             Unavailable
           </div>
         );
@@ -51,24 +54,3 @@ export const material: ColumnDef<Materials>[] = [
     },
   },
 ];
-
-// {
-//   accessorKey: "action",
-//   header: "ACTION",
-//   cell: ({ row }) => (
-//     <div className="flex gap-2">
-//       <div className="flex gap-2">
-//         <div>
-//           <Eye size={22} strokeWidth={1.5} />
-//         </div>
-//         <Link to={"/account-edit/" + row.getValue("id")}>
-//           <Pencil size={22} strokeWidth={1.5} />
-//         </Link>
-//         <DeleteMaterialRow
-//           id={row.getValue("id")}
-//           name={row.getValue("name")}
-//         />
-//       </div>
-//     </div>
-//   ),
-// },

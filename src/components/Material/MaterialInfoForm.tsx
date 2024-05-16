@@ -29,7 +29,6 @@ type Props = {
 
 export default function MaterialInfoForm({ control }: Props) {
   const { categories } = GetMaterialCategories();
-  console.log(categories);
   return (
     <div className="box-shadow flex flex-col gap-6 rounded-md bg-white p-6">
       <h2 className="text-xl font-medium ">Material Information</h2>
@@ -46,7 +45,7 @@ export default function MaterialInfoForm({ control }: Props) {
           </FormItem>
         )}
       />
-      <div className="flex gap-6">
+      <div className="flex flex-col gap-6 lg:flex-row">
         <FormField
           control={control}
           name="categoryId"
@@ -94,7 +93,7 @@ export default function MaterialInfoForm({ control }: Props) {
         control={control}
         name="detail"
         render={({ field }) => (
-          <FormItem className="h-80">
+          <FormItem className="h-96 lg:h-80">
             <FormLabel>Detail</FormLabel>
             <FormControl className="h-64">
               <ReactQuill theme="snow" {...field} />

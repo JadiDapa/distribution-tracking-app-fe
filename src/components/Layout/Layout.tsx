@@ -48,7 +48,7 @@ function Layout() {
         </div>
 
         <main
-          className={`w-full  p-4 transition-all duration-500 lg:ml-[268px]`}
+          className={`w-full  p-4 transition-all duration-500 lg:ml-[220px]`}
         >
           <Navbar handleOpen={handleOpen} />
           <Outlet />

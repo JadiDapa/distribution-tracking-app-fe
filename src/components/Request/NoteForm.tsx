@@ -20,9 +20,9 @@ export default function NoteForm({ control }: Props) {
         control={control}
         name="note"
         render={({ field }) => (
-          <FormItem className="h-60">
+          <FormItem className="h-72 lg:h-64">
             <FormLabel>Detail</FormLabel>
-            <FormControl className="h-44">
+            <FormControl className="h-48">
               <ReactQuill theme="snow" {...field} />
             </FormControl>
             <FormMessage />

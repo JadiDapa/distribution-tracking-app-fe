@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import Pagination from "../ui/Pagination";
-import { materialCategoryFilter, materialStatusFilter } from "@/utils/static";
 import {
   Select,
   SelectContent,
@@ -29,8 +28,10 @@ import {
 } from "../ui/select";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Diff, Upload } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Upload } from "lucide-react";
+import { SelectGroup } from "@radix-ui/react-select";
+import { GetVehicleVariants } from "@/lib/network/useVehicleVariant";
+import { VehicleVariants } from "@/lib/types/vehicle";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -41,6 +42,7 @@ export default function VehicleInventoryTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const { categories } = GetVehicleVariants();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -61,86 +63,64 @@ export default function VehicleInventoryTable<TData, TValue>({
 
   return (
     <div className="box-shadow w-full rounded-md bg-white">
-      <div className="p-6">
-        <div className="text-xl">Filters</div>
-        <div className="mt-4 grid grid-cols-3 gap-6">
-          <Select>
-            <SelectTrigger className="w-full text-base">
-              <SelectValue placeholder="Select Category" />
+      <div className="p-4 lg:p-6">
+        <div className="text-lg">Search Filters</div>
+        <div className="mt-4 grid gap-4 lg:grid-cols-3 lg:gap-6">
+          <Select
+            onValueChange={(value) => {
+              if (value === "clear") {
+                table.getColumn("category")?.setFilterValue("");
+              } else {
+                table.getColumn("category")?.setFilterValue(value);
+              }
+            }}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Variant" />
             </SelectTrigger>
             <SelectContent>
-              {materialCategoryFilter.map((option) => (
+              <SelectGroup>
                 <SelectItem
-                  key={option.value}
-                  value={option.value}
                   className="mt-1.5 text-base text-slate-600"
+                  value="clear"
                 >
-                  {option.name}
+                  Select Category
                 </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger className="w-full text-base">
-              <SelectValue placeholder="Select Status" />
-            </SelectTrigger>
-            <SelectContent>
-              {materialStatusFilter.map((option) => (
-                <SelectItem
-                  key={option.value}
-                  value={option.value}
-                  className="mt-1.5 text-base text-slate-600"
-                >
-                  {option.name}
-                </SelectItem>
-              ))}
+                {categories?.map((category: VehicleVariants) => (
+                  <SelectItem
+                    key={category.id}
+                    className="mt-1.5 text-base capitalize text-slate-600"
+                    value={category.category}
+                  >
+                    {category.category}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
             </SelectContent>
           </Select>
           <Input
             placeholder="Search Material"
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            value={
+              (table.getColumn("police_number")?.getFilterValue() as string) ??
+              ""
+            }
             onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
+              table
+                .getColumn("police_number")
+                ?.setFilterValue(event.target.value)
             }
             className="rounded-md border text-base transition-all duration-500 focus:border-transparent focus:outline-none focus:outline-transparent focus:ring-2 focus:ring-primary"
           />
-        </div>
-      </div>
-      <hr />
-      <div className="flex justify-end gap-4 p-6">
-        <div className="w-28">
-          <Select>
-            <SelectTrigger className="w-full text-base">
-              <SelectValue placeholder="10" />
-            </SelectTrigger>
-            <SelectContent>
-              {materialStatusFilter.map((option) => (
-                <SelectItem
-                  key={option.value}
-                  value={option.value}
-                  className="mt-1.5 text-base text-slate-600"
-                >
-                  {option.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Button variant="muted" icon={<Upload size={20} strokeWidth={2.25} />}>
-          Export
-        </Button>
-        <Link to="/material-quantity">
           <Button
-            variant="default"
-            icon={<Diff size={20} strokeWidth={2.25} />}
+            variant="muted"
+            icon={<Upload size={20} strokeWidth={2.25} />}
           >
-            Update Quantity
+            Export
           </Button>
-        </Link>
+        </div>
       </div>
       <hr />
-      <Table>
+      <Table className="max-lg:hidden">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -180,6 +160,54 @@ export default function VehicleInventoryTable<TData, TValue>({
               </TableCell>
             </TableRow>
           )}
+        </TableBody>
+      </Table>
+
+      {/* Mobile Table */}
+      <Table className="lg:hidden">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-xl font-medium ">Vehicle List</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows.map((row) => {
+            return (
+              <TableRow
+                key={row.id}
+                className="flex items-center justify-between px-4 py-2"
+              >
+                <div className="flex h-full flex-col gap-1">
+                  <div className="text-start font-medium">
+                    {flexRender(
+                      row.getVisibleCells()[1].column.columnDef.cell,
+                      row.getVisibleCells()[1].getContext(),
+                    )}
+                  </div>
+                  <div className="text-sm">
+                    {flexRender(
+                      row.getVisibleCells()[3].column.columnDef.cell,
+                      row.getVisibleCells()[3].getContext(),
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-1 text-end">
+                  <div className="">
+                    {flexRender(
+                      row.getVisibleCells()[2].column.columnDef.cell,
+                      row.getVisibleCells()[2].getContext(),
+                    )}
+                  </div>
+                  <div>
+                    {flexRender(
+                      row.getVisibleCells()[4].column.columnDef.cell,
+                      row.getVisibleCells()[4].getContext(),
+                    )}
+                  </div>
+                </div>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
       <hr />

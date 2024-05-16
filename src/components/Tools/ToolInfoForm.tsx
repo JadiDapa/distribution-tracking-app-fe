@@ -43,7 +43,7 @@ export default function ToolInfoForm({ control }: Props) {
           </FormItem>
         )}
       />
-      <div className="flex gap-6">
+      <div className="flex flex-col gap-6 lg:flex-row">
         <FormField
           control={control}
           name="categoryId"
@@ -94,9 +94,9 @@ export default function ToolInfoForm({ control }: Props) {
         control={control}
         name="detail"
         render={({ field }) => (
-          <FormItem className="h-full">
+          <FormItem className="h-96">
             <FormLabel>Detail</FormLabel>
-            <FormControl className="h-80">
+            <FormControl className="h-72 lg:h-80">
               <ReactQuill theme="snow" {...field} />
             </FormControl>
             <FormMessage />

@@ -67,6 +67,7 @@ export const CreateTool = () => {
         { name, sku, status, expired_at, detail, picture, categoryId },
         {
           headers: {
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },

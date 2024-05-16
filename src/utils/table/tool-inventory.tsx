@@ -1,4 +1,3 @@
-import ToolDetail from "@/components/Tools/ToolDetail";
 import TableSorter from "@/components/ui/TableSorter";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -27,23 +26,20 @@ export const toolInventory: ColumnDef<Tool>[] = [
     ),
     cell: ({ row }) => <div className="ml-4 text-primary">{row.index + 1}</div>,
   },
-  {
-    accessorKey: "toolId",
-    header: () => <></>,
-    cell: () => <></>,
-  },
+
   {
     accessorKey: "name",
     header: ({ column }) => <TableSorter column={column} header="TOOL" />,
     accessorFn: (row) => row.tool?.name,
-    cell: ({ row }) => <ToolDetail id={row.getValue("id")} />,
   },
   {
     accessorKey: "sku",
     header: ({ column }) => <TableSorter column={column} header="SKU" />,
     accessorFn: (row) => row.tool?.sku,
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue() as string}</div>
+      <div className="text-xs capitalize lg:text-base">
+        {getValue() as string}
+      </div>
     ),
   },
   {
@@ -51,7 +47,7 @@ export const toolInventory: ColumnDef<Tool>[] = [
     header: ({ column }) => <TableSorter column={column} header="CATEGORY" />,
     accessorFn: (row) => row.tool?.category.category,
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue() as string}</div>
+      <div className="capitalize ">{getValue() as string}</div>
     ),
   },
   {
@@ -65,5 +61,10 @@ export const toolInventory: ColumnDef<Tool>[] = [
   {
     accessorKey: "quantity",
     header: ({ column }) => <TableSorter column={column} header="QUANTITY" />,
+  },
+  {
+    accessorKey: "toolId",
+    header: () => <></>,
+    cell: () => <></>,
   },
 ];

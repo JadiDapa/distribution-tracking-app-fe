@@ -63,9 +63,9 @@ export default function VehicleTable<TData, TValue>({
 
   return (
     <div className="box-shadow w-full rounded-md bg-white">
-      <div className="p-6">
-        <div className="text-xl">Filters</div>
-        <div className="mt-4 grid grid-cols-3 gap-6">
+      <div className="p-4 lg:p-6">
+        <div className="text-lg">Search Filters</div>
+        <div className="mt-4 grid gap-4 lg:grid-cols-3 lg:gap-6">
           <Select
             onValueChange={(value) => {
               if (value === "clear") {
@@ -146,21 +146,26 @@ export default function VehicleTable<TData, TValue>({
         </div>
       </div>
       <hr />
-      <div className="flex items-center justify-end gap-6 p-6">
-        <Button variant="muted" icon={<Upload size={20} strokeWidth={2.25} />}>
+      <div className="flex flex-col justify-end gap-4 p-6 lg:flex-row">
+        <Button
+          variant="muted"
+          icon={<Upload size={20} strokeWidth={2.25} />}
+          className="h-9 w-full lg:max-w-fit "
+        >
           Export
         </Button>
         <Link to="/vehicle-add">
           <Button
             variant="default"
+            className="max-lg:w-full"
             icon={<CirclePlus size={20} strokeWidth={2.25} />}
           >
-            Add New Vehiclee
+            Add New Vehicles
           </Button>
         </Link>
       </div>
       <hr />
-      <Table>
+      <Table className="max-lg:hidden">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -200,6 +205,54 @@ export default function VehicleTable<TData, TValue>({
               </TableCell>
             </TableRow>
           )}
+        </TableBody>
+      </Table>
+
+      {/* Mobile Table */}
+      <Table className="lg:hidden">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-xl font-medium ">Vehicle List</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows.map((row) => {
+            return (
+              <TableRow
+                key={row.id}
+                className="flex items-center justify-between px-4 py-2"
+              >
+                <div className="flex h-full flex-col gap-1">
+                  <div className="text-start font-medium">
+                    {flexRender(
+                      row.getVisibleCells()[1].column.columnDef.cell,
+                      row.getVisibleCells()[1].getContext(),
+                    )}
+                  </div>
+                  <div className="text-sm">
+                    {flexRender(
+                      row.getVisibleCells()[3].column.columnDef.cell,
+                      row.getVisibleCells()[3].getContext(),
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-1 text-end">
+                  <div className="">
+                    {flexRender(
+                      row.getVisibleCells()[2].column.columnDef.cell,
+                      row.getVisibleCells()[2].getContext(),
+                    )}
+                  </div>
+                  <div>
+                    {flexRender(
+                      row.getVisibleCells()[5].column.columnDef.cell,
+                      row.getVisibleCells()[5].getContext(),
+                    )}
+                  </div>
+                </div>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
       <hr />

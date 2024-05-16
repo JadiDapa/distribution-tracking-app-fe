@@ -92,7 +92,7 @@ export default function MaterialInventoryUpdate() {
               subheader="modify your material quantity whenever you consuming or restocking your material"
             />
             <div className="flex flex-col gap-6">
-              <div className="flex gap-6">
+              <div className="flex flex-col gap-6 lg:flex-row">
                 <div className="box-shadow flex w-full flex-col gap-6 rounded-md bg-white p-6">
                   <h2 className="text-xl font-medium ">Updating information</h2>
                   <div className="flex flex-col gap-6 ">
@@ -118,9 +118,9 @@ export default function MaterialInventoryUpdate() {
                         control={form.control}
                         name="note"
                         render={({ field }) => (
-                          <FormItem className="h-48">
+                          <FormItem className="h-72 lg:h-48">
                             <FormLabel>Note / Detail</FormLabel>
-                            <FormControl className="h-28">
+                            <FormControl className="h-48 lg:h-28 ">
                               <ReactQuill theme="snow" {...field} />
                             </FormControl>
                             <FormMessage />
@@ -130,7 +130,7 @@ export default function MaterialInventoryUpdate() {
                     </div>
                   </div>
                 </div>
-                <div className="box-shadow relative flex w-1/2 flex-col gap-6 rounded-md bg-white p-6">
+                <div className="box-shadow relative flex flex-col gap-6 rounded-md bg-white p-6 lg:w-1/2">
                   <h2 className="text-xl font-medium ">Summary</h2>
                   <ul className="divide-y">
                     <li className="flex justify-between py-2.5">

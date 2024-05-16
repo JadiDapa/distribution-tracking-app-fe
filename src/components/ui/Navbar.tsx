@@ -1,15 +1,29 @@
 import useAuthStore from "@/lib/store/AuthStore";
 import SearchDialog from "./SearchDialog";
-
+import { MdLogout } from "react-icons/md";
 import Notifications from "./Notifications";
 import { Menu } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./dropdown-menu";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   handleOpen?: () => void;
 };
 
 export default function Navbar({ handleOpen }: Props) {
-  const { userData } = useAuthStore();
+  const { userData, removeUser } = useAuthStore();
+  const navigate = useNavigate();
+  function logout() {
+    localStorage.removeItem("userData");
+    removeUser();
+    navigate("/login");
+  }
   return (
     <nav className="box-shadow flex w-full items-center justify-between rounded-md bg-white px-4 py-2">
       <div className="flex items-center gap-3">
@@ -20,16 +34,30 @@ export default function Navbar({ handleOpen }: Props) {
       <div className="flex items-center gap-4">
         <Notifications />
 
-        <div className="size-9 overflow-hidden rounded-full border-2 border-primary">
-          <img
-            className="w-full p-0.5"
-            src={
-              userData?.picture ||
-              "https://res.cloudinary.com/dxxgiqzhc/image/upload/v1715254556/images-removebg-preview_cp546c.png"
-            }
-            alt=""
-          />
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="size-9 overflow-hidden rounded-full border-2 border-primary">
+              <img
+                className="w-full p-0.5"
+                src={
+                  userData?.picture ||
+                  "https://res.cloudinary.com/dxxgiqzhc/image/upload/v1715254556/images-removebg-preview_cp546c.png"
+                }
+                alt=""
+              />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-20">
+            <DropdownMenuGroup>
+              <DropdownMenuItem className="flex gap-3 text-primary">
+                {userData?.name}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={logout} className="flex gap-3">
+                Log Out <MdLogout />
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </nav>
   );

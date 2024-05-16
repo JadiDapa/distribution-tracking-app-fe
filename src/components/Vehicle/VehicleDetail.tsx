@@ -9,16 +9,17 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { Link } from "react-router-dom";
-import DeleteMaterialRow from "../ui/DeleteMaterialRow";
 import { GetVehicleById } from "@/lib/network/useVehicle";
+import useAuthStore from "@/lib/store/AuthStore";
+import DeleteVehicleRow from "../ui/DeleteVehicleRow";
 
 type Props = {
   id: string;
 };
 
 export default function VehicleDetail({ id }: Props) {
+  const { userData } = useAuthStore();
   const { vehicle } = GetVehicleById(id);
-  console.log(vehicle);
   return (
     <AlertDialog>
       <AlertDialogTrigger className="cursor-pointer duration-300 hover:text-primary ">
@@ -97,17 +98,35 @@ export default function VehicleDetail({ id }: Props) {
           )}
         </div>
 
-        <AlertDialogFooter>
-          <Link
-            to={"/vehicle-edit/" + vehicle?.id}
-            className="flex items-center gap-2 rounded-md bg-primary px-3 py-0.5 text-white"
-          >
-            <Pencil size={16} />
-            Edit
-          </Link>
+        <div className="flex justify-end gap-3 lg:hidden">
+          {userData?.id === 1 && (
+            <>
+              <Link
+                to={"/vehicle-edit/" + vehicle?.id}
+                className="flex items-center gap-2 rounded-md bg-primary px-3 py-0.5 text-white"
+              >
+                <Pencil size={16} />
+                Edit
+              </Link>
+              <DeleteVehicleRow id={vehicle?.id} name={vehicle?.name} />
+            </>
+          )}
+        </div>
+        <AlertDialogCancel className="h-9 lg:hidden">Close</AlertDialogCancel>
 
-          <DeleteMaterialRow id={vehicle?.id} name={vehicle?.name} />
-
+        <AlertDialogFooter className="hidden lg:flex">
+          {userData?.id === 1 && (
+            <>
+              <Link
+                to={"/vehicle-edit/" + vehicle?.id}
+                className="flex items-center gap-2 rounded-md bg-primary px-3 py-0.5 text-white"
+              >
+                <Pencil size={16} />
+                Edit
+              </Link>
+            </>
+          )}
+          <DeleteVehicleRow id={vehicle?.id} name={vehicle?.name} />
           <AlertDialogCancel>Close</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>

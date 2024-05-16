@@ -74,7 +74,7 @@ export default function RequestTool() {
           <div className="flex flex-col gap-6">
             <InfoForm control={form.control} />
             <SelectTool />
-            <div className="flex gap-6">
+            <div className="flex flex-col gap-6 lg:flex-row">
               <NoteForm control={form.control} />
               <RequestSummary
                 values={form.watch()}

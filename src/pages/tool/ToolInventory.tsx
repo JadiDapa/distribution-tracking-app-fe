@@ -2,12 +2,14 @@ import ToolInventoryTable from "@/components/Tools/ToolInventoryTable";
 import SeperatedCard from "@/components/ui/ConnectedCard";
 import DataLoading from "@/components/ui/DataLoading";
 import SeactionHeader from "@/components/ui/SeactionHeader";
+import { Button } from "@/components/ui/button";
 import { GetToolCategories } from "@/lib/network/useToolCategory";
 import { GetToolInventories } from "@/lib/network/useToolInventory";
 import useAuthStore from "@/lib/store/AuthStore";
 import { Tools } from "@/lib/types/tool";
 import { toolInventory } from "@/utils/table/tool-inventory";
-import { BadgeCheck, BadgeX, PencilRuler, Wrench } from "lucide-react";
+import { BadgeCheck, BadgeX, Clock, PencilRuler, Wrench } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function ToolInventory() {
   const { userData } = useAuthStore();
@@ -57,8 +59,16 @@ export default function ToolInventory() {
   if (tools) {
     return (
       <section className="flex w-full flex-col gap-6 py-6">
-        <SeactionHeader section="Tool" subSection="Tool Inventory" />
-        <div className="box-shadow flex divide-x rounded-md bg-white p-6">
+        <div className="flex w-full flex-col justify-between gap-4 lg:flex-row lg:items-center">
+          <SeactionHeader section="Tool" subSection="Tool Inventory" />
+          <Link className="flex max-lg:justify-end" to="/tool-updates">
+            <Button className="flex items-center gap-3 bg-yellow-500 hover:bg-yellow-600">
+              Quantity Update History
+              <Clock />
+            </Button>
+          </Link>
+        </div>
+        <div className="box-shadow flex flex-col divide-y rounded-md bg-white p-6 lg:flex-row lg:divide-x lg:divide-y-0">
           {toolInventoryCard.map((list) => (
             <SeperatedCard
               key={list.title}

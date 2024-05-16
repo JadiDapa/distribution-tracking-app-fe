@@ -92,7 +92,7 @@ export default function ToolInventoryUpdate() {
               subheader="modify your tool quantity whenever you consuming or restocking your tool"
             />
             <div className="flex flex-col gap-6">
-              <div className="flex gap-6">
+              <div className="flex flex-col gap-6 lg:flex-row">
                 <div className="box-shadow flex w-full flex-col gap-6 rounded-md bg-white p-6">
                   <h2 className="text-xl font-medium ">Updating information</h2>
                   <div className="flex flex-col gap-6 ">
@@ -130,7 +130,7 @@ export default function ToolInventoryUpdate() {
                     </div>
                   </div>
                 </div>
-                <div className="box-shadow relative flex w-1/2 flex-col gap-6 rounded-md bg-white p-6">
+                <div className="box-shadow relative flex flex-col gap-6 rounded-md bg-white p-6 lg:w-1/2">
                   <h2 className="text-xl font-medium ">Summary</h2>
                   <ul className="divide-y">
                     <li className="flex justify-between py-2.5">

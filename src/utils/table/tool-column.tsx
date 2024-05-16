@@ -21,6 +21,9 @@ export const toolColumns: ColumnDef<Tools>[] = [
   {
     accessorKey: "sku",
     header: ({ column }) => <TableSorter column={column} header="SKU" />,
+    cell: ({ getValue }) => (
+      <div className="text-xs lg:text-base">{getValue() as string}</div>
+    ),
   },
   {
     accessorKey: "category.category",
@@ -33,7 +36,7 @@ export const toolColumns: ColumnDef<Tools>[] = [
   {
     accessorKey: "expired_at",
     header: ({ column }) => <TableSorter column={column} header="EXPIRED" />,
-    cell: ({ getValue }) => <div>{getValue().slice(0, 7)}</div>,
+    cell: ({ getValue }) => <div>{(getValue() as string).slice(0, 7)}</div>,
   },
   {
     accessorKey: "status",
@@ -41,14 +44,14 @@ export const toolColumns: ColumnDef<Tools>[] = [
     cell: ({ getValue }) => {
       if (getValue() === "available") {
         return (
-          <div className="flex max-w-fit items-center gap-2 rounded-md bg-green-200/70 px-4 py-1 text-sm font-semibold text-green-600">
+          <div className="flex max-w-fit items-center gap-2 rounded-md bg-green-200/70 px-2 py-0.5 text-xs font-semibold text-green-600 lg:px-4 lg:py-1 lg:text-sm">
             Available
           </div>
         );
       }
       if (getValue() === "unavailable") {
         return (
-          <div className="flex max-w-fit items-center gap-2 rounded-md bg-red-200/70 px-4 py-1 text-sm font-semibold text-red-600">
+          <div className="flex max-w-fit items-center gap-2 rounded-md bg-red-200/70 px-2 py-0.5 text-xs font-semibold text-red-600 lg:px-4 lg:py-1 lg:text-sm">
             Unavailable
           </div>
         );

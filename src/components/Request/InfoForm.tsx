@@ -38,7 +38,7 @@ export default function InfoForm({ control }: Props) {
     return (
       <div className="box-shadow flex w-full flex-col gap-6 rounded-md bg-white p-6">
         <h2 className="text-xl font-medium ">Request Information</h2>
-        <div className="flex gap-6">
+        <div className="flex flex-col gap-6 lg:flex-row">
           <FormField
             control={control}
             name="reason"

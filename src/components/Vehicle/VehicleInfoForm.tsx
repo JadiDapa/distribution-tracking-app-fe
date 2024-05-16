@@ -26,7 +26,7 @@ type Props = {
 };
 
 export default function VehicleInfoForm({ control }: Props) {
-  const { variants } = GetVehicleVariants();
+  const { categories } = GetVehicleVariants();
   const { accounts } = GetAccounts();
   return (
     <div className="box-shadow flex h-full flex-col gap-6 rounded-md bg-white p-6">
@@ -44,7 +44,7 @@ export default function VehicleInfoForm({ control }: Props) {
           </FormItem>
         )}
       />
-      <div className="flex gap-6">
+      <div className="flex flex-col gap-6 lg:flex-row">
         <FormField
           control={control}
           name="variantId"
@@ -56,7 +56,7 @@ export default function VehicleInfoForm({ control }: Props) {
                   <SelectValue placeholder="Select Variant" />
                 </SelectTrigger>
                 <SelectContent>
-                  {variants?.map((variant: VehicleVariants) => (
+                  {categories?.map((variant: VehicleVariants) => (
                     <SelectItem
                       key={variant.id}
                       value={variant.id.toString()}
@@ -85,7 +85,7 @@ export default function VehicleInfoForm({ control }: Props) {
           )}
         />
       </div>
-      <div className="flex gap-6">
+      <div className="flex flex-col gap-6 lg:flex-row">
         <FormField
           control={control}
           name="areaId"
@@ -121,7 +121,7 @@ export default function VehicleInfoForm({ control }: Props) {
             <FormItem className="w-full">
               <FormLabel>Vehicle Location</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <SelectTrigger className="w-full text-base ">
+                <SelectTrigger className="w-full text-base">
                   <SelectValue placeholder="Select vehicle current exact location" />
                 </SelectTrigger>
                 <SelectContent>
@@ -146,9 +146,9 @@ export default function VehicleInfoForm({ control }: Props) {
         control={control}
         name="detail"
         render={({ field }) => (
-          <FormItem className="h-60">
+          <FormItem className="h-80">
             <FormLabel>Other Details</FormLabel>
-            <FormControl className="h-full">
+            <FormControl className="h-56 lg:h-64">
               <ReactQuill theme="snow" {...field} />
             </FormControl>
             <FormMessage />

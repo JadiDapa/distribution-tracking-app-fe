@@ -71,7 +71,7 @@ export default function AccountList() {
             />
           ))}
         </div>
-        <AccountTable columns={accountColumns} data={accounts} />;
+        <AccountTable columns={accountColumns} data={accounts} />
       </section>
     );
   }

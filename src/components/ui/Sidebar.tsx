@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { LiaToolsSolid } from "react-icons/lia";
 import { CiInboxIn } from "react-icons/ci";
+import useAuthStore from "@/lib/store/AuthStore";
 
 const sidebarLink = [
   {
@@ -81,18 +82,24 @@ type Props = {
 };
 
 export default function Sidebar({ isOpen, handleOpen }: Props) {
+  const { userData } = useAuthStore();
   return (
     <aside
       className={`box-shadow fixed z-50 min-h-screen w-[260px] overflow-hidden bg-white p-4 transition-all duration-500 ${isOpen ? "translate-x-0" : "max-lg:-translate-x-full"}`}
     >
-      <div className="flex items-center justify-between ">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <img src="/images/logo-only.png" className="w-11" />
-          <div className="blocktext-2xl font-extrabold tracking-wider text-[#00AFEF]">
-            PLN
-          </div>
+          <img
+            src="https://res.cloudinary.com/dxxgiqzhc/image/upload/v1715752754/Logo_Baru_HP_dkptlf.png"
+            className="w-44"
+          />
         </div>
-        <X onClick={handleOpen} size={24} strokeWidth={1.5} />
+        <X
+          className="lg:hidden"
+          onClick={handleOpen}
+          size={24}
+          strokeWidth={1.5}
+        />
       </div>
 
       <div className="mt-4">
@@ -105,16 +112,19 @@ export default function Sidebar({ isOpen, handleOpen }: Props) {
           />
         ))}
 
-        <div className="mt-4">ADMIN WORKSPACE</div>
-
-        {adminSidebarLink.map((link) => (
-          <SiderbarLink
-            key={link.name}
-            name={link.name}
-            url={link.url}
-            icon={link.icon}
-          />
-        ))}
+        {userData?.id === 1 && (
+          <>
+            <div className="mt-4">ADMIN WORKSPACE</div>
+            {adminSidebarLink.map((link) => (
+              <SiderbarLink
+                key={link.name}
+                name={link.name}
+                url={link.url}
+                icon={link.icon}
+              />
+            ))}
+          </>
+        )}
       </div>
     </aside>
   );

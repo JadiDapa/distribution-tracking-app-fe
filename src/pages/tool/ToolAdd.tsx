@@ -88,7 +88,7 @@ export default function ToolAdd() {
   }
 
   return (
-    <section className="flex w-full flex-col gap-6 pt-6">
+    <section className="flex w-full flex-col gap-6 py-6">
       <SeactionHeader section="Tool" subSection="Add Tool" />
       <Form {...form}>
         <form
@@ -100,12 +100,12 @@ export default function ToolAdd() {
             header="Add New Tool"
             subheader="Add new tool to use accross the app"
           />
-          <div className="flex gap-6">
-            <div className="w-2/3">
+          <div className="flex flex-col gap-6 lg:flex-row">
+            <div className="w-full lg:w-2/3">
               <ToolInfoForm control={form.control} values={form.watch()} />
             </div>
 
-            <div className="flex w-1/3 flex-col gap-6">
+            <div className="flex w-full flex-col gap-6 lg:w-1/3">
               <ToolStatusForm control={form.control} values={form.watch()} />
               <ToolImageForm
                 handlePicture={handlePicture}

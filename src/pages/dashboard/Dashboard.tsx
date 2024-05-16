@@ -1,20 +1,27 @@
 import DashboardStatistic from "@/components/Dashboard/DashboardStatistic";
 import DataLoading from "@/components/ui/DataLoading";
+import Graph from "@/components/ui/Graph";
+
 import { Button } from "@/components/ui/button";
+import { GetAccountById } from "@/lib/network/useAccounts";
 import { GetMaterialInventories } from "@/lib/network/useMaterialInventory";
-import { GetRequestByAccountId } from "@/lib/network/useRequest";
+import {
+  GetRequestByAccountId,
+  GetRequestInboxs,
+} from "@/lib/network/useRequest";
 import { GetToolInventories } from "@/lib/network/useToolInventory";
 import { GetVehiclesByAccountId } from "@/lib/network/useVehicle";
 import useAuthStore from "@/lib/store/AuthStore";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Accounts } from "@/lib/types/account";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
-  const [showWelcome, setShowWelcome] = useState(false);
   const { userData, removeUser } = useAuthStore();
+  const { account } = GetAccountById(userData?.id.toString());
   const { requests, isLoading, isError } = GetRequestByAccountId(
     userData?.id.toString(),
   );
+  const { requests: requestInbox } = GetRequestInboxs(userData?.id.toString());
   const { materials } = GetMaterialInventories(userData?.id.toString());
   const { tools } = GetToolInventories(userData?.id.toString());
   const { vehicles } = GetVehiclesByAccountId(userData?.id.toString());
@@ -26,18 +33,6 @@ export default function Dashboard() {
     navigate("/login");
   }
 
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem("firstLog");
-    if (isLoggedIn) {
-      setShowWelcome(true);
-      const deleteFirstLog = () => {
-        localStorage.removeItem("firstLog");
-        setShowWelcome(false);
-      };
-      setTimeout(deleteFirstLog, 5000);
-    }
-  }, []);
-
   if (isError)
     return (
       <div>
@@ -46,27 +41,69 @@ export default function Dashboard() {
       </div>
     );
   if (isLoading) return <DataLoading isLoading={isLoading} />;
-  if (requests && materials && tools && vehicles) {
+  if (requests && materials && tools && vehicles && account) {
     return (
-      <>
-        <section className="flex w-full flex-col gap-6 py-6">
-          <div className="flex w-full gap-6">
-            <div className="box-shadow w-2/6 rounded-md bg-white p-6">
-              <p className="text-xl text-primary">
-                {" "}
-                Welcome!, {userData?.name}
-              </p>
-              <div className="mt-1 text-slate-500">Have a nice day!</div>
-            </div>
-            <DashboardStatistic
-              requests={requests}
-              materials={materials}
-              tools={tools}
-              vehicles={vehicles}
-            />
+      <section className="flex w-full flex-col gap-6 py-6">
+        <div className="flex w-full flex-col gap-6 lg:flex-row">
+          <div className="box-shadow rounded-md bg-white p-6 lg:w-2/6">
+            <p className="text-xl text-primary">Welcome!, {userData?.name}</p>
+            <div className="mt-1 text-slate-500">Have a nice day!</div>
           </div>
-        </section>
-      </>
+          <DashboardStatistic
+            requests={requests}
+            materials={materials}
+            tools={tools}
+            vehicles={vehicles}
+          />
+        </div>
+        <div className="flex flex-col gap-6 lg:flex-row">
+          <Graph
+            requests={requests}
+            requestInbox={requestInbox}
+            materials={materials}
+            tools={tools}
+            vehicles={vehicles}
+          />
+          <div className="box-shadow flex w-full flex-col gap-3 rounded-md bg-white p-6 lg:w-[33%]">
+            <h2 className="text-xl font-medium ">Account Relation</h2>
+            <div className="flex flex-col gap-3 text-slate-500">
+              <div className="flex flex-col gap-1">
+                <div className="text-sm font-semibold text-slate-400">
+                  HIGHER RELATION :
+                </div>
+                <Link
+                  to={
+                    account?.higherAccount
+                      ? `/account-detail/${account?.higherAccount?.id}`
+                      : "#"
+                  }
+                  className="font-medium text-[#5748ff]"
+                >
+                  {account?.higherAccount?.name || "none"}
+                </Link>
+              </div>
+              <div className="flex flex-col gap-1">
+                <div className="text-sm font-semibold text-slate-400">
+                  LOWER RELATION :
+                </div>
+                {account?.lowerAccounts.length > 0 ? (
+                  account.lowerAccounts.map((account: Accounts) => (
+                    <Link
+                      to={`/account-detail/${account?.id}`}
+                      key={account?.id}
+                      className="cursor-pointer text-[#d37945]"
+                    >
+                      {account.name}
+                    </Link>
+                  ))
+                ) : (
+                  <div className="font-semibold text-red-500">none</div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     );
   }
 }

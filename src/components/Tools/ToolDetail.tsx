@@ -11,12 +11,14 @@ import {
 import { Link } from "react-router-dom";
 import { GetToolById } from "@/lib/network/useTool";
 import DeleteToolRow from "../ui/DeleteToolRow";
+import useAuthStore from "@/lib/store/AuthStore";
 
 type Props = {
   id: string;
 };
 
 export default function ToolDetail({ id }: Props) {
+  const { userData } = useAuthStore();
   const { tool } = GetToolById(id);
   return (
     <AlertDialog>
@@ -75,17 +77,35 @@ export default function ToolDetail({ id }: Props) {
           )}
         </div>
 
-        <AlertDialogFooter>
-          <Link
-            to={"/tool-edit/" + tool?.id}
-            className="flex items-center gap-2 rounded-md bg-primary px-3 py-0.5 text-white"
-          >
-            <Pencil size={16} />
-            Edit
-          </Link>
+        <div className="flex justify-end gap-3 lg:hidden">
+          {userData?.id === 1 && (
+            <>
+              <Link
+                to={"/tool-edit/" + tool?.id}
+                className="flex items-center gap-2 rounded-md bg-primary px-3 py-0.5 text-white"
+              >
+                <Pencil size={16} />
+                Edit
+              </Link>
+              <DeleteToolRow id={tool?.id} name={tool?.name} />
+            </>
+          )}
+        </div>
+        <AlertDialogCancel className="h-9 lg:hidden">Close</AlertDialogCancel>
 
-          <DeleteToolRow id={tool?.id} name={tool?.name} />
-
+        <AlertDialogFooter className="hidden lg:flex">
+          {userData?.id === 1 && (
+            <>
+              <Link
+                to={"/tool-edit/" + tool?.id}
+                className="flex items-center gap-2 rounded-md bg-primary px-3 py-0.5 text-white"
+              >
+                <Pencil size={16} />
+                Edit
+              </Link>
+              <DeleteToolRow id={tool?.id} name={tool?.name} />
+            </>
+          )}
           <AlertDialogCancel>Close</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>

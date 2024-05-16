@@ -30,6 +30,10 @@ import RequestDetail from "./pages/request/RequestDetail";
 import ToolEdit from "./pages/tool/ToolEdit";
 import VehicleEdit from "./pages/vehicle/VehicleEdit";
 import ToolInventoryUpdate from "./pages/tool/ToolInventoryUpdate";
+import MaterialUpdates from "./pages/material/MaterialUpdates";
+import MaterialUpdateDetail from "./pages/material/MaterialUpdateDetail";
+import ToolUpdates from "./pages/tool/ToolUpdates";
+import ToolUpdateDetail from "./pages/tool/ToolUpdateDetail";
 
 export default function App() {
   const { userData, saveUser } = useAuthStore();
@@ -71,11 +75,18 @@ export default function App() {
             path="/material-quantity"
             element={<MaterialInventoryUpdate />}
           />
+          <Route path="/material-updates" element={<MaterialUpdates />} />
+          <Route
+            path="/material-update/:updateId"
+            element={<MaterialUpdateDetail />}
+          />
           <Route path="/material-list" element={<MaterialList />} />
           <Route path="/material-add" element={<MaterialAdd />} />
           <Route path="/material-edit/:materialId" element={<MaterialEdit />} />
           <Route path="/tool-inventory" element={<ToolInventory />} />
           <Route path="/tool-quantity" element={<ToolInventoryUpdate />} />
+          <Route path="/tool-updates" element={<ToolUpdates />} />
+          <Route path="/tool-update/:updateId" element={<ToolUpdateDetail />} />
           <Route path="/tool-list" element={<ToolList />} />
           <Route path="/tool-add" element={<ToolAdd />} />\
           <Route path="/tool-edit/:toolId" element={<ToolEdit />} />

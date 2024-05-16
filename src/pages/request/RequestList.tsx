@@ -64,7 +64,7 @@ export default function RequestList() {
           </div>
         </div>
 
-        <div className="box-shadow flex divide-x rounded-md bg-white p-6">
+        <div className="box-shadow flex flex-col divide-y rounded-md bg-white p-6 lg:flex-row lg:divide-x lg:divide-y-0">
           {requestListCard.map((list) => (
             <ConnectedCard
               key={list.title}
@@ -77,7 +77,7 @@ export default function RequestList() {
             />
           ))}
         </div>
-        <RequestTable columns={requestColumns} data={requests} inbox />
+        <RequestTable columns={requestColumns} data={requests} />
       </section>
     );
   }

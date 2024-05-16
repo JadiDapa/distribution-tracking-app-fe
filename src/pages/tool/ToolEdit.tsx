@@ -93,7 +93,7 @@ export default function ToolEdit() {
 
       setStatus("success");
       setMessage("Material Successfully Updated!");
-      navigate("/material-list");
+      navigate("/tool-list");
     } catch (error) {
       console.error(error);
       setStatus("error");
@@ -105,7 +105,7 @@ export default function ToolEdit() {
   if (isLoading) return <DataLoading isLoading={isLoading} />;
   if (tool) {
     return (
-      <section className="flex w-full flex-col gap-6 pt-6">
+      <section className="flex w-full flex-col gap-6 py-6">
         <SeactionHeader section="Tool" subSection="Edit Tool" />
         <Form {...form}>
           <form
@@ -117,12 +117,12 @@ export default function ToolEdit() {
               header="Edit a Tool"
               subheader="Update existing tool to use accross the app"
             />
-            <div className="flex gap-6">
-              <div className="w-2/3">
+            <div className="flex flex-col gap-6 lg:flex-row">
+              <div className="w-full lg:w-2/3">
                 <ToolInfoForm control={form.control} values={form.watch()} />
               </div>
 
-              <div className="flex w-1/3 flex-col gap-6">
+              <div className="flex w-full flex-col gap-6 lg:w-1/3">
                 <ToolStatusForm control={form.control} values={form.watch()} />
                 <ToolImageForm
                   handlePicture={handlePicture}

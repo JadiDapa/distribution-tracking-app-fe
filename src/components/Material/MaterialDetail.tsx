@@ -11,6 +11,7 @@ import {
 import { GetMaterialById } from "@/lib/network/useMaterial";
 import { Link } from "react-router-dom";
 import DeleteMaterialRow from "../ui/DeleteMaterialRow";
+import useAuthStore from "@/lib/store/AuthStore";
 
 type Props = {
   id: string;
@@ -18,10 +19,11 @@ type Props = {
 };
 
 export default function MaterialDetail({ id, quantity }: Props) {
+  const { userData } = useAuthStore();
   const { material } = GetMaterialById(id);
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="cursor-pointer duration-300 hover:text-primary ">
+      <AlertDialogTrigger className="cursor-pointer text-start duration-300 hover:text-primary">
         {material?.name}
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -82,17 +84,35 @@ export default function MaterialDetail({ id, quantity }: Props) {
           )}
         </div>
 
-        <AlertDialogFooter>
-          <Link
-            to={"/material-edit/" + material?.id}
-            className="flex items-center gap-2 rounded-md bg-primary px-3 py-0.5 text-white"
-          >
-            <Pencil size={16} />
-            Edit
-          </Link>
+        <div className="flex justify-end gap-3 lg:hidden">
+          {userData?.id === 1 && (
+            <>
+              <Link
+                to={"/material-edit/" + material?.id}
+                className="flex items-center gap-2 rounded-md bg-primary px-3 py-0.5 text-white"
+              >
+                <Pencil size={16} />
+                Edit
+              </Link>
+              <DeleteMaterialRow id={material?.id} name={material?.name} />
+            </>
+          )}
+        </div>
+        <AlertDialogCancel className="h-9 lg:hidden">Close</AlertDialogCancel>
 
-          <DeleteMaterialRow id={material?.id} name={material?.name} />
-
+        <AlertDialogFooter className="hidden lg:flex">
+          {userData?.id === 1 && (
+            <>
+              <Link
+                to={"/material-edit/" + material?.id}
+                className="flex items-center gap-2 rounded-md bg-primary px-3 py-0.5 text-white"
+              >
+                <Pencil size={16} />
+                Edit
+              </Link>
+              <DeleteMaterialRow id={material?.id} name={material?.name} />
+            </>
+          )}
           <AlertDialogCancel>Close</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>

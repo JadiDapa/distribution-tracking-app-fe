@@ -38,31 +38,33 @@ export default function Notifications() {
           </SheetHeader>
           <Separator className="mt-6 " />
           <div className="flex flex-col divide-y">
-            {requests.map((request: Requests, index: number) => (
-              <Link
-                key={index}
-                to={`/request-inbox/${request.id}`}
-                className="cursor-pointer py-3 duration-300 hover:bg-slate-100"
-              >
-                <div className="flex gap-4">
-                  <CircleAlert size={40} className="text-red-500" />
-                  <div className="">
-                    <div>{request.requester!.name} Requesting</div>
-                    <div className="text-sm text-slate-500">a minute ago</div>
+            {requests
+              .filter((request) => request.status === "pending")
+              .map((request: Requests, index: number) => (
+                <Link
+                  key={index}
+                  to={`/request-inbox/${request.id}`}
+                  className="cursor-pointer py-3 duration-300 hover:bg-slate-100"
+                >
+                  <div className="flex gap-4">
+                    <CircleAlert size={40} className="text-red-500" />
                     <div className="">
-                      A new request from{" "}
-                      <span className="strong text-primary">
-                        {request.requester!.name}
-                      </span>
-                      , asking for some{" "}
-                      <span className="italic text-primary text-yellow-500">
-                        {request.type}
-                      </span>
+                      <div>{request.requester!.name} Requesting</div>
+                      <div className="text-sm text-slate-500">a minute ago</div>
+                      <div className="">
+                        A new request from{" "}
+                        <span className="strong text-primary">
+                          {request.requester!.name}
+                        </span>
+                        , asking for some{" "}
+                        <span className="italic text-primary text-yellow-500">
+                          {request.type}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
           </div>
         </SheetContent>
       </Sheet>

@@ -103,7 +103,7 @@ export default function MaterialEdit() {
   if (isLoading) return <DataLoading isLoading={isLoading} />;
   if (material) {
     return (
-      <section className="flex w-full flex-col gap-6 pt-6">
+      <section className="flex w-full flex-col gap-6 py-6">
         <SeactionHeader section="Material" subSection="Edit Material" />
         <Form {...form}>
           <form
@@ -115,15 +115,15 @@ export default function MaterialEdit() {
               header="Edit a Material"
               subheader="Update existing material to use accross the app"
             />
-            <div className="flex gap-6">
-              <div className="w-2/3">
+            <div className="flex flex-col gap-6 lg:flex-row">
+              <div className="w-full lg:w-2/3">
                 <MaterialInfoForm
                   control={form.control}
                   values={form.watch()}
                 />
               </div>
 
-              <div className="flex w-1/3 flex-col gap-6">
+              <div className="flex w-full flex-col gap-6 lg:w-1/3">
                 <MaterialStatusForm
                   control={form.control}
                   values={form.watch()}

@@ -1,16 +1,43 @@
 import SeactionHeader from "@/components/ui/SeactionHeader";
-import { useParams } from "react-router-dom";
-import { GetRequestById } from "@/lib/network/useRequest";
+import { useNavigate, useParams } from "react-router-dom";
+import { EditRequest, GetRequestById } from "@/lib/network/useRequest";
 import RequestDetailMaterials from "@/components/Request/RequestDetailMaterials";
 import { requestDetailColumn } from "@/utils/table/request-detail";
 import DataLoading from "@/components/ui/DataLoading";
-import { Archive, ArchiveRestore, ArchiveX } from "lucide-react";
+import { Archive, ArchiveRestore, ArchiveX, Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import RequestPdf from "@/components/ui/RequestPdf";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import useNotificationStore from "@/lib/store/NotificationStore";
 
 export default function RequestDetail() {
   const { requestId } = useParams();
   const { request, isError, isLoading } = GetRequestById(requestId);
+  const navigate = useNavigate();
+  const { setStatus, setMessage } = useNotificationStore();
+  const [file, setFile] = useState<File | null>();
+  const { editRequest } = EditRequest();
 
-  console.log(request);
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    setFile(file);
+    try {
+      await editRequest({
+        id: request.id,
+        aggreement: file,
+        status: "pending",
+      });
+      setStatus("success");
+      setMessage("Request Successfully Sent!");
+      navigate("/request-list");
+    } catch (error) {
+      setStatus("error");
+      setMessage("Something went wrong!");
+      console.log(error);
+    }
+  }
 
   const createdAt = new Date(request?.createdAt).toLocaleDateString("en-US", {
     year: "numeric",
@@ -26,20 +53,44 @@ export default function RequestDetail() {
     return (
       <section className="flex w-full flex-col gap-6 py-6">
         <SeactionHeader section="Request" subSection="Handle Request" />
-        <div className="">
-          <div className="text-xl text-primary">Request #{request.code}</div>
-          <header className="flex items-center justify-between">
-            <div className="">
-              <h1 className="text-2xl font-medium">
-                By {request.requester.name}
-              </h1>
-              <p className="mt-1 text-gray-400">{createdAt}</p>
-            </div>
-          </header>
+        <div className="flex flex-col justify-between lg:flex-row lg:items-center">
+          <div>
+            <div className="text-xl text-primary">Request #{request.code}</div>
+            <header className="flex items-center justify-between">
+              <div className="">
+                <h1 className="text-2xl font-medium">
+                  By {request.requester.name}
+                </h1>
+                <p className="mt-1 text-gray-400">{createdAt}</p>
+              </div>
+            </header>
+          </div>
+          <div className="relative mt-4 flex justify-end gap-6 lg:mt-0 lg:justify-start">
+            <PDFDownloadLink
+              document={<RequestPdf request={request} />}
+              fileName={`Request #${request.code}`}
+            >
+              <Button variant={"muted"} className="flex items-center gap-3">
+                Download PDF
+                <Download />
+              </Button>
+            </PDFDownloadLink>
+            {request.status === "aggreement" && (
+              <Button>
+                <Input
+                  className="absolute left-0 top-0 h-full w-full opacity-0"
+                  type="file"
+                  onChange={handleFile}
+                />
+                Upload Signed PDF
+              </Button>
+            )}
+          </div>
         </div>
+
         <div className="flex flex-col gap-6">
           <div className="box-shadow flex w-full flex-col gap-5 rounded-md bg-white p-6">
-            <div className="flex w-full justify-between">
+            <div className="flex w-full flex-col justify-between gap-4 lg:flex-row">
               <h2 className="text-xl font-medium">Request Information</h2>
               <h2 className="text-xl font-medium">
                 {request.status === "accepted" && (

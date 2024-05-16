@@ -86,9 +86,9 @@ export default function RequestTable<TData, TValue>({
   if (account) {
     return (
       <div className="box-shadow w-full rounded-md bg-white">
-        <div className="p-6">
+        <div className="p-4 lg:p-6">
           <div className="text-lg">Search Filters</div>
-          <div className="mt-4 grid grid-cols-3 gap-6">
+          <div className="mt-4 grid gap-4 lg:grid-cols-3 lg:gap-6">
             <Select
               onValueChange={(value) => {
                 if (value === "clear") {
@@ -121,7 +121,6 @@ export default function RequestTable<TData, TValue>({
                 </SelectGroup>
               </SelectContent>
             </Select>
-
             <Select
               onValueChange={(value) => {
                 if (value === "clear") {
@@ -201,64 +200,62 @@ export default function RequestTable<TData, TValue>({
           </div>
         </div>
         <hr />
-        <div className="flex justify-end gap-4 px-6 py-6">
-          <div className="flex gap-4">
-            <Input
-              placeholder="Search Request Code"
-              value={
-                (table.getColumn("code")?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table.getColumn("code")?.setFilterValue(event.target.value)
-              }
-              className="h-10 rounded-md border text-base transition-all duration-500 focus:border-transparent focus:outline-none focus:outline-transparent focus:ring-2 focus:ring-primary"
-            />
-            <Button
-              variant="muted"
-              icon={<Upload size={20} strokeWidth={2.25} />}
-            >
-              Export
-            </Button>
-            <AlertDialog>
-              <AlertDialogTrigger>
-                <Button
-                  variant="default"
-                  icon={<CirclePlus size={20} strokeWidth={2.25} />}
-                >
-                  Create New Request
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Select item type you want to request
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    You can only choose one type of item to request, you can
-                    make another request if you want to ask for other item type
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <Link to="/request-item/material">
-                    <AlertDialogAction className="flex gap-2 bg-primary hover:opacity-95">
-                      Material
-                      <Cable size={20} />
-                    </AlertDialogAction>
-                  </Link>
-                  <Link to="/request-item/tool">
-                    <AlertDialogAction className="flex gap-2 bg-teal-400 hover:bg-teal-600">
-                      Tool
-                      <Wrench size={20} />
-                    </AlertDialogAction>
-                  </Link>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
+        <div className="flex flex-col justify-end gap-4 p-4 lg:flex-row lg:p-6">
+          <Input
+            placeholder="Search Request Code"
+            value={(table.getColumn("code")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("code")?.setFilterValue(event.target.value)
+            }
+            className="block h-10 rounded-md border text-base transition-all duration-500 focus:border-transparent focus:outline-none focus:outline-transparent focus:ring-2 focus:ring-primary lg:flex lg:max-w-fit"
+          />
+          <Button
+            variant="muted"
+            icon={<Upload size={20} strokeWidth={2.25} />}
+            className="h-9 w-full lg:max-w-fit "
+          >
+            Export
+          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button
+                variant="default"
+                icon={<CirclePlus size={20} strokeWidth={2.25} />}
+                className="max-lg:w-full"
+              >
+                Create New Request
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Select item type you want to request
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  You can only choose one type of item to request, you can make
+                  another request if you want to ask for other item type
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter className="flex flex-col gap-3 lg:flex-row lg:gap-0">
+                <Link to="/request-item/material">
+                  <AlertDialogAction className="flex gap-2 bg-primary hover:opacity-95 max-lg:w-full">
+                    Material
+                    <Cable size={20} />
+                  </AlertDialogAction>
+                </Link>
+                <Link to="/request-item/tool">
+                  <AlertDialogAction className="flex gap-2 bg-teal-400 hover:bg-teal-600 max-lg:w-full">
+                    Tool
+                    <Wrench size={20} />
+                  </AlertDialogAction>
+                </Link>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
         <hr />
-        <Table>
+        <Table className="max-lg:hidden">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -304,6 +301,56 @@ export default function RequestTable<TData, TValue>({
                 </TableCell>
               </TableRow>
             )}
+          </TableBody>
+        </Table>
+
+        {/* Mobile Table */}
+        <Table className="lg:hidden">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="text-xl font-medium ">
+                Request Sent List
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => {
+              return (
+                <TableRow
+                  key={row.id}
+                  className="flex items-center justify-between px-4 py-2"
+                >
+                  <div className="flex h-full flex-col gap-1">
+                    <div className="text-start font-medium">
+                      {flexRender(
+                        row.getVisibleCells()[1].column.columnDef.cell,
+                        row.getVisibleCells()[1].getContext(),
+                      )}
+                    </div>
+                    <div className="text-sm">
+                      {flexRender(
+                        row.getVisibleCells()[3].column.columnDef.cell,
+                        row.getVisibleCells()[3].getContext(),
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end gap-1 text-end">
+                    <div className="">
+                      {flexRender(
+                        row.getVisibleCells()[5].column.columnDef.cell,
+                        row.getVisibleCells()[5].getContext(),
+                      )}
+                    </div>
+                    <div>
+                      {flexRender(
+                        row.getVisibleCells()[2].column.columnDef.cell,
+                        row.getVisibleCells()[2].getContext(),
+                      )}
+                    </div>
+                  </div>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
         <hr />

@@ -33,6 +33,16 @@ export type AccountControl = Control<{
   higherAccountId?: string | undefined;
 }>;
 
+export type AccountEditControl = Control<{
+  name: string;
+  user: string;
+  status: string;
+  unitId: string;
+  id?: number | string;
+  password?: string | undefined;
+  higherAccountId?: string | undefined;
+}>;
+
 export const defaultValues = {
   id: 0,
   name: "",

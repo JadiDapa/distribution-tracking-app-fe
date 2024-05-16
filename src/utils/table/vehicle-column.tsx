@@ -25,7 +25,9 @@ export const vehicleColumns: ColumnDef<Vehicles>[] = [
     header: ({ column }) => <TableSorter column={column} header="VARIANT" />,
     accessorFn: (row) => row.variant?.category,
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue() as string}</div>
+      <div className="text-sm capitalize lg:text-base">
+        {getValue() as string}
+      </div>
     ),
   },
   {
@@ -39,14 +41,18 @@ export const vehicleColumns: ColumnDef<Vehicles>[] = [
     accessorKey: "manufacture_year",
     header: ({ column }) => <TableSorter column={column} header="YEAR" />,
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue() as string}</div>
+      <div className="text-sm capitalize lg:text-base">
+        {getValue() as string}
+      </div>
     ),
   },
   {
     accessorKey: "location.name",
     header: ({ column }) => <TableSorter column={column} header="LOCATION" />,
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue() as string}</div>
+      <div className="text-sm capitalize max-lg:font-medium lg:text-base">
+        {getValue() as string}
+      </div>
     ),
   },
 ];

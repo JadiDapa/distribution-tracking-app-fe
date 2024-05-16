@@ -1,5 +1,4 @@
 import RequestInboxTable from "@/components/Request/RequestInboxTable";
-import RequestTable from "@/components/Request/RequestTable";
 import ConnectedCard from "@/components/ui/ConnectedCard";
 import DataLoading from "@/components/ui/DataLoading";
 import SeactionHeader from "@/components/ui/SeactionHeader";
@@ -66,7 +65,7 @@ export default function RequestInbox() {
             This are list of requests directed to you
           </div>
         </div>
-        <div className="box-shadow flex divide-x rounded-md bg-white p-6">
+        <div className="box-shadow flex flex-col divide-y rounded-md bg-white p-6 lg:flex-row lg:divide-x lg:divide-y-0">
           {requestInboxCard.map((list) => (
             <ConnectedCard
               key={list.title}
@@ -79,7 +78,7 @@ export default function RequestInbox() {
             />
           ))}
         </div>
-        <RequestInboxTable columns={requestInboxs} data={requests} />;
+        <RequestInboxTable columns={requestInboxs} data={requests} />
       </section>
     );
   }

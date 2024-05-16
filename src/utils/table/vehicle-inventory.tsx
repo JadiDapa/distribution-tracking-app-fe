@@ -1,9 +1,10 @@
+import VehicleDetail from "@/components/Vehicle/VehicleDetail";
 import MoveVehicleDialog from "@/components/ui/MoveVehicleDialog";
 import TableSorter from "@/components/ui/TableSorter";
 import { Vehicles } from "@/lib/types/vehicle";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye, Pencil } from "lucide-react";
+import { Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const vehicleInventory: ColumnDef<Vehicles>[] = [
@@ -21,12 +22,15 @@ export const vehicleInventory: ColumnDef<Vehicles>[] = [
     header: ({ column }) => (
       <TableSorter column={column} header="POLICE NUMBER" />
     ),
+    cell: ({ row }) => <VehicleDetail id={row.getValue("id")} />,
   },
   {
     accessorKey: "variant.category",
     header: ({ column }) => <TableSorter column={column} header="VARIANT" />,
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue() as string}</div>
+      <div className="text-sm capitalize lg:text-base">
+        {getValue() as string}
+      </div>
     ),
   },
   {

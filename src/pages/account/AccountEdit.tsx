@@ -12,7 +12,6 @@ import InfoFormEdit from "@/components/User/InfoFormEdit";
 
 const formSchema = z
   .object({
-    id: z.any(),
     name: z
       .string()
       .min(4, {
@@ -58,7 +57,6 @@ export default function AccountEdit() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     values: {
-      id: account?.id,
       name: account?.name,
       user: account?.user,
       status: account?.status,
@@ -69,7 +67,7 @@ export default function AccountEdit() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     await editAccount({
-      id: Number(values.id),
+      id: Number(accountId),
       name: values.name,
       user: values.user,
       password: values.password,
