@@ -17,7 +17,7 @@ const fetch = (url: string, token: string | undefined) =>
 export function GetMaterials() {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/materials", userData?.token],
+    [import.meta.env.VITE_API_URL + "materials", userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -32,7 +32,7 @@ export function GetMaterials() {
 export const GetMaterialById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/materials/" + id, userData?.token],
+    [import.meta.env.VITE_API_URL + "materials/" + id, userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
