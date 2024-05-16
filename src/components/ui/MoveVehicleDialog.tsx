@@ -12,7 +12,6 @@ import { Truck } from "lucide-react";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -65,7 +64,7 @@ export default function MoveVehicleDialog({ vehicle, id }: Props) {
             Move <span className="font-semibold text-primary">{vehicle}</span>{" "}
             Into Other Location?
           </AlertDialogTitle>
-          <div className="mt-5 flex flex-col gap-2">
+          <div className="flex flex-col gap-2 mt-5">
             <div className="text-sm text-gray-400">
               This vehicle will moved from your location into selected one!
             </div>

@@ -1,15 +1,21 @@
 import SeactionHeader from "@/components/ui/SeactionHeader";
 import { useNavigate, useParams } from "react-router-dom";
-import { EditRequest, GetRequestById } from "@/lib/network/useRequest";
+import { GetRequestById, SignPdf } from "@/lib/network/useRequest";
 import RequestDetailMaterials from "@/components/Request/RequestDetailMaterials";
 import { requestDetailColumn } from "@/utils/table/request-detail";
 import DataLoading from "@/components/ui/DataLoading";
-import { Archive, ArchiveRestore, ArchiveX, Download } from "lucide-react";
+import {
+  Archive,
+  ArchiveRestore,
+  ArchiveX,
+  Download,
+  FileCheck,
+  Upload,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import RequestPdf from "@/components/ui/RequestPdf";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
 import useNotificationStore from "@/lib/store/NotificationStore";
 
 export default function RequestDetail() {
@@ -17,16 +23,14 @@ export default function RequestDetail() {
   const { request, isError, isLoading } = GetRequestById(requestId);
   const navigate = useNavigate();
   const { setStatus, setMessage } = useNotificationStore();
-  const [file, setFile] = useState<File | null>();
-  const { editRequest } = EditRequest();
+  const { signRequest } = SignPdf();
 
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    setFile(file);
     try {
-      await editRequest({
-        id: request.id,
-        aggreement: file,
+      await signRequest({
+        id: request.id.toString(),
+        signedPdf: file!,
         status: "pending",
       });
       setStatus("success");
@@ -47,44 +51,64 @@ export default function RequestDetail() {
     minute: "2-digit",
   });
 
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = request?.signedPdf;
+    link.download = `signed-request#${request.code}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (isError) return <div>Something went wrong...</div>;
   if (isLoading) return <DataLoading isLoading={isLoading} />;
   if (request) {
     return (
       <section className="flex w-full flex-col gap-6 py-6">
         <SeactionHeader section="Request" subSection="Handle Request" />
-        <div className="flex flex-col justify-between lg:flex-row lg:items-center">
-          <div>
-            <div className="text-xl text-primary">Request #{request.code}</div>
-            <header className="flex items-center justify-between">
-              <div className="">
-                <h1 className="text-2xl font-medium">
-                  By {request.requester.name}
-                </h1>
-                <p className="mt-1 text-gray-400">{createdAt}</p>
-              </div>
-            </header>
-          </div>
-          <div className="relative mt-4 flex justify-end gap-6 lg:mt-0 lg:justify-start">
-            <PDFDownloadLink
-              document={<RequestPdf request={request} />}
-              fileName={`Request #${request.code}`}
-            >
-              <Button variant={"muted"} className="flex items-center gap-3">
-                Download PDF
-                <Download />
-              </Button>
-            </PDFDownloadLink>
+        <div className="flex flex-col ">
+          <div className="text-xl text-primary">Request #{request.code}</div>
+          <header className="flex items-center justify-between">
+            <div className="">
+              <h1 className="text-2xl font-medium">
+                By {request.requester.name}
+              </h1>
+              <p className="mt-1 text-gray-400">{createdAt}</p>
+            </div>
+          </header>
+          <div className="mt-3 flex w-full flex-col items-start justify-between lg:flex-row lg:items-center">
             {request.status === "aggreement" && (
-              <Button>
+              <Button className="relative flex items-center gap-3">
                 <Input
                   className="absolute left-0 top-0 h-full w-full opacity-0"
                   type="file"
                   onChange={handleFile}
                 />
-                Upload Signed PDF
+                Upload Signed PDF <Upload />
               </Button>
             )}
+            <div className="relative mt-4 flex justify-end gap-6 lg:mt-0 lg:justify-start">
+              {request.signedPdf ? (
+                <Button
+                  onClick={handleDownload}
+                  variant={"muted"}
+                  className="flex items-center gap-3"
+                >
+                  Download Signed PDF
+                  <Download />
+                </Button>
+              ) : (
+                <PDFDownloadLink
+                  document={<RequestPdf request={request} />}
+                  fileName={`Request #${request.code}`}
+                >
+                  <Button variant={"muted"} className="flex items-center gap-3">
+                    Download Unsigned PDF
+                    <Download />
+                  </Button>
+                </PDFDownloadLink>
+              )}
+            </div>
           </div>
         </div>
 
@@ -117,9 +141,17 @@ export default function RequestDetail() {
                     </span>
                   </div>
                 )}
+                {request.status === "aggreement" && (
+                  <div className="accepted flex max-w-fit items-center gap-2 rounded-md bg-orange-400 px-3 py-1.5 text-sm text-white">
+                    Aggreement
+                    <span>
+                      <FileCheck size={18} />
+                    </span>
+                  </div>
+                )}
               </h2>
             </div>
-            <div className="">
+            <div className="flex flex-col gap-1">
               <div className="text-lg font-medium text-primary">Reason</div>
               <div className="">{request.reason}</div>
             </div>

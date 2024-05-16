@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
 import useSWR, { mutate } from "swr";
-import { VehicleVariants } from "../types/vehicle";
+import { MaterialCategories } from "../types/material";
 
 const fetch = (url: string, token: string | undefined) =>
   axios
@@ -17,7 +17,7 @@ const fetch = (url: string, token: string | undefined) =>
 export function GetMaterialCategories() {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/material-categories", userData?.token],
+    [import.meta.env.VITE_API_URL + "material-categories", userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -28,44 +28,50 @@ export function GetMaterialCategories() {
   };
 }
 
-// Get Single Vehicle Variant By Id
-export const GetVehicleVariantById = (id: string) => {
+// Get Single Material Category By Id
+export const GetMaterialCategoryById = (id: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/vehicle-variants/" + id, userData?.token],
+    [
+      import.meta.env.VITE_API_URL + "material-categories/" + id,
+      userData?.token,
+    ],
     ([url, token]) => fetch(url, token),
   );
 
   return {
-    variant: data?.data,
+    category: data?.data,
     isLoading,
     isError: error,
   };
 };
 
-// Create a new Vehicle
-export const CreateVehicleVariant = () => {
+// Create a new Material Category
+export const CreateMaterialCategory = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const { userData } = useAuthStore();
 
-  const postVehicle = async ({ category }: VehicleVariants) => {
+  const postMaterialCategory = async ({ category }: MaterialCategories) => {
     setIsLoading(true);
     setError(false);
     try {
       setIsLoading(true);
       await axios.post(
-        "http://localhost:3000/api/vehicle-variants/create",
+        import.meta.env.VITE_API_URL + "material-categories/create",
         {
           category,
         },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },
       );
+      mutate([
+        import.meta.env.VITE_API_URL + "material-categories",
+        userData?.token,
+      ]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);
@@ -76,21 +82,21 @@ export const CreateVehicleVariant = () => {
     }
   };
 
-  return { postVehicle, isLoading, error };
+  return { postMaterialCategory, isLoading, error };
 };
 
-// Update existing Vehicle
-export const EditVehicleVariant = () => {
+// Update existing Material Category
+export const EditMaterialCategory = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const { userData } = useAuthStore();
 
-  const editVehicle = async ({ id, category }: VehicleVariants) => {
+  const editMaterialCategory = async ({ id, category }: MaterialCategories) => {
     setIsLoading(true);
     setError(false);
     try {
       await axios.put(
-        "http://localhost:3000/api/vehicle-variants/" + id,
+        import.meta.env.VITE_API_URL + "material-categories/" + id,
         { category },
         {
           headers: {
@@ -98,6 +104,10 @@ export const EditVehicleVariant = () => {
           },
         },
       );
+      mutate([
+        import.meta.env.VITE_API_URL + "material-categories",
+        userData?.token,
+      ]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);
@@ -108,29 +118,31 @@ export const EditVehicleVariant = () => {
     }
   };
 
-  return { editVehicle, isLoading, error };
+  return { editMaterialCategory, isLoading, error };
 };
 
-// Delete an Vehicle Data
-export const DeleteVehicleVariant = () => {
+// Delete an MaterialCategory Data
+export const DeleteMaterialCategory = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setError] = useState<boolean>(false);
   const { userData } = useAuthStore();
 
-  const deleteVehicle = async (id: string) => {
+  const deleteMaterialCategory = async (id: string) => {
     try {
       setIsLoading(true);
       setError(false);
-      const convertId = Number(id);
       await axios.delete(
-        "http://localhost:3000/api/vehicle-variants/" + convertId,
+        import.meta.env.VITE_API_URL + "material-categories/" + id,
         {
           headers: {
             Authorization: `Bearer ${userData?.token}`,
           },
         },
       );
-      mutate(["http://localhost:3000/api/vehicle-variants", userData?.token]);
+      mutate([
+        import.meta.env.VITE_API_URL + "material-categories",
+        userData?.token,
+      ]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);
@@ -141,5 +153,5 @@ export const DeleteVehicleVariant = () => {
     }
   };
 
-  return { deleteVehicle, isLoading, isError };
+  return { deleteMaterialCategory, isLoading, isError };
 };

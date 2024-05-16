@@ -19,6 +19,7 @@ import { Vehicles, VehicleControl, VehicleVariants } from "@/lib/types/vehicle";
 import { GetVehicleVariants } from "@/lib/network/useVehicleVariant";
 import { GetAccounts } from "@/lib/network/useAccounts";
 import { Accounts } from "@/lib/types/account";
+import AddVehicleVariant from "./AddVehicleVariant";
 
 type Props = {
   control: VehicleControl;
@@ -29,7 +30,7 @@ export default function VehicleInfoForm({ control }: Props) {
   const { categories } = GetVehicleVariants();
   const { accounts } = GetAccounts();
   return (
-    <div className="box-shadow flex h-full flex-col gap-6 rounded-md bg-white p-6">
+    <div className="flex flex-col h-full gap-6 p-6 bg-white rounded-md box-shadow">
       <h2 className="text-xl font-medium ">Vehicle Information</h2>
       <FormField
         control={control}
@@ -59,12 +60,13 @@ export default function VehicleInfoForm({ control }: Props) {
                   {categories?.map((variant: VehicleVariants) => (
                     <SelectItem
                       key={variant.id}
-                      value={variant.id.toString()}
+                      value={variant.id!.toString()}
                       className="mt-1.5 text-base capitalize text-slate-600"
                     >
                       {variant.category}
                     </SelectItem>
                   ))}
+                  <AddVehicleVariant />
                 </SelectContent>
               </Select>
               <FormMessage />

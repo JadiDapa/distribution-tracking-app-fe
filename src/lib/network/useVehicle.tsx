@@ -17,7 +17,7 @@ const fetch = (url: string, token: string | undefined) =>
 export function GetVehicles() {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/vehicles", userData?.token],
+    [import.meta.env.VITE_API_URL + "vehicles", userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -32,7 +32,7 @@ export function GetVehicles() {
 export function GetVehiclesByAccountId(accountId?: string) {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/vehicles/" + accountId, userData?.token],
+    [import.meta.env.VITE_API_URL + "vehicles/" + accountId, userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -47,7 +47,7 @@ export function GetVehiclesByAccountId(accountId?: string) {
 export const GetVehicleById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/vehicles/detail/" + id, userData?.token],
+    [import.meta.env.VITE_API_URL + "vehicles/detail/" + id, userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -81,7 +81,7 @@ export const CreateVehicle = () => {
     try {
       setIsLoading(true);
       await axios.post(
-        "http://localhost:3000/api/vehicles/create",
+        import.meta.env.VITE_API_URL + "vehicles/create",
         {
           police_number,
           variantId,
@@ -137,7 +137,7 @@ export const EditVehicle = () => {
     setError(false);
     try {
       await axios.put(
-        `http://localhost:3000/api/vehicles/${id}`,
+        import.meta.env.VITE_API_URL + `vehicles/${id}`,
         {
           police_number,
           variantId: Number(variantId),
@@ -187,7 +187,7 @@ export const MoveVehicle = () => {
     setError(false);
     try {
       await axios.put(
-        `http://localhost:3000/api/vehicles/${id}`,
+        import.meta.env.VITE_API_URL + `vehicles/${id}`,
         {
           locationId: Number(locationId),
         },
@@ -198,7 +198,7 @@ export const MoveVehicle = () => {
         },
       );
       mutate([
-        "http://localhost:3000/api/vehicles/" + userData?.id,
+        import.meta.env.VITE_API_URL + "vehicles/" + userData?.id,
         userData?.token,
       ]);
     } catch (error) {
@@ -225,12 +225,15 @@ export const DeleteVehicle = () => {
       setIsLoading(true);
       setError(false);
       const convertId = Number(id);
-      await axios.delete("http://localhost:3000/api/vehicles/" + convertId, {
-        headers: {
-          Authorization: `Bearer ${userData?.token}`,
+      await axios.delete(
+        import.meta.env.VITE_API_URL + "vehicles/" + convertId,
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+          },
         },
-      });
-      mutate(["http://localhost:3000/api/vehicle", userData?.token]);
+      );
+      mutate([import.meta.env.VITE_API_URL + "vehicle", userData?.token]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);

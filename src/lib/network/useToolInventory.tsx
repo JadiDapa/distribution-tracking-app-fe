@@ -17,7 +17,7 @@ export function GetToolInventories(accountId?: string) {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
     [
-      "http://localhost:3000/api/tool-inventories/" + accountId,
+      import.meta.env.VITE_API_URL + "tool-inventories/" + accountId,
       userData?.token,
     ],
     ([url, token]) => fetch(url, token),
@@ -34,7 +34,7 @@ export function GetToolInventories(accountId?: string) {
 export const GetToolById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/tool-inventories/" + id, userData?.token],
+    [import.meta.env.VITE_API_URL + "tool-inventories/" + id, userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -66,7 +66,7 @@ export const UpdateToolInvetory = () => {
     setError(false);
     try {
       await axios.post(
-        `http://localhost:3000/api/tool-inventories/update`,
+        import.meta.env.VITE_API_URL + `tool-inventories/update`,
         { accountId, reason, items, note },
         {
           headers: {
@@ -98,12 +98,12 @@ export const DeleteTool = () => {
       setIsLoading(true);
       setError(false);
       const convertId = Number(id);
-      await axios.delete("http://localhost:3000/api/tools/" + convertId, {
+      await axios.delete(import.meta.env.VITE_API_URL + "tools/" + convertId, {
         headers: {
           Authorization: `Bearer ${userData?.token}`,
         },
       });
-      mutate(["http://localhost:3000/api/tools", userData?.token]);
+      mutate([import.meta.env.VITE_API_URL + "tools", userData?.token]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);

@@ -18,7 +18,7 @@ export interface Vehicles {
 }
 
 export interface VehicleVariants {
-  id: number;
+  id?: number;
   category: string;
 }
 

@@ -78,7 +78,12 @@ export default function RequestInbox() {
             />
           ))}
         </div>
-        <RequestInboxTable columns={requestInboxs} data={requests} />
+        <RequestInboxTable
+          columns={requestInboxs}
+          data={requests.filter(
+            (request: Requests) => request.status !== "aggreement",
+          )}
+        />
       </section>
     );
   }

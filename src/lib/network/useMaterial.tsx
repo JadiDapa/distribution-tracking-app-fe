@@ -61,7 +61,7 @@ export const CreateMaterial = () => {
     setError(false);
     try {
       await axios.post(
-        "http://localhost:3000/api/materials/create",
+        import.meta.env.VITE_API_URL + "materials/create",
         { name, sku, status, detail, picture, categoryId },
         {
           headers: {
@@ -102,7 +102,7 @@ export const EditMaterial = () => {
     setError(false);
     try {
       await axios.put(
-        `http://localhost:3000/api/materials/${id}`,
+        import.meta.env.VITE_API_URL + `materials/${id}`,
         { name, sku, status, detail, picture, categoryId },
         {
           headers: {
@@ -135,12 +135,15 @@ export const DeleteMaterial = () => {
       setIsLoading(true);
       setError(false);
       const convertId = Number(id);
-      await axios.delete("http://localhost:3000/api/materials/" + convertId, {
-        headers: {
-          Authorization: `Bearer ${userData?.token}`,
+      await axios.delete(
+        import.meta.env.VITE_API_URL + "materials/" + convertId,
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+          },
         },
-      });
-      mutate(["http://localhost:3000/api/materials", userData?.token]);
+      );
+      mutate([import.meta.env.VITE_API_URL + "materials", userData?.token]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);

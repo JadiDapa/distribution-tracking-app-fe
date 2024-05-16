@@ -5,7 +5,7 @@ import { EditRequest, GetRequestById } from "@/lib/network/useRequest";
 import useRequestItemStore from "@/lib/store/RequestItemStore";
 import { Button } from "@/components/ui/button";
 import ClipLoader from "react-spinners/ClipLoader";
-import { ArchiveRestore, ArchiveX } from "lucide-react";
+import { ArchiveRestore, ArchiveX, Download } from "lucide-react";
 import { useEffect } from "react";
 import { RequestedItems } from "@/lib/types/requestItem";
 import RequestFormEdit from "@/components/Request/RequestFormEdit";
@@ -128,8 +128,14 @@ export default function HandleRequest() {
                 By {request?.requester.name}
               </h1>
               <p className="mt-1 text-gray-400">{createdAt}</p>
+              <a href={request.signedPdf} download>
+                <Button className="mt-3 flex items-center gap-3">
+                  Download Signed PDF
+                  <Download />
+                </Button>
+              </a>
             </div>
-            <div className="mt-4 flex justify-end gap-4 lg:mt-0 lg:justify-normal">
+            <div className="mt-4 flex gap-4 lg:mt-0 lg:justify-normal">
               <Button
                 onClick={handleAccept}
                 className="bg-green-400 hover:bg-green-600"

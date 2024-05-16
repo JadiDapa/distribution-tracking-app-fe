@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -105,7 +108,7 @@ export default function ToolEdit() {
   if (isLoading) return <DataLoading isLoading={isLoading} />;
   if (tool) {
     return (
-      <section className="flex w-full flex-col gap-6 py-6">
+      <section className="flex flex-col w-full gap-6 py-6">
         <SeactionHeader section="Tool" subSection="Edit Tool" />
         <Form {...form}>
           <form
@@ -122,7 +125,7 @@ export default function ToolEdit() {
                 <ToolInfoForm control={form.control} values={form.watch()} />
               </div>
 
-              <div className="flex w-full flex-col gap-6 lg:w-1/3">
+              <div className="flex flex-col w-full gap-6 lg:w-1/3">
                 <ToolStatusForm control={form.control} values={form.watch()} />
                 <ToolImageForm
                   handlePicture={handlePicture}

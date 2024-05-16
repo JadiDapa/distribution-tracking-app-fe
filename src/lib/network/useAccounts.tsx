@@ -17,7 +17,7 @@ const fetch = (url: string, token: string | undefined) =>
 export function GetAccounts() {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/accounts", userData?.token],
+    [import.meta.env.VITE_API_URL + "accounts", userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -32,7 +32,7 @@ export function GetAccounts() {
 export const GetAccountById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    [`http://localhost:3000/api/accounts/${id}`, userData?.token],
+    [import.meta.env.VITE_API_URL + `accounts/${id}`, userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -61,7 +61,7 @@ export const CreateAccount = () => {
     setError(false);
     try {
       await axios.post(
-        "http://localhost:3000/api/accounts/create",
+        import.meta.env.VITE_API_URL + "accounts/create",
         {
           name,
           user,
@@ -108,7 +108,7 @@ export const EditAccount = () => {
     setError(false);
     try {
       await axios.put(
-        `http://localhost:3000/api/accounts/${id}`,
+        import.meta.env.VITE_API_URL + `accounts/${id}`,
         {
           name,
           user,
@@ -144,8 +144,7 @@ export const DeleteAccount = () => {
     try {
       setIsLoading(true);
       setError(false);
-      const convertId = Number(id);
-      await axios.delete("http://localhost:3000/api/accounts/" + convertId, {
+      await axios.delete(import.meta.env.VITE_API_URL + "accounts/" + id, {
         headers: {
           Authorization: `Bearer ${userData?.token}`,
         },

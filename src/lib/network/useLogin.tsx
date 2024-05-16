@@ -14,7 +14,7 @@ export const useLogin = () => {
     setError("");
 
     await axios
-      .post("http://localhost:3000/api/accounts/login", values)
+      .post(import.meta.env.VITE_API_URL + "accounts/login", values)
       .then((response) => {
         const data = response.data.data;
         localStorage.setItem("userData", JSON.stringify(data));

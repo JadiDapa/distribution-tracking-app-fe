@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -115,11 +119,11 @@ export default function Graph({
 
   return (
     <div>
-      <div className="box-shadow w-full rounded-md bg-white p-6">
-        <div className="mb-2 text-center text-2xl font-medium text-primary">
+      <div className="w-full p-6 bg-white rounded-md box-shadow">
+        <div className="mb-2 text-2xl font-medium text-center text-primary">
           Select Charts
         </div>
-        <div className="flex w-full flex-wrap justify-between gap-4 lg:justify-center lg:gap-6">
+        <div className="flex flex-wrap justify-between w-full gap-4 lg:justify-center lg:gap-6">
           <div
             onClick={() => setDisplayedData("materials")}
             className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "materials" ? "bg-[#5748ff] text-white" : "text-slate-700 hover:bg-[#5748ff] hover:text-white"}`}

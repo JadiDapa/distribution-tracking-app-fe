@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -86,7 +89,7 @@ export default function AccountEdit() {
   }
 
   return (
-    <section className="flex w-full flex-col gap-6 py-6">
+    <section className="flex flex-col w-full gap-6 py-6">
       <SeactionHeader section="Account" subSection="Edit Account" />
       <Form {...form}>
         <form

@@ -21,6 +21,8 @@ import {
   Materials,
 } from "@/lib/types/material";
 import { GetMaterialCategories } from "@/lib/network/useMaterialCategory";
+import AddMaterialCategory from "./AddMaterialCategory";
+import DataLoading from "../ui/DataLoading";
 
 type Props = {
   control: MaterialControl;
@@ -28,80 +30,86 @@ type Props = {
 };
 
 export default function MaterialInfoForm({ control }: Props) {
-  const { categories } = GetMaterialCategories();
-  return (
-    <div className="box-shadow flex flex-col gap-6 rounded-md bg-white p-6">
-      <h2 className="text-xl font-medium ">Material Information</h2>
-      <FormField
-        control={control}
-        name="name"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Material Name</FormLabel>
-            <FormControl>
-              <Input placeholder="ex: Posko-Sriwijaya" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <div className="flex flex-col gap-6 lg:flex-row">
+  const { categories, isLoading, isError } = GetMaterialCategories();
+
+  if (isError) return <div>Something went wrong...</div>;
+  if (isLoading) return <DataLoading isLoading={isLoading} />;
+  if (categories) {
+    return (
+      <div className="box-shadow flex flex-col gap-6 rounded-md bg-white p-6">
+        <h2 className="text-xl font-medium ">Material Information</h2>
         <FormField
           control={control}
-          name="categoryId"
+          name="name"
           render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
-                <SelectTrigger className="w-full text-base">
-                  <SelectValue
-                    className="capitalize"
-                    placeholder="Select Category"
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories?.map((category: MaterialCategories) => (
-                    <SelectItem
-                      key={category.id}
-                      value={category.id.toString()}
-                      className="mt-1.5 text-base capitalize text-slate-600"
-                    >
-                      {category.category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <FormItem>
+              <FormLabel>Material Name</FormLabel>
+              <FormControl>
+                <Input placeholder="ex: Posko-Sriwijaya" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <div className="flex flex-col gap-6 lg:flex-row">
+          <FormField
+            control={control}
+            name="categoryId"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Category</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger className="w-full text-base">
+                    <SelectValue
+                      className="capitalize"
+                      placeholder="Select Category"
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((category: MaterialCategories) => (
+                      <SelectItem
+                        key={category.id}
+                        value={category.id!.toString()}
+                        className="mt-1.5 text-base capitalize text-slate-600"
+                      >
+                        {category.category}
+                      </SelectItem>
+                    ))}
+                    <AddMaterialCategory />
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={control}
+            name="sku"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>SKU</FormLabel>
+                <FormControl>
+                  <Input placeholder="0123-4567-890" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           control={control}
-          name="sku"
+          name="detail"
           render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>SKU</FormLabel>
-              <FormControl>
-                <Input placeholder="0123-4567-890" {...field} />
+            <FormItem className="h-96 lg:h-80">
+              <FormLabel>Detail</FormLabel>
+              <FormControl className="h-64">
+                <ReactQuill theme="snow" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
       </div>
-      <FormField
-        control={control}
-        name="detail"
-        render={({ field }) => (
-          <FormItem className="h-96 lg:h-80">
-            <FormLabel>Detail</FormLabel>
-            <FormControl className="h-64">
-              <ReactQuill theme="snow" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-    </div>
-  );
+    );
+  }
 }

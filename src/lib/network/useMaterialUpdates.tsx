@@ -16,7 +16,7 @@ export function GetMaterialUpdates(accountId?: string) {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
     [
-      "http://localhost:3000/api/material-updates/" + accountId,
+      import.meta.env.VITE_API_URL + "material-updates/" + accountId,
       userData?.token,
     ],
     ([url, token]) => fetch(url, token),
@@ -34,7 +34,7 @@ export const GetMaterialUpdateById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
     [
-      "http://localhost:3000/api/material-updates/detail/" + id,
+      import.meta.env.VITE_API_URL + "material-updates/detail/" + id,
       userData?.token,
     ],
     ([url, token]) => fetch(url, token),

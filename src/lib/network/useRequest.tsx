@@ -17,7 +17,7 @@ const fetch = (url: string, token: string | undefined) =>
 export function GetRequestByAccountId(accountId?: string) {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/requests/" + accountId, userData?.token],
+    [import.meta.env.VITE_API_URL + "requests/" + accountId, userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -32,7 +32,10 @@ export function GetRequestByAccountId(accountId?: string) {
 export function GetRequestInboxs(accountId?: string) {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/requests/inbox/" + accountId, userData?.token],
+    [
+      import.meta.env.VITE_API_URL + "requests/inbox/" + accountId,
+      userData?.token,
+    ],
     ([url, token]) => fetch(url, token),
   );
 
@@ -47,7 +50,7 @@ export function GetRequestInboxs(accountId?: string) {
 export const GetRequestById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/requests/detail/" + id, userData?.token],
+    [import.meta.env.VITE_API_URL + "requests/detail/" + id, userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -77,7 +80,7 @@ export const CreateRequest = () => {
     setError(false);
     try {
       await axios.post(
-        "http://localhost:3000/api/requests/create",
+        import.meta.env.VITE_API_URL + "requests/create",
         { type, reason, requesterId, requestedId, items, note, status },
         {
           headers: {
@@ -118,7 +121,7 @@ export const EditRequest = () => {
     setError(false);
     try {
       await axios.put(
-        `http://localhost:3000/api/requests/${id}`,
+        import.meta.env.VITE_API_URL + `requests/${id}`,
         { type, reason, requesterId, requestedId, items, note, status },
         {
           headers: {
@@ -127,7 +130,7 @@ export const EditRequest = () => {
         },
       );
       mutate([
-        "http://localhost:3000/api/requests/inbox/" + userData?.id,
+        import.meta.env.VITE_API_URL + "requests/inbox/" + userData?.id,
         userData?.token,
       ]);
     } catch (error) {
@@ -141,6 +144,49 @@ export const EditRequest = () => {
   return { editRequest, isLoading, error };
 };
 
+// Edit an existing Request
+export const SignPdf = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<boolean>(false);
+  const { userData } = useAuthStore();
+
+  const signRequest = async ({
+    id,
+    signedPdf,
+    status,
+  }: {
+    id: string;
+    signedPdf: File;
+    status: string;
+  }) => {
+    setIsLoading(true);
+    setError(false);
+    try {
+      await axios.put(
+        import.meta.env.VITE_API_URL + `requests/sign/${id}`,
+        { signedPdf, status },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userData?.token}`,
+          },
+        },
+      );
+      mutate([
+        import.meta.env.VITE_API_URL + "requests/inbox/" + userData?.id,
+        userData?.token,
+      ]);
+    } catch (error) {
+      console.log(error);
+      setError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { signRequest, isLoading, error };
+};
+
 // Delete an Request Data
 export const DeleteRequest = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -152,11 +198,14 @@ export const DeleteRequest = () => {
       setIsLoading(true);
       setError(false);
       const convertId = Number(id);
-      await axios.delete("http://localhost:3000/api/requests/" + convertId, {
-        headers: {
-          Authorization: `Bearer ${userData?.token}`,
+      await axios.delete(
+        import.meta.env.VITE_API_URL + "requests/" + convertId,
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+          },
         },
-      });
+      );
     } catch (error) {
       console.log(error);
       setError(true);

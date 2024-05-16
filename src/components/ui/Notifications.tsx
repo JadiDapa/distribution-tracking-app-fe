@@ -8,7 +8,6 @@ import {
   SheetTrigger,
 } from "./sheet";
 import { Separator } from "./separator";
-import DataLoading from "./DataLoading";
 import useAuthStore from "@/lib/store/AuthStore";
 import { GetRequestInboxs } from "@/lib/network/useRequest";
 import { Link } from "react-router-dom";
@@ -21,7 +20,7 @@ export default function Notifications() {
   );
 
   if (isError) return <div>Something went wrong...</div>;
-  if (isLoading) return <DataLoading isLoading={isLoading} />;
+  if (isLoading) return <Bell size={24} className="cursor-pointer" />;
 
   if (requests) {
     return (
@@ -39,7 +38,7 @@ export default function Notifications() {
           <Separator className="mt-6 " />
           <div className="flex flex-col divide-y">
             {requests
-              .filter((request) => request.status === "pending")
+              .filter((request: Requests) => request.status === "pending")
               .map((request: Requests, index: number) => (
                 <Link
                   key={index}

@@ -17,7 +17,7 @@ const fetch = (url: string, token: string | undefined) =>
 export function GetVehicleVariants() {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/vehicle-variants", userData?.token],
+    [import.meta.env.VITE_API_URL + "vehicle-variants", userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -32,7 +32,7 @@ export function GetVehicleVariants() {
 export const GetVehicleVariantById = (id: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/vehicle-variants/" + id, userData?.token],
+    [import.meta.env.VITE_API_URL + "vehicle-variants/" + id, userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -55,17 +55,20 @@ export const CreateVehicleVariant = () => {
     try {
       setIsLoading(true);
       await axios.post(
-        "http://localhost:3000/api/vehicle-variants/create",
+        import.meta.env.VITE_API_URL + "vehicle-variants/create",
         {
           category,
         },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },
       );
+      mutate([
+        import.meta.env.VITE_API_URL + "vehicle-variants",
+        userData?.token,
+      ]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);
@@ -90,7 +93,7 @@ export const EditVehicleVariant = () => {
     setError(false);
     try {
       await axios.put(
-        "http://localhost:3000/api/vehicle-variants/" + id,
+        import.meta.env.VITE_API_URL + "vehicle-variants/" + id,
         { category },
         {
           headers: {
@@ -123,14 +126,17 @@ export const DeleteVehicleVariant = () => {
       setError(false);
       const convertId = Number(id);
       await axios.delete(
-        "http://localhost:3000/api/vehicle-variants/" + convertId,
+        import.meta.env.VITE_API_URL + "vehicle-variants/" + convertId,
         {
           headers: {
             Authorization: `Bearer ${userData?.token}`,
           },
         },
       );
-      mutate(["http://localhost:3000/api/vehicle-variants", userData?.token]);
+      mutate([
+        import.meta.env.VITE_API_URL + "vehicle-variants",
+        userData?.token,
+      ]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);

@@ -15,7 +15,10 @@ const fetch = (url: string, token: string | undefined) =>
 export function GetToolUpdates(accountId?: string) {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/tool-updates/" + accountId, userData?.token],
+    [
+      import.meta.env.VITE_API_URL + "tool-updates/" + accountId,
+      userData?.token,
+    ],
     ([url, token]) => fetch(url, token),
   );
 
@@ -30,7 +33,10 @@ export function GetToolUpdates(accountId?: string) {
 export const GetToolUpdateById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/tool-updates/detail/" + id, userData?.token],
+    [
+      import.meta.env.VITE_API_URL + "tool-updates/detail/" + id,
+      userData?.token,
+    ],
     ([url, token]) => fetch(url, token),
   );
 

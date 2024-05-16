@@ -17,7 +17,7 @@ const fetch = (url: string, token: string | undefined) =>
 export function GetToolCategories() {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/tool-categories", userData?.token],
+    [import.meta.env.VITE_API_URL + "tool-categories", userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -32,7 +32,7 @@ export function GetToolCategories() {
 export const GetToolCategoryById = (id: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/tool-categories/" + id, userData?.token],
+    [import.meta.env.VITE_API_URL + "tool-categories/" + id, userData?.token],
     ([url, token]) => fetch(url, token),
   );
 
@@ -55,18 +55,20 @@ export const CreateToolCategory = () => {
     try {
       setIsLoading(true);
       await axios.post(
-        "http://localhost:3000/api/tool-categories/create",
+        import.meta.env.VITE_API_URL + "tool-categories/create",
         {
           category,
         },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },
       );
-      mutate(["http://localhost:3000/api/tool-categories", userData?.token]);
+      mutate([
+        import.meta.env.VITE_API_URL + "tool-categories",
+        userData?.token,
+      ]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);
@@ -91,7 +93,7 @@ export const EditToolCategory = () => {
     setError(false);
     try {
       await axios.put(
-        "http://localhost:3000/api/tool-categories/" + id,
+        import.meta.env.VITE_API_URL + "tool-categories/" + id,
         { category },
         {
           headers: {
@@ -99,7 +101,10 @@ export const EditToolCategory = () => {
           },
         },
       );
-      mutate(["http://localhost:3000/api/tool-categories", userData?.token]);
+      mutate([
+        import.meta.env.VITE_API_URL + "tool-categories",
+        userData?.token,
+      ]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);
@@ -123,16 +128,18 @@ export const DeleteToolCategory = () => {
     try {
       setIsLoading(true);
       setError(false);
-      const convertId = Number(id);
       await axios.delete(
-        "http://localhost:3000/api/tool-categories/" + convertId,
+        import.meta.env.VITE_API_URL + "tool-categories/" + id,
         {
           headers: {
             Authorization: `Bearer ${userData?.token}`,
           },
         },
       );
-      mutate(["http://localhost:3000/api/tool-categories", userData?.token]);
+      mutate([
+        import.meta.env.VITE_API_URL + "tool-categories",
+        userData?.token,
+      ]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);

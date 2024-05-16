@@ -17,7 +17,7 @@ export function GetMaterialInventories(accountId?: string) {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
     [
-      "http://localhost:3000/api/material-inventories/" + accountId,
+      import.meta.env.VITE_API_URL + "material-inventories/" + accountId,
       userData?.token,
     ],
     ([url, token]) => fetch(url, token),
@@ -34,7 +34,10 @@ export function GetMaterialInventories(accountId?: string) {
 export const GetMaterialById = (id?: string) => {
   const { userData } = useAuthStore();
   const { data, error, isLoading } = useSWR(
-    ["http://localhost:3000/api/material-inventories/" + id, userData?.token],
+    [
+      import.meta.env.VITE_API_URL + "material-inventories/" + id,
+      userData?.token,
+    ],
     ([url, token]) => fetch(url, token),
   );
 
@@ -66,7 +69,7 @@ export const UpdateMaterialInvetory = () => {
     setError(false);
     try {
       await axios.post(
-        `http://localhost:3000/api/material-inventories/update`,
+        import.meta.env.VITE_API_URL + `material-inventories/update`,
         { accountId, reason, items, note },
         {
           headers: {
@@ -98,12 +101,15 @@ export const DeleteMaterial = () => {
       setIsLoading(true);
       setError(false);
       const convertId = Number(id);
-      await axios.delete("http://localhost:3000/api/materials/" + convertId, {
-        headers: {
-          Authorization: `Bearer ${userData?.token}`,
+      await axios.delete(
+        import.meta.env.VITE_API_URL + "materials/" + convertId,
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+          },
         },
-      });
-      mutate(["http://localhost:3000/api/materials", userData?.token]);
+      );
+      mutate([import.meta.env.VITE_API_URL + "materials", userData?.token]);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response);

@@ -25,7 +25,7 @@ export interface MaterialInventories {
 }
 
 export interface MaterialCategories {
-  id: number | string;
+  id?: number | string;
   category: string;
 }
 
