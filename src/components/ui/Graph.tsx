@@ -118,47 +118,45 @@ export default function Graph({
   };
 
   return (
-    <div>
-      <div className="w-full p-6 bg-white rounded-md box-shadow">
-        <div className="mb-2 text-2xl font-medium text-center text-primary">
-          Select Charts
-        </div>
-        <div className="flex flex-wrap justify-between w-full gap-4 lg:justify-center lg:gap-6">
-          <div
-            onClick={() => setDisplayedData("materials")}
-            className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "materials" ? "bg-[#5748ff] text-white" : "text-slate-700 hover:bg-[#5748ff] hover:text-white"}`}
-          >
-            <Cable size={18} strokeWidth={1.7} />
-            Materials
-          </div>
-          <div
-            onClick={() => setDisplayedData("tools")}
-            className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "tools" ? "bg-[#47bcc0] text-white" : "text-slate-700 hover:bg-[#47bcc0] hover:text-white"}`}
-          >
-            <Wrench size={18} strokeWidth={1.7} />
-            Tools
-          </div>
-          <div
-            onClick={() => setDisplayedData("requests")}
-            className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "requests" ? "bg-[#c750c7] text-white" : "text-slate-700 hover:bg-[#c750c7] hover:text-white"}`}
-          >
-            <ArchiveRestore size={18} strokeWidth={1.7} />
-            Request Sent
-          </div>
-          <div
-            onClick={() => setDisplayedData("request-inbox")}
-            className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "request-inbox" ? "bg-yellow-500 text-white" : "text-slate-700 hover:bg-yellow-500 hover:text-white"}`}
-          >
-            <CiInboxIn size={18} strokeWidth={1.7} />
-            Inbox
-          </div>
-        </div>
-        <Line
-          className="mt-6 scale-110 lg:scale-100"
-          options={options}
-          data={data}
-        />
+    <div className="box-shadow w-full rounded-md bg-white p-6 lg:w-[63%]">
+      <div className="mb-2 text-center text-2xl font-medium text-primary">
+        Select Charts
       </div>
+      <div className="flex w-full flex-wrap justify-between gap-4 lg:justify-center lg:gap-6">
+        <div
+          onClick={() => setDisplayedData("materials")}
+          className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "materials" ? "bg-[#5748ff] text-white" : "text-slate-700 hover:bg-[#5748ff] hover:text-white"}`}
+        >
+          <Cable size={18} strokeWidth={1.7} />
+          Materials
+        </div>
+        <div
+          onClick={() => setDisplayedData("tools")}
+          className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "tools" ? "bg-[#47bcc0] text-white" : "text-slate-700 hover:bg-[#47bcc0] hover:text-white"}`}
+        >
+          <Wrench size={18} strokeWidth={1.7} />
+          Tools
+        </div>
+        <div
+          onClick={() => setDisplayedData("requests")}
+          className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "requests" ? "bg-[#c750c7] text-white" : "text-slate-700 hover:bg-[#c750c7] hover:text-white"}`}
+        >
+          <ArchiveRestore size={18} strokeWidth={1.7} />
+          Request Sent
+        </div>
+        <div
+          onClick={() => setDisplayedData("request-inbox")}
+          className={`flex cursor-pointer items-center gap-2 rounded-md px-3 py-1 duration-300 ${displayedData === "request-inbox" ? "bg-yellow-500 text-white" : "text-slate-700 hover:bg-yellow-500 hover:text-white"}`}
+        >
+          <CiInboxIn size={18} strokeWidth={1.7} />
+          Inbox
+        </div>
+      </div>
+      <Line
+        className="mt-6 scale-110 lg:scale-100"
+        options={options}
+        data={data}
+      />
     </div>
   );
 }

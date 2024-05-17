@@ -23,8 +23,10 @@ import { vehicleInventory } from "@/utils/table/vehicle-inventory";
 import { requestColumns } from "@/utils/table/request-column";
 import RequestTable from "@/components/Request/RequestTable";
 import VehicleInventoryTable from "@/components/Vehicle/VehicleInventoryTable";
+import useAuthStore from "@/lib/store/AuthStore";
 
 export default function AccountDetail() {
+  const { userData } = useAuthStore();
   const { accountId } = useParams();
 
   const { materials } = GetMaterialInventories(accountId);
@@ -51,7 +53,7 @@ export default function AccountDetail() {
                 className="w-full"
                 src={
                   account?.picture ||
-                  "https://res.cloudinary.com/dxxgiqzhc/image/upload/v1714885198/images_awiko3.png"
+                  "https://res.cloudinary.com/dxxgiqzhc/image/upload/v1715798818/y7or0yhl57ipet3exx7j.png"
                 }
                 alt=""
               />
@@ -60,16 +62,20 @@ export default function AccountDetail() {
               <div className="text-xl text-primary">{account?.name}</div>
               <div className="text-slate-500">{account?.user}</div>
             </div>
-            <div className="flex items-center gap-4">
-              <Link
-                to={"/account-edit/" + account?.id}
-                className="flex items-center gap-2 rounded-md bg-primary px-3 py-1 text-white"
-              >
-                <Pencil size={16} />
-                Edit
-              </Link>
-              <DeleteAccountRow id={account?.id} name={account?.name} />
-            </div>
+            {(userData?.id === 1 || userData?.id === accountId) && (
+              <div className="flex items-center gap-4">
+                <Link
+                  to={"/account-edit/" + account?.id}
+                  className="flex items-center gap-2 rounded-md bg-primary px-3 py-1 text-white"
+                >
+                  <Pencil size={16} />
+                  Edit
+                </Link>
+                {userData?.id === 1 && (
+                  <DeleteAccountRow id={account?.id} name={account?.name} />
+                )}
+              </div>
+            )}
           </div>
           <div className="h-auto w-[1px] bg-slate-300"></div>
           <div className="flex flex-col gap-2">

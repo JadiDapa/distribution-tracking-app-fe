@@ -55,7 +55,7 @@ export const toolInventory: ColumnDef<Tool>[] = [
     header: ({ column }) => <TableSorter column={column} header="EXPIRED" />,
     accessorFn: (row) => row.tool?.expired_at,
     cell: ({ getValue }) => (
-      <div className="capitalize">{getValue() as string}</div>
+      <div className="capitalize">{(getValue() as string).slice(0, 10)}</div>
     ),
   },
   {

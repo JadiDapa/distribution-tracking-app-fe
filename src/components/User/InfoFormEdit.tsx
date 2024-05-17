@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { AccountControl, Accounts } from "@/lib/types/account";
 import { Power, PowerOff } from "lucide-react";
-import { useState } from "react";
+// import { useState } from "react";
 
 type Props = {
   control: AccountControl;
@@ -18,7 +18,7 @@ type Props = {
 };
 
 export default function InfoFormEdit({ control, values }: Props) {
-  const [isChangePassword, setIsChangePassword] = useState(false);
+  // const [isChangePassword, setIsChangePassword] = useState(false);
   return (
     <div className="box-shadow flex w-[53%] flex-col gap-6 rounded-md bg-white p-6">
       <h2 className="text-xl font-medium ">Account Information</h2>
@@ -67,7 +67,7 @@ export default function InfoFormEdit({ control, values }: Props) {
           </FormItem>
         )}
       />
-      {isChangePassword && (
+      {/* {isChangePassword && (
         <FormField
           control={control}
           name="password"
@@ -89,7 +89,7 @@ export default function InfoFormEdit({ control, values }: Props) {
         {isChangePassword
           ? "Cancel Password Change"
           : "Change Account Password?"}
-      </div>
+      </div> */}
     </div>
   );
 }

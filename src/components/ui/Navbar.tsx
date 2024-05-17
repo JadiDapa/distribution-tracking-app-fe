@@ -10,7 +10,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { BiUser } from "react-icons/bi";
 
 type Props = {
   handleOpen?: () => void;
@@ -49,11 +50,18 @@ export default function Navbar({ handleOpen }: Props) {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-20">
             <DropdownMenuGroup>
-              <DropdownMenuItem className="flex gap-3 text-primary">
-                {userData?.name}
+              <DropdownMenuItem>
+                <Link
+                  to={`/account-detail/${userData?.id}`}
+                  className="flex items-center gap-3"
+                >
+                  <BiUser className="text-lg" />
+                  Profile
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={logout} className="flex gap-3">
-                Log Out <MdLogout />
+                <MdLogout className="text-lg" />
+                Log Out
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

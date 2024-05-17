@@ -3,44 +3,50 @@ import SeperatedCard from "@/components/ui/ConnectedCard";
 import DataLoading from "@/components/ui/DataLoading";
 import SeactionHeader from "@/components/ui/SeactionHeader";
 import { Button } from "@/components/ui/button";
+import { GetMaterialCategories } from "@/lib/network/useMaterialCategory";
 import { GetMaterialInventories } from "@/lib/network/useMaterialInventory";
 import useAuthStore from "@/lib/store/AuthStore";
+import { MaterialInventories } from "@/lib/types/material";
 import { materialInventory } from "@/utils/table/material-inventory";
 import { Cable, CircuitBoard, Clock, LampCeiling } from "lucide-react";
 import { Link } from "react-router-dom";
-
-const materialInventoryCard = [
-  {
-    title: "Material Availlable",
-    value: "200",
-    icon: <CircuitBoard strokeWidth={1.5} />,
-    detail: "Total material available",
-    bgColor: "#e8e6fc",
-    textColor: "#5748ff",
-  },
-  {
-    title: "Material Quantity",
-    value: "400",
-    icon: <Cable />,
-    detail: "Total material quantity",
-    bgColor: "#ffd3d5",
-    textColor: "#ff5e66",
-  },
-  {
-    title: "Material Category",
-    value: "3",
-    icon: <LampCeiling />,
-    detail: "Total category of material",
-    bgColor: "#d6ffe9",
-    textColor: "#45d387",
-  },
-];
 
 export default function MaterialInventory() {
   const { userData } = useAuthStore();
   const { materials, isLoading, isError } = GetMaterialInventories(
     userData?.id.toString(),
   );
+  const { categories } = GetMaterialCategories();
+
+  const materialInventoryCard = [
+    {
+      title: "Material Availlable",
+      value: materials?.length,
+      icon: <CircuitBoard strokeWidth={1.5} />,
+      detail: "Total material available",
+      bgColor: "#e8e6fc",
+      textColor: "#5748ff",
+    },
+    {
+      title: "Material Quantity",
+      value: materials?.reduce(
+        (acc: number, material: MaterialInventories) => acc + material.quantity,
+        0,
+      ),
+      icon: <Cable />,
+      detail: "Total material quantities",
+      bgColor: "#ffd3d5",
+      textColor: "#ff5e66",
+    },
+    {
+      title: "Material Unit",
+      value: categories?.length,
+      icon: <LampCeiling />,
+      detail: "Total unit of material",
+      bgColor: "#d6ffe9",
+      textColor: "#45d387",
+    },
+  ];
 
   if (isError) return <div>Something went wrong...</div>;
   if (isLoading) return <DataLoading isLoading={isLoading} />;

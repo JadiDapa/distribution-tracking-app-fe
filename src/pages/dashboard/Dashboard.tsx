@@ -43,11 +43,19 @@ export default function Dashboard() {
   if (isLoading) return <DataLoading isLoading={isLoading} />;
   if (requests && materials && tools && vehicles && account) {
     return (
-      <section className="flex flex-col w-full gap-6 py-6">
-        <div className="flex flex-col w-full gap-6 lg:flex-row">
-          <div className="p-6 bg-white rounded-md box-shadow lg:w-2/6">
+      <section className="flex w-full flex-col gap-6 py-6">
+        <div className="flex w-full flex-col gap-6 lg:flex-row">
+          <div className="box-shadow relative h-44 rounded-md bg-white p-6 lg:w-2/6">
             <p className="text-xl text-primary">Welcome!, {userData?.name}</p>
             <div className="mt-1 text-slate-500">Have a nice day!</div>
+            <Link className="absolute bottom-4" to="/request-list">
+              <Button>View Requests</Button>
+            </Link>
+            <img
+              className="absolute -bottom-1 right-1 w-36 drop-shadow-lg"
+              src="https://res.cloudinary.com/dxxgiqzhc/image/upload/v1715939087/89772ee660025fb67a61bbc004962ceb-removebg-preview_1_seviwx.png"
+              alt=""
+            />
           </div>
           <DashboardStatistic
             requests={requests}
@@ -56,7 +64,7 @@ export default function Dashboard() {
             vehicles={vehicles}
           />
         </div>
-        <div className="flex flex-col gap-6 lg:flex-row">
+        <div className="flex w-full flex-col gap-6 lg:flex-row">
           <Graph
             requests={requests}
             requestInbox={requestInbox}
@@ -64,7 +72,7 @@ export default function Dashboard() {
             tools={tools}
             vehicles={vehicles}
           />
-          <div className="box-shadow flex w-full flex-col gap-3 rounded-md bg-white p-6 lg:w-[33%]">
+          <div className="box-shadow flex w-full flex-col gap-3 rounded-md bg-white p-6 lg:w-[35%]">
             <h2 className="text-xl font-medium ">Account Relation</h2>
             <div className="flex flex-col gap-3 text-slate-500">
               <div className="flex flex-col gap-1">

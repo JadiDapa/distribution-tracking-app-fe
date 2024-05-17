@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import { GetToolCategories } from "@/lib/network/useToolCategory";
 import { GetToolInventories } from "@/lib/network/useToolInventory";
 import useAuthStore from "@/lib/store/AuthStore";
-import { Tools } from "@/lib/types/tool";
+import { ToolInventories } from "@/lib/types/tool";
 import { toolInventory } from "@/utils/table/tool-inventory";
-import { BadgeCheck, BadgeX, Clock, PencilRuler, Wrench } from "lucide-react";
+import { Clock, PencilRuler, Wrench } from "lucide-react";
+import { BsTools } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
 export default function ToolInventory() {
@@ -28,29 +29,23 @@ export default function ToolInventory() {
       textColor: "#5748ff",
     },
     {
+      title: "Tool Quantity",
+      value: tools?.reduce(
+        (acc: number, tool: ToolInventories) => acc + tool.quantity,
+        0,
+      ),
+      icon: <BsTools />,
+      detail: "Total tool categories",
+      bgColor: "#ffd3d5",
+      textColor: "#ff5e66",
+    },
+    {
       title: "Tool Categories",
       value: categories?.length,
       icon: <PencilRuler />,
       detail: "Total tool categories",
       bgColor: "#aff6fa",
       textColor: "#30d2d8",
-    },
-    {
-      title: "Available Tools",
-      value: tools?.filter((tool: Tools) => tool.status === "available").length,
-      icon: <BadgeCheck />,
-      detail: "Total tools available",
-      bgColor: "#d6ffe9",
-      textColor: "#45d387",
-    },
-    {
-      title: "Unavailable Tools",
-      value: tools?.filter((tool: Tools) => tool.status === "unavailable")
-        .length,
-      icon: <BadgeX />,
-      detail: "Total tools available",
-      bgColor: "#ffd3d5",
-      textColor: "#ff5e66",
     },
   ];
 

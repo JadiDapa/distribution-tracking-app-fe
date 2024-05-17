@@ -89,7 +89,7 @@ export default function AccountEdit() {
   }
 
   return (
-    <section className="flex flex-col w-full gap-6 py-6">
+    <section className="flex w-full flex-col gap-6 py-6">
       <SeactionHeader section="Account" subSection="Edit Account" />
       <Form {...form}>
         <form
