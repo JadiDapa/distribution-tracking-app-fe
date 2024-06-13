@@ -22,7 +22,7 @@ import {
   TableRow,
 } from "../ui/table";
 import Pagination from "../ui/Pagination";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useAuthStore from "@/lib/store/AuthStore";
 import { GetAccountById } from "@/lib/network/useAccounts";
 import DataLoading from "../ui/DataLoading";
@@ -43,6 +43,7 @@ export default function ToolUpdatesTable<TData, TValue>({
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const { accountId } = useParams();
 
   const table = useReactTable({
     data,
@@ -80,15 +81,17 @@ export default function ToolUpdatesTable<TData, TValue>({
           >
             Export
           </Button>
-          <Link to="/tool-quantity">
-            <Button
-              variant="default"
-              icon={<Diff size={20} strokeWidth={2.25} />}
-              className="w-full lg:w-auto"
-            >
-              Update Quantity
-            </Button>
-          </Link>
+          {userData?.id === accountId && (
+            <Link to="/tool-quantity">
+              <Button
+                variant="default"
+                icon={<Diff size={20} strokeWidth={2.25} />}
+                className="w-full lg:w-auto"
+              >
+                Update Quantity
+              </Button>
+            </Link>
+          )}
         </div>
         <hr />
         <Table className="max-lg:hidden">

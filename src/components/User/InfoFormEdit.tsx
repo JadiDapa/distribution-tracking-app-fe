@@ -10,17 +10,23 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { AccountControl, Accounts } from "@/lib/types/account";
 import { Power, PowerOff } from "lucide-react";
-// import { useState } from "react";
+import { Button } from "../ui/button";
 
 type Props = {
   control: AccountControl;
   values: Accounts;
+  isChangePassword?: boolean;
+  togglePassword: () => void;
 };
 
-export default function InfoFormEdit({ control, values }: Props) {
-  // const [isChangePassword, setIsChangePassword] = useState(false);
+export default function InfoFormEdit({
+  control,
+  values,
+  isChangePassword,
+  togglePassword,
+}: Props) {
   return (
-    <div className="box-shadow flex w-[53%] flex-col gap-6 rounded-md bg-white p-6">
+    <div className="box-shadow flex flex-col gap-6 rounded-md bg-white p-6 lg:w-[53%]">
       <h2 className="text-xl font-medium ">Account Information</h2>
       <FormField
         control={control}
@@ -35,6 +41,31 @@ export default function InfoFormEdit({ control, values }: Props) {
           </FormItem>
         )}
       />
+      <div className="flex items-end justify-between gap-3">
+        {isChangePassword && (
+          <FormField
+            control={control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input placeholder="New Password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+        <Button
+          type="button"
+          onClick={togglePassword}
+          className={`h-9 shadow-lg ${isChangePassword ? "bg-red-500" : "bg-primary"}`}
+        >
+          {isChangePassword ? "Cancel Change" : "Change Password?"}
+        </Button>
+      </div>
+
       <FormField
         control={control}
         name="status"
@@ -67,29 +98,6 @@ export default function InfoFormEdit({ control, values }: Props) {
           </FormItem>
         )}
       />
-      {/* {isChangePassword && (
-        <FormField
-          control={control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input placeholder="New Password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      )}
-      <div
-        onClick={() => setIsChangePassword(!isChangePassword)}
-        className={`max-w-fit cursor-pointer rounded-md  px-3 py-1.5 text-white ${isChangePassword ? "bg-red-500" : "bg-yellow-500"}`}
-      >
-        {isChangePassword
-          ? "Cancel Password Change"
-          : "Change Account Password?"}
-      </div> */}
     </div>
   );
 }

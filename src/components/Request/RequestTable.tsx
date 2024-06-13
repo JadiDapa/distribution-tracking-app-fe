@@ -30,7 +30,7 @@ import {
   TableRow,
 } from "../ui/table";
 import Pagination from "../ui/Pagination";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -63,6 +63,7 @@ export default function RequestTable<TData, TValue>({
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const { accountId } = useParams();
 
   const lowerAccounts = account?.lowerAccounts;
 
@@ -216,43 +217,45 @@ export default function RequestTable<TData, TValue>({
           >
             Export
           </Button>
-          <AlertDialog>
-            <AlertDialogTrigger>
-              <Button
-                variant="default"
-                icon={<CirclePlus size={20} strokeWidth={2.25} />}
-                className="max-lg:w-full"
-              >
-                Create New Request
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  Select item type you want to request
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  You can only choose one type of item to request, you can make
-                  another request if you want to ask for other item type
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter className="flex flex-col gap-3 lg:flex-row lg:gap-0">
-                <Link to="/request-item/material">
-                  <AlertDialogAction className="flex gap-2 bg-primary hover:opacity-95 max-lg:w-full">
-                    Material
-                    <Cable size={20} />
-                  </AlertDialogAction>
-                </Link>
-                <Link to="/request-item/tool">
-                  <AlertDialogAction className="flex gap-2 bg-teal-400 hover:bg-teal-600 max-lg:w-full">
-                    Tool
-                    <Wrench size={20} />
-                  </AlertDialogAction>
-                </Link>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          {!accountId && (
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <Button
+                  variant="default"
+                  icon={<CirclePlus size={20} strokeWidth={2.25} />}
+                  className="max-lg:w-full"
+                >
+                  Create New Request
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Select item type you want to request
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    You can only choose one type of item to request, you can
+                    make another request if you want to ask for other item type
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="flex flex-col gap-3 lg:flex-row lg:gap-0">
+                  <Link to="/request-item/material">
+                    <AlertDialogAction className="flex gap-2 bg-primary hover:opacity-95 max-lg:w-full">
+                      Material
+                      <Cable size={20} />
+                    </AlertDialogAction>
+                  </Link>
+                  <Link to="/request-item/tool">
+                    <AlertDialogAction className="flex gap-2 bg-teal-400 hover:bg-teal-600 max-lg:w-full">
+                      Tool
+                      <Wrench size={20} />
+                    </AlertDialogAction>
+                  </Link>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
         </div>
         <hr />
         <Table className="max-lg:hidden">

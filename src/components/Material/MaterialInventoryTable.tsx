@@ -28,8 +28,8 @@ import {
 } from "../ui/select";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Diff, Upload } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Clock, Diff, Upload } from "lucide-react";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { SelectGroup } from "@radix-ui/react-select";
 import { ToolCategory } from "@/lib/types/tool";
 import { GetMaterialCategories } from "@/lib/network/useMaterialCategory";
@@ -46,6 +46,9 @@ export default function MaterialInventoryTable<TData, TValue>({
   const { categories } = GetMaterialCategories();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const location = useLocation();
+
+  const { accountId } = useParams();
 
   const table = useReactTable({
     data,
@@ -101,9 +104,11 @@ export default function MaterialInventoryTable<TData, TValue>({
           </Select>
           <Input
             placeholder="Search Material"
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            value={
+              (table.getColumn("material")?.getFilterValue() as string) ?? ""
+            }
             onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
+              table.getColumn("material")?.setFilterValue(event.target.value)
             }
             className="rounded-md border text-base transition-all duration-500 focus:border-transparent focus:outline-none focus:outline-transparent focus:ring-2 focus:ring-primary"
           />
@@ -114,15 +119,27 @@ export default function MaterialInventoryTable<TData, TValue>({
         <Button variant="muted" icon={<Upload size={20} strokeWidth={2.25} />}>
           Export
         </Button>
-        <Link to="/material-quantity">
-          <Button
-            className="w-full lg:w-auto"
-            variant="default"
-            icon={<Diff size={20} strokeWidth={2.25} />}
+        {location.pathname.includes("/account-detail/") ? (
+          <Link
+            className="flex max-lg:justify-end"
+            to={`/material-updates/${accountId}`}
           >
-            Update Quantity
-          </Button>
-        </Link>
+            <Button className="flex items-center gap-3 bg-yellow-500 hover:bg-yellow-600">
+              Quantity Update History
+              <Clock />
+            </Button>
+          </Link>
+        ) : (
+          <Link to="/material-quantity">
+            <Button
+              className="w-full lg:w-auto"
+              variant="default"
+              icon={<Diff size={20} strokeWidth={2.25} />}
+            >
+              Update Quantity
+            </Button>
+          </Link>
+        )}
       </div>
       <hr />
       <Table className="max-lg:hidden">

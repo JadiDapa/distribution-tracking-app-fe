@@ -1,8 +1,10 @@
+import ToolDetail from "@/components/Tools/ToolDetail";
 import TableSorter from "@/components/ui/TableSorter";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type Tool = {
   id: number;
+  toolId: string | number;
   tool: {
     name: string;
     sku: string;
@@ -28,9 +30,12 @@ export const toolInventory: ColumnDef<Tool>[] = [
   },
 
   {
-    accessorKey: "name",
+    accessorKey: "tool",
     header: ({ column }) => <TableSorter column={column} header="TOOL" />,
     accessorFn: (row) => row.tool?.name,
+    cell: ({ row }) => {
+      return <ToolDetail id={row.original.toolId.toString()} />;
+    },
   },
   {
     accessorKey: "sku",

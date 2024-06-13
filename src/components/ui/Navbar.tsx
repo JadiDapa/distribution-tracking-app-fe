@@ -12,6 +12,7 @@ import {
 } from "./dropdown-menu";
 import { Link, useNavigate } from "react-router-dom";
 import { BiUser } from "react-icons/bi";
+import { GetAccountById } from "@/lib/network/useAccounts";
 
 type Props = {
   handleOpen?: () => void;
@@ -19,12 +20,14 @@ type Props = {
 
 export default function Navbar({ handleOpen }: Props) {
   const { userData, removeUser } = useAuthStore();
+  const { account } = GetAccountById(userData?.id.toString());
   const navigate = useNavigate();
   function logout() {
     localStorage.removeItem("userData");
     removeUser();
     navigate("/login");
   }
+
   return (
     <nav className="box-shadow flex w-full items-center justify-between rounded-md bg-white px-4 py-2">
       <div className="flex items-center gap-3">
@@ -41,7 +44,7 @@ export default function Navbar({ handleOpen }: Props) {
               <img
                 className="w-full p-0.5"
                 src={
-                  userData?.picture ||
+                  account?.picture ||
                   "https://res.cloudinary.com/dxxgiqzhc/image/upload/v1715254556/images-removebg-preview_cp546c.png"
                 }
                 alt=""

@@ -16,7 +16,7 @@ export default function SeperatedCard({
   textColor,
 }: Props) {
   return (
-    <>
+    <div className="w-full">
       <div className="box-shadow hidden w-full justify-between rounded-md bg-white p-6 lg:flex">
         <div className="flex flex-col gap-2">
           <div>{title}</div>
@@ -49,6 +49,6 @@ export default function SeperatedCard({
           <div className="text-2xl">{value}</div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

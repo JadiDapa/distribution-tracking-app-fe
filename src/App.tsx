@@ -75,7 +75,10 @@ export default function App() {
             path="/material-quantity"
             element={<MaterialInventoryUpdate />}
           />
-          <Route path="/material-updates" element={<MaterialUpdates />} />
+          <Route
+            path="/material-updates/:accountId"
+            element={<MaterialUpdates />}
+          />
           <Route
             path="/material-update/:updateId"
             element={<MaterialUpdateDetail />}
@@ -85,7 +88,7 @@ export default function App() {
           <Route path="/material-edit/:materialId" element={<MaterialEdit />} />
           <Route path="/tool-inventory" element={<ToolInventory />} />
           <Route path="/tool-quantity" element={<ToolInventoryUpdate />} />
-          <Route path="/tool-updates" element={<ToolUpdates />} />
+          <Route path="/tool-updates/:accountId" element={<ToolUpdates />} />
           <Route path="/tool-update/:updateId" element={<ToolUpdateDetail />} />
           <Route path="/tool-list" element={<ToolList />} />
           <Route path="/tool-add" element={<ToolAdd />} />\

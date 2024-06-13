@@ -30,23 +30,20 @@ import { CiInboxIn } from "react-icons/ci";
 import { MaterialInventories } from "@/lib/types/material";
 import { ToolInventories } from "@/lib/types/tool";
 import { Vehicles } from "@/lib/types/vehicle";
+import { GetMaterialUpdates } from "@/lib/network/useMaterialUpdates";
+import { GetToolUpdates } from "@/lib/network/useToolUpdates";
+import useAuthStore from "@/lib/store/AuthStore";
 
 type Props = {
   requests: Requests;
   requestInbox: Requests;
-  materials: MaterialInventories;
-  tools: ToolInventories;
-  vehicles: Vehicles;
 };
 
-export default function Graph({
-  requests,
-  requestInbox,
-  materials,
-  tools,
-  vehicles,
-}: Props) {
+export default function Graph({ requests, requestInbox }: Props) {
+  const { userData } = useAuthStore();
   const [displayedData, setDisplayedData] = useState("requests");
+  const { updates: materials } = GetMaterialUpdates(userData?.id.toString());
+  const { updates: tools } = GetToolUpdates(userData?.id.toString());
 
   function getLast30Days() {
     const dates = [];
@@ -88,16 +85,19 @@ export default function Graph({
 
   const labels = getLast30Days();
   let dataChart;
+  let color;
   if (displayedData === "requests") {
     dataChart = requests;
+    color = "199, 80, 199";
   } else if (displayedData === "request-inbox") {
     dataChart = requestInbox;
+    color = "234, 179, 8";
   } else if (displayedData === "materials") {
     dataChart = materials;
+    color = "87, 72, 255";
   } else if (displayedData === "tools") {
     dataChart = tools;
-  } else if (displayedData === "vehicles") {
-    dataChart = vehicles;
+    color = "71, 188, 192";
   }
   const datasByDate = aggregateDataByDate(dataChart);
 
@@ -111,8 +111,8 @@ export default function Graph({
       {
         label: displayedData.toUpperCase() + " Update",
         data: dataSentData,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: `rgb(${color})`,
+        backgroundColor: `rgba(${color} ,0.5)`,
       },
     ],
   };

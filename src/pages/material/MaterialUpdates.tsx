@@ -2,14 +2,12 @@ import MaterialUpdatesTable from "@/components/Material/MaterialUpdatesTable";
 import DataLoading from "@/components/ui/DataLoading";
 import SeactionHeader from "@/components/ui/SeactionHeader";
 import { GetMaterialUpdates } from "@/lib/network/useMaterialUpdates";
-import useAuthStore from "@/lib/store/AuthStore";
 import { materialUpdates } from "@/utils/table/material-updates";
+import { useParams } from "react-router-dom";
 
 export default function MaterialUpdates() {
-  const { userData } = useAuthStore();
-  const { updates, isLoading, isError } = GetMaterialUpdates(
-    userData?.id.toString(),
-  );
+  const { accountId } = useParams();
+  const { updates, isLoading, isError } = GetMaterialUpdates(accountId);
 
   if (isError) return <div>Something went wrong...</div>;
   if (isLoading) return <DataLoading isLoading={isLoading} />;

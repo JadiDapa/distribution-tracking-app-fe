@@ -3,6 +3,7 @@ import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
 import useSWR, { mutate } from "swr";
 import { Accounts } from "../types/account";
+import fileUpload from "./FileUpload";
 
 const fetch = (url: string, token: string | undefined) =>
   axios
@@ -103,10 +104,12 @@ export const EditAccount = () => {
     status,
     unitId,
     higherAccountId,
+    picture,
   }: Accounts) => {
     setIsLoading(true);
     setError(false);
     try {
+      const pictureUrl = await fileUpload(picture);
       await axios.put(
         import.meta.env.VITE_API_URL + `accounts/${id}`,
         {
@@ -116,6 +119,7 @@ export const EditAccount = () => {
           status,
           unitId,
           higherAccountId,
+          picture: pictureUrl,
         },
         {
           headers: {
@@ -123,6 +127,10 @@ export const EditAccount = () => {
           },
         },
       );
+      mutate([
+        import.meta.env.VITE_API_URL + `accounts/${id}`,
+        userData?.token,
+      ]);
     } catch (error) {
       console.log(error);
       setError(true);
@@ -149,7 +157,7 @@ export const DeleteAccount = () => {
           Authorization: `Bearer ${userData?.token}`,
         },
       });
-      mutate(["http://localhost:3000/api/accounts", userData?.token]);
+      mutate([import.meta.env.VITE_API_URL + "accounts", userData?.token]);
     } catch (error) {
       console.log(error);
       setError(true);

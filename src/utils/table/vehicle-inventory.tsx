@@ -4,8 +4,6 @@ import TableSorter from "@/components/ui/TableSorter";
 import { Vehicles } from "@/lib/types/vehicle";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye } from "lucide-react";
-import { Link } from "react-router-dom";
 
 export const vehicleInventory: ColumnDef<Vehicles>[] = [
   {
@@ -50,18 +48,17 @@ export const vehicleInventory: ColumnDef<Vehicles>[] = [
   {
     accessorKey: "action",
     header: "ACTION",
-    cell: ({ row }) => (
-      <div className="flex gap-2">
-        <div className="cursor-pointer">
-          <MoveVehicleDialog
-            vehicle={`${row.getValue("police_number")} (${row.getValue("brand")})`}
-            id={row.getValue("id")}
-          />
+    cell: ({ row }) => {
+      return (
+        <div className="flex gap-2">
+          <div className="cursor-pointer">
+            <MoveVehicleDialog
+              vehicle={`${row.getValue("police_number")} (${row.getValue("brand")})`}
+              id={row.getValue("id")}
+            />
+          </div>
         </div>
-        <Link to="#">
-          <Eye size={22} strokeWidth={1.5} />
-        </Link>
-      </div>
-    ),
+      );
+    },
   },
 ];

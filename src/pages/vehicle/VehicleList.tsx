@@ -33,7 +33,7 @@ export default function VehicleList() {
     },
     {
       title: "Oldest Vehicle",
-      value: Math.min(getVehicleYear),
+      value: Math.min(...(getVehicleYear || [0])),
       icon: <BadgeCheck />,
       detail: "Total Vehicles available",
       bgColor: "#d6ffe9",
@@ -41,7 +41,7 @@ export default function VehicleList() {
     },
     {
       title: "Latest Vehicle",
-      value: Math.max(getVehicleYear),
+      value: Math.max(...(getVehicleYear || [0])),
       icon: <BadgeX />,
       detail: "Total tools available",
       bgColor: "#ffd3d5",

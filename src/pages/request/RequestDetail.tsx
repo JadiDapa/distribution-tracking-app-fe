@@ -111,7 +111,6 @@ export default function RequestDetail() {
             </div>
           </div>
         </div>
-
         <div className="flex flex-col gap-6">
           <div className="box-shadow flex w-full flex-col gap-5 rounded-md bg-white p-6">
             <div className="flex w-full flex-col justify-between gap-4 lg:flex-row">

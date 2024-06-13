@@ -3,6 +3,7 @@ import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
 import useSWR, { mutate } from "swr";
 import { Materials } from "../types/material";
+import fileUpload from "./FileUpload";
 
 const fetch = (url: string, token: string | undefined) =>
   axios
@@ -60,12 +61,12 @@ export const CreateMaterial = () => {
     setIsLoading(true);
     setError(false);
     try {
+      const pictureUrl = await fileUpload(picture);
       await axios.post(
         import.meta.env.VITE_API_URL + "materials/create",
-        { name, sku, status, detail, picture, categoryId },
+        { name, sku, status, detail, picture: pictureUrl, categoryId },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },
@@ -101,12 +102,12 @@ export const EditMaterial = () => {
     setIsLoading(true);
     setError(false);
     try {
+      const pictureUrl = await fileUpload(picture);
       await axios.put(
         import.meta.env.VITE_API_URL + `materials/${id}`,
-        { name, sku, status, detail, picture, categoryId },
+        { name, sku, status, detail, picture: pictureUrl, categoryId },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },

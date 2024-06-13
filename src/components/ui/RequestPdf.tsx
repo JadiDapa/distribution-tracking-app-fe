@@ -259,14 +259,18 @@ export default function RequestPdf({ request }: { request: RequestedItems }) {
                   width: "40%",
                 }}
               >
-                {item.material.name}
+                {request.type === "material"
+                  ? item.material.name
+                  : item.tool.name}
               </Text>
               <Text
                 style={{
                   width: "30%",
                 }}
               >
-                {item.material.sku}
+                {request.type === "material"
+                  ? item.material.sku
+                  : item.tool.sku}
               </Text>
               <Text
                 style={{

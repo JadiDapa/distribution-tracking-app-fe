@@ -28,8 +28,8 @@ import {
 } from "../ui/select";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Diff, Upload } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Clock, Diff, Upload } from "lucide-react";
+import { Link, useParams } from "react-router-dom";
 import { SelectGroup } from "@radix-ui/react-select";
 import { ToolCategory } from "@/lib/types/tool";
 import { GetToolCategories } from "@/lib/network/useToolCategory";
@@ -46,6 +46,7 @@ export default function ToolInventoryTable<TData, TValue>({
   const { categories } = GetToolCategories();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const { accountId } = useParams();
 
   const table = useReactTable({
     data,
@@ -114,15 +115,27 @@ export default function ToolInventoryTable<TData, TValue>({
         <Button variant="muted" icon={<Upload size={20} strokeWidth={2.25} />}>
           Export
         </Button>
-        <Link to="/tool-quantity">
-          <Button
-            className="w-full lg:w-auto"
-            variant="default"
-            icon={<Diff size={20} strokeWidth={2.25} />}
+        {location.pathname.includes("/account-detail/") ? (
+          <Link
+            className="flex max-lg:justify-end"
+            to={`/tool-updates/${accountId}`}
           >
-            Update Quantity
-          </Button>
-        </Link>
+            <Button className="flex items-center gap-3 bg-yellow-500 hover:bg-yellow-600">
+              Quantity Update History
+              <Clock />
+            </Button>
+          </Link>
+        ) : (
+          <Link to="/tool-quantity">
+            <Button
+              className="w-full lg:w-auto"
+              variant="default"
+              icon={<Diff size={20} strokeWidth={2.25} />}
+            >
+              Update Quantity
+            </Button>
+          </Link>
+        )}
       </div>
       <hr />
       <Table className="max-lg:hidden">

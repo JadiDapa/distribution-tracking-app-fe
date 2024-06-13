@@ -5,12 +5,13 @@ export interface Accounts {
   name: string;
   user: string;
   password?: string;
-  picture?: string;
+  picture?: File | string;
   status: string;
   unitId: string | number;
   unit?: AccountUnit;
   higherAccountId?: string | number;
   higherAccount?: HigherAccounts;
+  lowerAccounts?: Accounts[];
 }
 
 export type AccountUnit = {

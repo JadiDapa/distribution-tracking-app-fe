@@ -65,13 +65,7 @@ export default function Dashboard() {
           />
         </div>
         <div className="flex w-full flex-col gap-6 lg:flex-row">
-          <Graph
-            requests={requests}
-            requestInbox={requestInbox}
-            materials={materials}
-            tools={tools}
-            vehicles={vehicles}
-          />
+          <Graph requests={requests} requestInbox={requestInbox} />
           <div className="box-shadow flex w-full flex-col gap-3 rounded-md bg-white p-6 lg:w-[35%]">
             <h2 className="text-xl font-medium ">Account Relation</h2>
             <div className="flex flex-col gap-3 text-slate-500">

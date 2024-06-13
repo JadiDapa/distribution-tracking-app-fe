@@ -19,14 +19,23 @@ export default function Notifications() {
     userData?.id.toString(),
   );
 
-  if (isError) return <div>Something went wrong...</div>;
+  const pendingRequest = requests?.filter(
+    (request: Requests) => request.status === "pending",
+  );
+
+  if (isError) return <Bell size={24} className="cursor-pointer" />;
   if (isLoading) return <Bell size={24} className="cursor-pointer" />;
 
-  if (requests) {
+  if (requests && pendingRequest) {
     return (
       <Sheet>
-        <SheetTrigger>
+        <SheetTrigger className="relative">
           <Bell size={24} className="cursor-pointer" />
+          {pendingRequest.length >= 1 && (
+            <div className="absolute -right-1 -top-1 size-4 rounded-full bg-red-500 text-xs text-white">
+              {pendingRequest.length}
+            </div>
+          )}
         </SheetTrigger>
         <SheetContent side={"right"}>
           <SheetHeader>
@@ -37,33 +46,31 @@ export default function Notifications() {
           </SheetHeader>
           <Separator className="mt-6 " />
           <div className="flex flex-col divide-y">
-            {requests
-              .filter((request: Requests) => request.status === "pending")
-              .map((request: Requests, index: number) => (
-                <Link
-                  key={index}
-                  to={`/request-inbox/${request.id}`}
-                  className="cursor-pointer py-3 duration-300 hover:bg-slate-100"
-                >
-                  <div className="flex gap-4">
-                    <CircleAlert size={40} className="text-red-500" />
+            {pendingRequest.map((request: Requests, index: number) => (
+              <Link
+                key={index}
+                to={`/request-inbox/${request.id}`}
+                className="cursor-pointer py-3 duration-300 hover:bg-slate-100"
+              >
+                <div className="flex gap-4">
+                  <CircleAlert size={40} className="text-red-500" />
+                  <div className="">
+                    <div>{request.requester!.name} Requesting</div>
+                    <div className="text-sm text-slate-500">a minute ago</div>
                     <div className="">
-                      <div>{request.requester!.name} Requesting</div>
-                      <div className="text-sm text-slate-500">a minute ago</div>
-                      <div className="">
-                        A new request from{" "}
-                        <span className="strong text-primary">
-                          {request.requester!.name}
-                        </span>
-                        , asking for some{" "}
-                        <span className="italic text-primary text-yellow-500">
-                          {request.type}
-                        </span>
-                      </div>
+                      A new request from{" "}
+                      <span className="strong text-primary">
+                        {request.requester!.name}
+                      </span>
+                      , asking for some{" "}
+                      <span className="italic text-primary text-yellow-500">
+                        {request.type}
+                      </span>
                     </div>
                   </div>
-                </Link>
-              ))}
+                </div>
+              </Link>
+            ))}
           </div>
         </SheetContent>
       </Sheet>

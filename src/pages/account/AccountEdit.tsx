@@ -12,6 +12,7 @@ import { EditAccount, GetAccountById } from "@/lib/network/useAccounts";
 import { useNavigate, useParams } from "react-router-dom";
 import useNotificationStore from "@/lib/store/NotificationStore";
 import InfoFormEdit from "@/components/User/InfoFormEdit";
+import { useState } from "react";
 
 const formSchema = z
   .object({
@@ -52,10 +53,11 @@ const formSchema = z
 export default function AccountEdit() {
   const { editAccount } = EditAccount();
   const { accountId } = useParams();
-  const navigate = useNavigate();
   const { setStatus, setMessage } = useNotificationStore();
+  const [isChangePassword, setIsChangePassword] = useState(false);
+  const navigate = useNavigate();
 
-  const { account, isError } = GetAccountById(accountId!);
+  const { account } = GetAccountById(accountId!);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,27 +66,35 @@ export default function AccountEdit() {
       user: account?.user,
       status: account?.status,
       unitId: String(account?.unitId),
-      higherAccountId: String(account?.relation),
+      higherAccountId: String(account?.higherAccountId),
     },
   });
 
+  function togglePassword() {
+    if (isChangePassword) {
+      form.setValue("password", undefined);
+    }
+    setIsChangePassword(!isChangePassword);
+  }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await editAccount({
-      id: Number(accountId),
-      name: values.name,
-      user: values.user,
-      password: values.password,
-      status: values.status,
-      unitId: Number(values.unitId),
-      higherAccountId: Number(values.higherAccountId),
-    });
-    if (isError) {
-      setStatus("success");
-      setMessage(`Something Went Wrong`);
-    } else {
+    try {
+      await editAccount({
+        id: Number(accountId),
+        name: values.name,
+        user: values.user,
+        password: values.password,
+        status: values.status,
+        unitId: Number(values.unitId),
+        higherAccountId: values.higherAccountId,
+      });
+
       setStatus("success");
       setMessage(`Account ${values.name} Successfully Updated!`);
       navigate("/account-list");
+    } catch (error) {
+      setStatus("error");
+      setMessage(`Something Went Wrong`);
     }
   }
 
@@ -100,8 +110,13 @@ export default function AccountEdit() {
             header="Edit an Account"
             subheader="Update an account information as you needed"
           />
-          <div className="flex gap-6">
-            <InfoFormEdit control={form.control} values={form.watch()} />
+          <div className="flex flex-col gap-6 lg:flex-row">
+            <InfoFormEdit
+              control={form.control}
+              values={form.watch()}
+              isChangePassword={isChangePassword}
+              togglePassword={togglePassword}
+            />
             <RelationForm control={form.control} values={form.watch()} />
           </div>
         </form>

@@ -21,6 +21,7 @@ type Props = {
 export default function MaterialDetail({ id, quantity }: Props) {
   const { userData } = useAuthStore();
   const { material } = GetMaterialById(id);
+
   return (
     <AlertDialog>
       <AlertDialogTrigger className="cursor-pointer text-start duration-300 hover:text-primary">

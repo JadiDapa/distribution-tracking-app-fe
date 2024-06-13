@@ -3,6 +3,7 @@ import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
 import { Requests } from "../types/request";
 import useSWR, { mutate } from "swr";
+import fileUpload from "./FileUpload";
 
 const fetch = (url: string, token: string | undefined) =>
   axios
@@ -161,13 +162,13 @@ export const SignPdf = () => {
   }) => {
     setIsLoading(true);
     setError(false);
+    const signedPdfUrl = await fileUpload(signedPdf);
     try {
       await axios.put(
         import.meta.env.VITE_API_URL + `requests/sign/${id}`,
-        { signedPdf, status },
+        { signedPdf: signedPdfUrl, status },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },

@@ -1,8 +1,10 @@
+import MaterialDetail from "@/components/Material/MaterialDetail";
 import TableSorter from "@/components/ui/TableSorter";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type Material = {
   id: number;
+  materialId: number | string;
   material: {
     name: string;
     sku: string;
@@ -30,6 +32,9 @@ export const materialInventory: ColumnDef<Material>[] = [
     accessorKey: "material",
     header: ({ column }) => <TableSorter column={column} header="MATERIAL" />,
     accessorFn: (row) => row.material?.name,
+    cell: ({ row }) => {
+      return <MaterialDetail id={row.original.materialId.toString()} />;
+    },
   },
   {
     accessorKey: "sku",

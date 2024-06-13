@@ -56,10 +56,10 @@ export default function MaterialQuantityUpdater() {
   }
 
   return (
-    <div className="flex flex-col w-full gap-6 p-6 bg-white rounded-md box-shadow">
+    <div className="box-shadow flex w-full flex-col gap-6 rounded-md bg-white p-6">
       <h2 className="text-xl font-medium ">Select Items From your Inventory</h2>
       <div className="flex flex-col gap-6 lg:flex-row">
-        <div className="relative font-medium grow">
+        <div className="relative grow font-medium">
           <div
             onClick={() => setOpen(!open)}
             className={`flex w-full items-center justify-between rounded border bg-white px-4 py-2 ${
@@ -77,7 +77,7 @@ export default function MaterialQuantityUpdater() {
               open ? "mt-2 max-h-60 border" : "max-h-0"
             } `}
           >
-            <div className="sticky top-0 flex items-center px-4 bg-white border-b">
+            <div className="sticky top-0 flex items-center border-b bg-white px-4">
               <AiOutlineSearch size={18} className="text-gray-700" />
               <input
                 type="text"
@@ -149,7 +149,7 @@ export default function MaterialQuantityUpdater() {
               e.preventDefault;
               createRequest();
             }}
-            className="flex items-center w-full gap-2 lg:hidden"
+            className="flex w-full items-center gap-2 lg:hidden"
           >
             <span>Add</span>
             <Plus />
@@ -161,7 +161,7 @@ export default function MaterialQuantityUpdater() {
             e.preventDefault;
             createRequest();
           }}
-          className="items-center hidden gap-2 lg:flex"
+          className="hidden items-center gap-2 lg:flex"
         >
           <span>Add</span>
           <Plus />

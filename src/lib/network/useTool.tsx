@@ -3,6 +3,7 @@ import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
 import useSWR, { mutate } from "swr";
 import { Tools } from "../types/tool";
+import fileUpload from "./FileUpload";
 
 const fetch = (url: string, token: string | undefined) =>
   axios
@@ -60,14 +61,21 @@ export const CreateTool = () => {
   }: Tools) => {
     setIsLoading(true);
     setError(false);
+    const pictureUrl = await fileUpload(picture);
     try {
-      setIsLoading(true);
       await axios.post(
         import.meta.env.VITE_API_URL + "tools/create",
-        { name, sku, status, expired_at, detail, picture, categoryId },
+        {
+          name,
+          sku,
+          status,
+          expired_at,
+          detail,
+          picture: pictureUrl,
+          categoryId,
+        },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },
@@ -103,13 +111,21 @@ export const EditTool = () => {
   }: Tools) => {
     setIsLoading(true);
     setError(false);
+    const pictureUrl = await fileUpload(picture);
     try {
       await axios.put(
         import.meta.env.VITE_API_URL + `tools/${id}`,
-        { name, sku, status, expired_at, detail, picture, categoryId },
+        {
+          name,
+          sku,
+          status,
+          expired_at,
+          detail,
+          picture: pictureUrl,
+          categoryId,
+        },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },

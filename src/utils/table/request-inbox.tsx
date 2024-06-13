@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Requests } from "@/lib/types/request";
 import { RequestedItems } from "@/lib/types/requestItem";
 import { ColumnDef } from "@tanstack/react-table";
-import { Cable, CheckCircle, CircleDot, Wrench } from "lucide-react";
+import { Cable, CheckCircle, CircleDot, Wrench, XCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const requestInboxs: ColumnDef<Requests>[] = [
@@ -22,7 +22,10 @@ export const requestInboxs: ColumnDef<Requests>[] = [
       <TableSorter column={column} header="REQUEST CODE" />
     ),
     cell: ({ row }) => {
-      if (row.getValue("status") === "accepted") {
+      if (
+        row.getValue("status") === "accepted" ||
+        row.getValue("status") === "rejected"
+      ) {
         return (
           <Link
             to={`/request-detail/${row.getValue("id")}`}
@@ -132,6 +135,12 @@ export const requestInboxs: ColumnDef<Requests>[] = [
         return (
           <Button className="cursor-default bg-green-500 px-3 py-0 text-white hover:bg-green-500">
             <CheckCircle size={20} />
+          </Button>
+        );
+      } else if (row.getValue("status") === "rejected") {
+        return (
+          <Button className="cursor-default bg-red-500 px-3 py-0 text-white hover:bg-red-500">
+            <XCircle size={20} />
           </Button>
         );
       } else {

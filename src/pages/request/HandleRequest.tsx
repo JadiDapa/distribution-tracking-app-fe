@@ -1,4 +1,3 @@
-import SeactionHeader from "@/components/ui/SeactionHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import useNotificationStore from "@/lib/store/NotificationStore";
 import { EditRequest, GetRequestById } from "@/lib/network/useRequest";
@@ -15,6 +14,7 @@ import useAuthStore from "@/lib/store/AuthStore";
 import { GetToolInventories } from "@/lib/network/useToolInventory";
 import { MaterialInventories } from "@/lib/types/material";
 import { ToolInventories } from "@/lib/types/tool";
+import SeactionHeader from "@/components/ui/SeactionHeader";
 
 export default function HandleRequest() {
   const { requestId } = useParams();
@@ -30,12 +30,12 @@ export default function HandleRequest() {
   const { tools } = GetToolInventories(userData?.id.toString());
 
   useEffect(() => {
-    if (requestedItems.length < 1) {
+    if (requestedItems.length < 1 && request) {
       request?.items.forEach((item: RequestedItems) => {
-        if (request?.type === "material") {
+        if (request.type === "material" && item.material) {
           const getStock = materials?.find(
-            (request: MaterialInventories) =>
-              request.material.sku === item.material!.sku,
+            (material: MaterialInventories) =>
+              material.material.sku === item.material!.sku,
           );
           addItem({
             id: item.id,
@@ -44,26 +44,25 @@ export default function HandleRequest() {
             requestId: item.requestId,
             name: item.material!.name,
             sku: item.material!.sku,
-            stock: getStock ? getStock?.quantity : 0,
+            stock: getStock ? getStock.quantity : 0,
           });
-        }
-        if (request?.type === "tool") {
+        } else if (request.type === "tool" && item.tool) {
           const getStock = tools?.find(
-            (request: ToolInventories) => request.tool.sku === item.tool!.sku,
+            (tool: ToolInventories) => tool.tool.sku === item.tool!.sku,
           );
           addItem({
             id: item.id,
             toolId: item.toolId,
             quantity: item.quantity,
             requestId: item.requestId,
-            name: item.material!.name,
-            sku: item.material!.sku,
-            stock: getStock ? getStock?.quantity : 0,
+            name: item.tool!.name,
+            sku: item.tool!.sku,
+            stock: getStock ? getStock.quantity : 0,
           });
         }
       });
     }
-  });
+  }, [requestedItems, request, materials, tools, addItem]);
 
   useEffect(() => {
     return () => {
@@ -99,6 +98,14 @@ export default function HandleRequest() {
   }
 
   async function handleAccept() {
+    const consumptionError = requestedItems?.filter(
+      (item) => item.stock < item.quantity,
+    );
+    if (consumptionError.length > 0) {
+      setStatus("error");
+      setMessage("Can't consuming item larger than your current stock");
+      return;
+    }
     await editRequest({
       id: request?.id,
       type: request?.type,
@@ -109,6 +116,7 @@ export default function HandleRequest() {
       items: requestedItems,
       status: "accepted",
     });
+
     setStatus("success");
     setMessage("Successfully accepting the request!");
     navigate("/request-inbox");
@@ -190,4 +198,5 @@ export default function HandleRequest() {
       </section>
     );
   }
+  return null;
 }

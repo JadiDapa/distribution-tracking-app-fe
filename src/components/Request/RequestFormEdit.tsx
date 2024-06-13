@@ -11,11 +11,11 @@ import { requestItemsColumn } from "@/utils/table/request-items";
 type Props = {
   displayedItems?: {
     id: number;
-    material: {
+    material?: {
       name: string;
       sku: string;
     };
-    tool: {
+    tool?: {
       name: string;
       sku: string;
     };
@@ -33,8 +33,6 @@ export default function RequestFormEdit({ displayedItems }: Props) {
   const [selectedStock, setSelectedStock] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [open, setOpen] = useState(false);
-
-  console.log(requestedItems);
 
   function createRequest(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
@@ -87,12 +85,9 @@ export default function RequestFormEdit({ displayedItems }: Props) {
               />
             </div>
             {displayedItems?.map((item, index: number) => {
-              const itemName = item.material.name
-                ? item.material.name
-                : item.tool.name;
-              const itemSku = item.material.sku
-                ? item.material.sku
-                : item.tool.sku;
+              const itemName =
+                item.material?.name ?? item.tool?.name ?? "Unnamed";
+              const itemSku = item.material?.sku ?? item.tool?.sku ?? "No SKU";
               return (
                 <li
                   key={index}
@@ -137,7 +132,7 @@ export default function RequestFormEdit({ displayedItems }: Props) {
           <NumberInput value={quantity} onChange={setQuantity} />
           <Button
             onClick={(e) => {
-              e.preventDefault;
+              e.preventDefault();
               createRequest(e);
             }}
             className="flex w-full items-center gap-2 lg:hidden"
@@ -148,7 +143,7 @@ export default function RequestFormEdit({ displayedItems }: Props) {
         </div>
         <Button
           onClick={(e) => {
-            e.preventDefault;
+            e.preventDefault();
             createRequest(e);
           }}
           className="hidden items-center gap-2 lg:flex"

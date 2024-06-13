@@ -55,7 +55,10 @@ export default function MaterialInventory() {
       <section className="flex w-full flex-col gap-6 py-6">
         <div className="flex w-full flex-col justify-between gap-4 lg:flex-row lg:items-center">
           <SeactionHeader section="Material" subSection="Material Inventory" />
-          <Link className="flex max-lg:justify-end" to="/material-updates">
+          <Link
+            className="flex max-lg:justify-end"
+            to={`/material-updates/${userData?.id}`}
+          >
             <Button className="flex items-center gap-3 bg-yellow-500 hover:bg-yellow-600">
               Quantity Update History
               <Clock />

@@ -3,6 +3,7 @@ import axios, { AxiosError } from "axios";
 import useAuthStore from "../store/AuthStore";
 import useSWR, { mutate } from "swr";
 import { Vehicles } from "../types/vehicle";
+import fileUpload from "./FileUpload";
 
 const fetch = (url: string, token: string | undefined) =>
   axios
@@ -78,8 +79,8 @@ export const CreateVehicle = () => {
   }: Vehicles) => {
     setIsLoading(true);
     setError(false);
+    const pictureUrl = await fileUpload(picture);
     try {
-      setIsLoading(true);
       await axios.post(
         import.meta.env.VITE_API_URL + "vehicles/create",
         {
@@ -92,11 +93,10 @@ export const CreateVehicle = () => {
           contract_end,
           areaId,
           locationId,
-          picture,
+          picture: pictureUrl,
         },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },
@@ -135,6 +135,7 @@ export const EditVehicle = () => {
   }: Vehicles) => {
     setIsLoading(true);
     setError(false);
+    const pictureUrl = await fileUpload(picture);
     try {
       await axios.put(
         import.meta.env.VITE_API_URL + `vehicles/${id}`,
@@ -148,11 +149,10 @@ export const EditVehicle = () => {
           contract_end,
           areaId: Number(areaId),
           locationId: Number(locationId),
-          picture,
+          picture: pictureUrl,
         },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userData?.token}`,
           },
         },
@@ -179,9 +179,11 @@ export const MoveVehicle = () => {
   const moveVehicle = async ({
     id,
     locationId,
+    areaId,
   }: {
     id: string;
     locationId: number | string;
+    areaId: number | string;
   }) => {
     setIsLoading(true);
     setError(false);
@@ -189,7 +191,8 @@ export const MoveVehicle = () => {
       await axios.put(
         import.meta.env.VITE_API_URL + `vehicles/${id}`,
         {
-          locationId: Number(locationId),
+          locationId,
+          areaId,
         },
         {
           headers: {
